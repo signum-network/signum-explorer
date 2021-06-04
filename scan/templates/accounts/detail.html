@@ -6,12 +6,12 @@
 {% block title %} - Account #{{ address.id }}{% endblock %}
 
 {% block description %}
-BURST-{{ address.id|num2rs }}
+S-{{ address.id|num2rs }}
 {% if address.name %}{{ address.name }}{% endif %}
 {% endblock %}
 
 {% block scripts %}
-  <script>jQuery('#qr_code').qrcode({text: "BURST-{{ address.id|num2rs }}", width: 240, height: 240});</script>
+  <script>jQuery('#qr_code').qrcode({text: "S-{{ address.id|num2rs }}", width: 240, height: 240});</script>
 {% endblock %}
 
 {% block content %}
@@ -26,14 +26,14 @@ BURST-{{ address.id|num2rs }}
           </button>
         </div>
         <div class="modal-body text-center">
-          <div id="qr_code" title="BURST-{{ address.id|num2rs }}"></div>
+          <div id="qr_code" title="S-{{ address.id|num2rs }}"></div>
         </div>
       </div>
     </div>
   </div>
 
   <h5 class="p-2">Account #{{ address.id }}
-    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="BURST-{{ address.id|num2rs }}"><i class="far fa-copy"></i></a>
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="S-{{ address.id|num2rs }}"><i class="far fa-copy"></i></a>
     <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
   </h5>
 
@@ -46,7 +46,7 @@ BURST-{{ address.id|num2rs }}
             <tbody>
             <tr>
               <th>Address</th>
-              <th>BURST-{{ address.id|num2rs }}</th>
+              <th>S-{{ address.id|num2rs }}</th>
             </tr>
             <tr>
               <th style="width: 160px;">Name</th>
@@ -59,9 +59,9 @@ BURST-{{ address.id|num2rs }}
             <tr>
               <th>Balance</th>
               <td>
-                {{ address.unconfirmed_balance|burst_amount|intcomma }} Burst <span class="text-info">(${{ address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }}/Burst)</span>
+                {{ address.unconfirmed_balance|burst_amount|intcomma }} Signa <span class="text-info">(${{ address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }}/Burst)</span>
                 {% if address.unconfirmed_balance != address.balance %}
-                  <i> + {{ address.balance|sub:address.unconfirmed_balance|burst_amount|intcomma }} Burst are locked</i>
+                  <i> + {{ address.balance|sub:address.unconfirmed_balance|burst_amount|intcomma }} Signa are locked</i>
                 {% endif %}
               </td>
             </tr>

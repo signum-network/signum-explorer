@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "l42wty32hl$*6=lsy33%0%)cps87@@!vfns!ucu-#*%$x_@min"
+    "SECRET_KEY", "changeme"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -254,8 +254,8 @@ GOOGLE_TRACKING_ID = os.environ.get("GOOGLE_TRACKING_ID")
 DEFAULT_P2P_PORT = int(os.environ.get("DEFAULT_P2P_PORT", 8123))
 DEFAULT_API_V1_PORT = int(os.environ.get("DEFAULT_API_V1_PORT", 8125))
 
-BRS_P2P_VERSION = "2.5.0"
-MIN_PEER_VERSION = "2.4.0"
+BRS_P2P_VERSION = "3.0.1"
+MIN_PEER_VERSION = "3.0.0"
 
 BRS_NODE = os.environ.get("BRS_NODE")
 

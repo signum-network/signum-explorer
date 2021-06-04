@@ -5,7 +5,7 @@
 
 {% block description %}
 Latest block: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.height }}{% endwith %}{% endif %}
-Network Difficult: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.base_target|net_diff|floatformat:2|intcomma }} TB{% endwith %}{% endif %}
+Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.base_target|net_diff|floatformat:2|intcomma }} PiB{% endwith %}{% endif %}
 {% endblock %}
 
 {% block revision %}{{ last_block.height }}{% endblock %}
@@ -63,10 +63,10 @@ Network Difficult: {% if blocks %}{%  with blocks|first as last_block %}{{ last_
             <hr class="hr-space-lg">
             <div class="media align-items-center">
               <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0">Network Difficult</h6>
+                <h6 class="text-uppercase text-secondary mb-0">Network Difficulty</h6>
                 {% if blocks %}
                   {%  with blocks|first as last_block %}
-                    <span class="text-info small">{{ last_block.base_target|net_diff|floatformat:2|intcomma }} TB</span>
+                    <span class="text-info small">{{ last_block.base_target|net_diff|floatformat:2|intcomma }} PiB</span>
                   {% endwith %}
                 {% else %}
                   -

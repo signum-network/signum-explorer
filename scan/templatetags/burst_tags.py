@@ -11,6 +11,8 @@ from java_wallet.fields import get_desc_tx_type
 from java_wallet.models import Block, Transaction
 from scan.caching_data.exchange import CachingExchangeData
 
+import struct
+
 register = template.Library()
 
 
@@ -104,9 +106,12 @@ def percent(value: int or float, total: int or float) -> int or float:
 
 
 @register.filter
+#def net_diff(base_target: int) -> float:
+#    return MAX_BASE_TARGET / base_target
 def net_diff(base_target: int) -> float:
-    return MAX_BASE_TARGET / base_target
-
+    s = struct.pack('>l', base_target & 0xFFFFFFFF)
+    base_target_capacity = struct.unpack('>f', s)[0]
+    return MAX_BASE_TARGET / (1.83 * base_target_capacity)
 
 @register.simple_tag(takes_context=True)
 def rank_row(context: dict, number: int) -> int:

@@ -17,12 +17,12 @@
       <header>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-3">
-          <a class="mb-2" href="/"><img alt="BURST" src="{% static 'img/burst-logo.svg' %}" height="32px"></a>
+          <a class="mb-2" href="/"><img alt="SIGNUM" src="https://hostingwire.net/wp-content/uploads/2021/06/Signum_Logo_V1_black.png" height="34px"></a>
           <a href="/">
           {% if test_net %}
             <span class="navbar-brand my-0 mr-md-auto mb-2 text-danger">Explorer TestNet</span>
           {% else %}
-            <span class="navbar-brand my-0 mr-md-auto mb-2">Explorer</span>
+            <span class="navbar-brand my-0 mr-md-auto mb-2">&nbsp;&nbsp;Explorer</span>
           {% endif %}
           </a>
 
@@ -66,7 +66,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="more-nav" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
                 <div class="dropdown-menu" aria-labelledby="more-nav">
-                  <a class="dropdown-item" href="https://burst-coin.org" target="_blank">Burstcoin Site</a>
+                  <a class="dropdown-item" href="https://signum.network/" target="_blank">Signum.network</a>
                   <a class="dropdown-item" href="https://burstforum.net" target="_blank">Burstcoin Forum</a>
                   <a class="dropdown-item" href="https://burstcoin.ist" target="_blank">Burstcoin News</a>
                   <a class="dropdown-item" href="https://www.reddit.com/r/burstcoin/" target="_blank">Burstcoin Reddit</a>
@@ -75,9 +75,6 @@
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="https://discord.gg/G8N2QPa" target="_blank">Discord Community</a>
                   <a class="dropdown-item" href="https://t.me/burstcoin" target="_blank">Telegram Community</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="https://telegram.me/ExchangeRatesBot" target="_blank">Telegram ExchangeRatesBot</a>
-                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{{ wallet_url }}" target="_blank">Online {% if test_net %}TestNet {% endif %}Wallet</a>
                 </div>
               </li>
@@ -100,8 +97,6 @@
       <main role="main">
         <div class="container">
           <div class="text-center mb-3">
-            <a href="https://shop.ledger.com/pages/ledger-nano-x?r=a6d58956d1cc"><img width=320 height=50 alt="Ledger Nano X - The secure hardware wallet" src="https://www.ledgerwallet.com/images/promo/banners/ledger_banner_3-2-0x5-0.jpg" target="_blank"></a>
-            <a href="https://medium.com/@jjos2372/how-to-use-a-ledger-nano-s-with-btdex-to-secure-your-burst-and-trt-3522db9afc34" target="_blank"><h5>[&nbsp;Burstcoin&nbsp;on&nbsp;Ledger&nbsp;]</h5></a>
           </div>
           {% if submit == 'Search' %}
             <div class="alert alert-danger" role="alert">
@@ -120,9 +115,6 @@
         Developed by <a href="https://github.com/llybin/burst_explorer" target="_blank">Lev Lybin</a>
         <br>
         {% if not test_net %}
-          Donations:
-          <a href="{% url 'address-detail' 11834991772770337952 %}">BURST-D372-C2DU-HMKK-CQLHA</a> |
-          <a href="{% url 'asset-detail' 14686983107863035136 %}">Buy BurstScan ❤️ Asset</a>
         {% endif %}
       </div>
     </footer>
@@ -144,6 +136,22 @@
         gtag('config', '{{ google_tracking_id }}');
       </script>
     {% endif %}
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://analytics.hostingwire.net/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '5']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
 
     <script>
       clipboard = new ClipboardJS('.copy-btn');
