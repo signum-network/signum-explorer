@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="{% block description %}{% endblock %}">
     <meta name="author" content="Lev Lybin">
-    <title>BurstCoin {% if test_net %}TestNet {% endif %}Blockchain Explorer{% block title %}{% endblock %}</title>
+    <title>Signum {% if test_net %}TestNet {% endif %}Blockchain Explorer{% block title %}{% endblock %}</title>
     <link href="{% static 'favicon.ico' %}" rel="icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
@@ -17,12 +17,12 @@
       <header>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-3">
-          <a class="mb-2" href="/"><img alt="SIGNUM" src="https://hostingwire.net/wp-content/uploads/2021/06/Signum_Logo_V1_black.png" height="34px"></a>
+          <a class="mb-2" href="/"><img alt="SIGNUM" src="https://hostingwire.net/wp-content/uploads/2021/06/Signum_Logo_V1_black.png" height="32px"></a>
           <a href="/">
           {% if test_net %}
             <span class="navbar-brand my-0 mr-md-auto mb-2 text-danger">Explorer TestNet</span>
           {% else %}
-            <span class="navbar-brand my-0 mr-md-auto mb-2">&nbsp;&nbsp;Explorer</span>
+            <span class="navbar-brand my-0 mr-md-auto mb-2"></span>
           {% endif %}
           </a>
 

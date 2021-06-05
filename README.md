@@ -19,14 +19,15 @@ django-redis
 djangorestframework
 gunicorn
 jsonschema
-mysqlclien
-pycoingeck
+mysqlclient
+pycoingecko
 python-redis-lock
 requests
 sentry-sdk
 simplejson
 supervisor
 whitenoise
+python-dotenv
 
 ## Set-up
 
