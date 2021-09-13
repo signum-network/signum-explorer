@@ -38,11 +38,11 @@ class CachingExchangeData(CachingDataBase):
 
         cg = CoinGeckoAPI()
         response = cg.get_price(
-            ids="signa",
+            ids="signum",
             vs_currencies=["usd", "btc"],
             include_market_cap="true",
             include_24hr_change="true",
-        )["signa"]
+        )["signum"]
 
         return ExchangeData(
             price_usd=response["usd"],
