@@ -5,12 +5,14 @@ from burst.libs.reed_solomon import ReedSolomon, ReedSolomonError
 from java_wallet import models
 from scan.models import PeerMonitor
 
+import os
+
 SEARCH_BY = [
     ("Block", "height", "/block/{}"),
     ("Account", "id", "/address/{}"),
     ("Asset", "id", "/asset/{}"),
-    ("Goods", "id", "/mp/{}"),
-    ("At", "id", "/at/{}"),
+#    ("Goods", "id", "/mp/{}"),
+    ("Contract", "id", "/at/{}"),
     ("Transaction", "id", "/tx/{}"),
 ]
 
@@ -41,8 +43,10 @@ def search_view(request):
                 redirect_url = x[2].format(query)
                 break
 
-    elif len(query) in REED_SOLOMON_LENS:
+    elif len(query) in REED_SOLOMON_LENS or query.find(os.environ.get("ADDRESS_PREFIX")) == 0:
         try:
+            if query.find(os.environ.get("ADDRESS_PREFIX")) == 0:
+                query = query[len(os.environ.get("ADDRESS_PREFIX")):]
             numeric_id = ReedSolomon().decode(query)
             exists = (
                 models.Account.objects.using("java_wallet")

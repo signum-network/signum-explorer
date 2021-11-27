@@ -12,6 +12,7 @@ from java_wallet.models import Block, Transaction
 from scan.caching_data.exchange import CachingExchangeData
 
 import struct
+import os
 
 register = template.Library()
 
@@ -28,7 +29,15 @@ def block_reward_with_fee(block: Block) -> float:
 
 @register.filter
 def burst_amount(value: int) -> float:
-    return value / 10 ** 8
+    return value / 100000000.0
+
+@register.filter
+def append_symbol(value: float) -> str:
+    return value + " " + os.environ.get("COIN_SYMBOL")
+
+@register.simple_tag()
+def coin_symbol() -> str:
+    return os.environ.get("COIN_SYMBOL")
 
 
 @register.filter
@@ -63,7 +72,7 @@ def tx_type(tx: Transaction) -> str:
 
 @register.filter
 def num2rs(value: str or int) -> str:
-    return ReedSolomon().encode(str(value))
+    return os.environ.get("ADDRESS_PREFIX") + ReedSolomon().encode(str(value))
 
 
 @register.simple_tag()
@@ -109,6 +118,8 @@ def percent(value: int or float, total: int or float) -> int or float:
 #def net_diff(base_target: int) -> float:
 #    return MAX_BASE_TARGET / base_target
 def net_diff(base_target: int) -> float:
+    if base_target < 100000000000:
+        return MAX_BASE_TARGET / base_target
     s = struct.pack('>l', base_target & 0xFFFFFFFF)
     base_target_capacity = struct.unpack('>f', s)[0]
     return MAX_BASE_TARGET / (1.83 * base_target_capacity)

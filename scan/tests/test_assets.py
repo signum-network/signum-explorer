@@ -11,7 +11,7 @@ class AssetListViewTests(TestCase):
     def test_ok(self):
         response = self.client.get("/assets/")
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "assets found")
+        self.assertContains(response, "tokens found")
         self.assertContains(response, "Blockchain Explorer - Assets</title>")
         self.assertQuerysetEqual(response.context["assets"], [])
 

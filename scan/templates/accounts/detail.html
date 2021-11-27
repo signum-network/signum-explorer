@@ -46,7 +46,7 @@ S-{{ address.id|num2rs }}
             <tbody>
             <tr>
               <th>Address</th>
-              <th>S-{{ address.id|num2rs }}</th>
+              <th>{{ address.id|num2rs }}</th>
             </tr>
             <tr>
               <th style="width: 160px;">Name</th>
@@ -59,9 +59,9 @@ S-{{ address.id|num2rs }}
             <tr>
               <th>Balance</th>
               <td>
-                {{ address.unconfirmed_balance|burst_amount|intcomma }} Signa <span class="text-info">(${{ address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }}/Burst)</span>
+                {{ address.unconfirmed_balance|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
                 {% if address.unconfirmed_balance != address.balance %}
-                  <i> + {{ address.balance|sub:address.unconfirmed_balance|burst_amount|intcomma }} Signa are locked</i>
+                  <i> + {{ address.balance|sub:address.unconfirmed_balance|burst_amount|intcomma|append_symbol }} are locked</i>
                 {% endif %}
               </td>
             </tr>
@@ -69,7 +69,7 @@ S-{{ address.id|num2rs }}
               <th>Public Key</th>
               <td style="word-wrap: break-word; max-width: 250px">
                 {% if address.key_height %}
-                  <span class="text-monospace">{{ address.public_key|bin2hex }}</span> in <a href="{% url 'block-detail' address.key_height %}">{{ address.key_height }}</a>
+                  <span class="text-monospace">{{ address.public_key|bin2hex }}</span> at <a href="{% url 'block-detail' address.key_height %}">block {{ address.key_height }}</a>
                 {% endif %}
               </td>
             </tr>
@@ -142,7 +142,7 @@ S-{{ address.id|num2rs }}
 
             <div class="tab-pane fade" id="nav-asset-hold" role="tabpanel" aria-labelledby="nav-asset-hold-tab">
               <p class="small p-1" style="margin-top: 10px">
-                {{ assets_cnt|intcomma }} assets found
+                {{ assets_cnt|intcomma }} tokens found
               </p>
               {% include "accounts/assets.html" %}
             </div>

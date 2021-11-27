@@ -7,7 +7,7 @@
 
 {% block description %}
 {{ tx|tx_type }}
-{{ tx.amount|burst_amount|intcomma }} Burst
+{{ tx.amount|burst_amount|intcomma|append_symbol }}
 {% endblock %}
 
 {% block content %}
@@ -76,11 +76,11 @@
             </tr>
             <tr>
               <th>Value</th>
-              <td>{{ tx.amount|burst_amount|intcomma }} Burst <span class="text-info">(${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
+              <td>{{ tx.amount|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
             </tr>
             <tr>
               <th>Transaction Fee</th>
-              <td>{{ tx.fee|burst_amount|intcomma }} Burst <span class="text-info">(${{ tx.fee|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
+              <td>{{ tx.fee|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ tx.fee|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
             </tr>
             <tr class="collapse show_more_info">
               <th style="min-width: 160px;">Version</th>
