@@ -26,7 +26,7 @@
         </td>
         <td>{{ purchase.quantity|intcomma }}
         </td>
-        <td class="text-nowrap">{{ purchase.price|burst_amount|intcomma }} Burst</td>
+        <td class="text-nowrap">{{ purchase.price|burst_amount|intcomma|append_symbol }} </td>
       </tr>
     {% endfor %}
     </tbody>
