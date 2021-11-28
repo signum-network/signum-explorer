@@ -5,7 +5,7 @@
 
 {% block description %}
 Latest block: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.height }}{% endwith %}{% endif %}
-Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.base_target|net_capacity_pib|floatformat:2|intcomma }} PiB{% endwith %}{% endif %}
+Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.base_target|net_capacity_tib|format_capacity }}{% endwith %}{% endif %}
 {% endblock %}
 
 {% block revision %}{{ last_block.height }}{% endblock %}
@@ -66,7 +66,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last
                 <h6 class="text-uppercase text-secondary mb-0">Network Difficulty</h6>
                 {% if blocks %}
                   {%  with blocks|first as last_block %}
-                    <span class="text-info small">{{ last_block.base_target|net_capacity_pib|floatformat:3|intcomma }} PiB
+                    <span class="text-info small">{{ last_block.base_target|net_capacity_tib|format_capacity }}
                       + {{ last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %}/TiB
                     </span>
                   {% endwith %}
