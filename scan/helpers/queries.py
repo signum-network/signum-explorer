@@ -3,7 +3,7 @@ from cache_memoize import cache_memoize
 from java_wallet.models import Account, Asset, Block, RewardRecipAssign, Transaction
 
 
-@cache_memoize(86400)
+@cache_memoize(3600)
 def get_account_name(account_id: int) -> str:
     return (
         Account.objects.using("java_wallet")
