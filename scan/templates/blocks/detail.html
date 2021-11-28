@@ -83,9 +83,13 @@
             </tr>
             <tr>
               <th>Block Reward</th>
-              <td>{{ blk|block_reward_with_fee|intcomma|append_symbol }} ({{ blk|block_reward }} + {{ blk.total_fee|burst_amount|intcomma }})</td>
+              <td>{{ blk|block_reward_with_fee|intcomma|append_symbol }}</td>
             </tr>
             <tr>
+              <th>Fees</th>
+              <td>{{ blk.total_fee|burst_amount|intcomma|append_symbol }}</td>
+            </tr>
+            <tr class="collapse show_more_info">
               <th>Size</th>
               <td>{{ blk.payload_length|filesizeformat }}</td>
             </tr>
@@ -126,7 +130,7 @@
               <td class="text-monospace" style="word-wrap: break-word; max-width: 250px">{{ blk.block_signature|bin2hex }}</td>
             </tr>
             <tr class="collapse show_more_info">
-              <th>ATs</th>
+              <th>Contracts</th>
               <td>
                 <textarea id="ats" class="form-control" spellcheck="false" rows="5" disabled>{{ blk.ats|bin2hex }}</textarea>
                 <label for="ats"></label>
@@ -135,7 +139,7 @@
             </tbody>
           </table>
         </div>
-        <a data-toggle="collapse" data-target=".show_more_info" href="#">Show more details</a>
+        <a data-toggle="collapse" data-target=".show_more_info" href="#">Toogle details</a>
 
       </div>
     </div>
