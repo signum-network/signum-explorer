@@ -1,8 +1,10 @@
-# BurstCoin Blockchain Explorer
+# Signum Explorer
 This documentation is a work in progress. More details to follow.
 
 
 ## Requirements
+
+A [Signum Node](https://github.com/signum-network/signum-node) with MariaDB version 3.3 or up is required.
 
 ### Linux
 
@@ -14,13 +16,13 @@ sudo apt install python3-dev default-libmysqlclient-dev build-essential redis-se
 
 ### Windows
 
-...
+(python and other tools equivalent to the above list)
 
 ### Modules (all platforms)
 
 The following python modules are required as well:
 ```
-pip instll celery django django-cache-memoize django-cors-headers django-filter django-redis djangorestframework gunicorn jsonschema mysqlclient pycoingecko python-redis-lock requests sentry-sdk simplejson supervisor whitenoise python-dotenv
+pip install celery django django-cache-memoize django-cors-headers django-filter django-redis djangorestframework gunicorn jsonschema mysqlclient pycoingecko python-redis-lock requests sentry-sdk simplejson supervisor whitenoise python-dotenv
 ```
 
 ## Set-up
