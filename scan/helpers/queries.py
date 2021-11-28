@@ -14,11 +14,11 @@ def get_account_name(account_id: int) -> str:
 
 
 @cache_memoize(None)
-def get_asset_details(asset_id: int) -> (str, int, int):
+def get_asset_details(asset_id: int) -> (str, int, int, bool):
     asset_details = (
         Asset.objects.using("java_wallet")
         .filter(id=asset_id)
-        .values_list("name", "decimals", "quantity")
+        .values_list("name", "decimals", "quantity", "mintable")
         .first()
     )
 

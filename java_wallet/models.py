@@ -101,6 +101,7 @@ class Asset(models.Model):
     quantity = PositiveBigIntegerField()
     decimals = models.IntegerField()
     height = models.IntegerField()
+    mintable = models.BooleanField()
 
     class Meta:
         managed = True

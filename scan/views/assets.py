@@ -10,7 +10,7 @@ from scan.views.filters.assets import AssetTransferFilter, TradeFilter
 
 
 def fill_data_asset_transfer(transfer):
-    transfer.name, transfer.decimals, transfer.total_quantity = get_asset_details(
+    transfer.name, transfer.decimals, transfer.total_quantity, mintable = get_asset_details(
         transfer.asset_id
     )
     transfer.sender_name = get_account_name(transfer.sender_id)
@@ -18,7 +18,7 @@ def fill_data_asset_transfer(transfer):
 
 
 def fill_data_asset_trade(trade):
-    trade.name, trade.decimals, trade.total_quantity = get_asset_details(trade.asset_id)
+    trade.name, trade.decimals, trade.total_quantity, mintable = get_asset_details(trade.asset_id)
     trade.buyer_name = get_account_name(trade.buyer_id)
     trade.seller_name = get_account_name(trade.seller_id)
 

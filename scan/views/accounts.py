@@ -100,7 +100,7 @@ class AddressDetailView(IntSlugDetailView):
         )
 
         for asset in assets:
-            asset.name, asset.decimals, asset.total_quantity = get_asset_details(
+            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(
                 asset.asset_id
             )
 
