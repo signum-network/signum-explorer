@@ -96,6 +96,7 @@
               <td>{{ tx.block_timestamp|naturaltime }} ({{ tx.block_timestamp|date:'Y-m-d H:i:s' }} UTC)</td>
             </tr>
             {% endif %}
+            {% if tx.ec_block_id %}
             <tr class="collapse show_more_info">
               <th>EC Block ID</th>
               <td>{{ tx.ec_block_id }}</td>
@@ -104,6 +105,7 @@
               <th>EC Block Height</th>
               <td>{{ tx.ec_block_height }}</td>
             </tr>
+            {% endif %}
             {% if tx.height != 0 %}
             <tr class="collapse show_more_info">
               <th>Has message</th>
@@ -126,11 +128,13 @@
               <th>Sender Public Key</th>
               <td class="text-monospace" style="word-wrap: break-word; max-width: 250px">{{ tx.sender_public_key|bin2hex }}</td>
             </tr>
+            {% if tx.signature %}
             <tr class="collapse show_more_info">
               <th>Signature</th>
               <td class="text-monospace" style="word-wrap: break-word; max-width: 250px">{{ tx.signature|bin2hex }}</td>
             </tr>
-            {% if tx.height != 0 %}
+            {% endif %}
+            {% if tx.referenced_transaction_fullhash and tx.height != 0 %}
             <tr class="collapse show_more_info">
               <th class=>Referenced Transaction Fullhash</th>
               <td class="text-monospace" style="word-wrap: break-word; max-width: 250px">{{ tx.referenced_transaction_fullhash|bin2hex }}</td>
@@ -161,7 +165,7 @@
             </tbody>
           </table>
         </div>
-        <a data-toggle="collapse" data-target=".show_more_info" href="#">Show more details</a>
+        <a data-toggle="collapse" data-target=".show_more_info" href="#">Toogle details</a>
 
       </div>
     </div>
