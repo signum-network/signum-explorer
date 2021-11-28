@@ -115,14 +115,20 @@ def percent(value: int or float, total: int or float) -> int or float:
 
 
 @register.filter
-#def net_diff(base_target: int) -> float:
-#    return MAX_BASE_TARGET / base_target
-def net_diff(base_target: int) -> float:
+def net_capacity_pib(base_target: int) -> float:
     if base_target < 100000000000:
-        return MAX_BASE_TARGET / base_target
+        return MAX_BASE_TARGET / (base_target * 1024.0)
     s = struct.pack('>l', base_target & 0xFFFFFFFF)
     base_target_capacity = struct.unpack('>f', s)[0]
-    return MAX_BASE_TARGET / (1.83 * base_target_capacity)
+    return MAX_BASE_TARGET / (1.83 * base_target_capacity * 1024.0)
+
+@register.filter
+def net_commitment(base_target: int) -> float:
+    if base_target < 100000000000:
+        return 1000
+    s = struct.pack('>l', base_target >> 32)
+    avg_commitment = struct.unpack('>f', s)[0]
+    return avg_commitment/100000000.0
 
 @register.simple_tag(takes_context=True)
 def rank_row(context: dict, number: int) -> int:
