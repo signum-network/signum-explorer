@@ -22,14 +22,6 @@ def get_asset_details(asset_id: int) -> (str, int, int):
         .first()
     )
 
-    # BurstScan
-    if asset_id == 14686983107863035136:
-        asset_details = (
-            f"{asset_details[0]} ❤️",
-            asset_details[1],
-            asset_details[2],
-        )
-
     return asset_details
 
 
