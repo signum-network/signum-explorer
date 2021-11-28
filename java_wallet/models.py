@@ -137,6 +137,7 @@ class At(models.Model):
     ap_code = models.TextField()
     height = models.IntegerField()
     latest = models.IntegerField()
+    ap_code_hash_id = PositiveBigIntegerField()
 
     class Meta:
         managed = True

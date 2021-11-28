@@ -56,6 +56,11 @@
                 <td>{{ at.version }}</td>
               </tr>
               <tr>
+                <th>Code hash id</th>
+                <td>{{ at.ap_code_hash_id }}</td>
+              </tr>
+              <!--
+              <tr>
                 <th>CSize</th>
                 <td>{{ at.csize }}</td>
               </tr>
@@ -71,8 +76,9 @@
                 <th>CCall Stack Bytes</th>
                 <td>{{ at.c_call_stack_bytes }}</td>
               </tr>
+              -->
               <tr>
-                <th>Bytecode</th>
+                <th>Code</th>
                 <td class="text-monospace">
                   <textarea id="ap_code" class="form-control" spellcheck="false" rows="5" disabled>{{ at.ap_code|bin2hex }}</textarea>
                   <label for="ap_code"></label>
