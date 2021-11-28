@@ -35,6 +35,15 @@ TX_TYPES = {
     (TxType.COLORED_COINS, TxSubtypeColoredCoins.BID_ORDER_CANCELLATION): _(
         "Bid Order Cancellation"
     ),
+    (TxType.COLORED_COINS, TxSubtypeColoredCoins.ASSET_MINT): _(
+        "Asset Mint"
+    ),
+    (TxType.COLORED_COINS, TxSubtypeColoredCoins.ADD_TREASURY_ACCOUNT): _(
+        "Add Treasury Account"
+    ),
+    (TxType.COLORED_COINS, TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS): _(
+        "Distribute to Holders"
+    ),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.LISTING): _("Marketplace Listing"),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.DELISTING): _("Marketplace Removal"),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.PRICE_CHANGE): _(
@@ -50,6 +59,12 @@ TX_TYPES = {
     ),
     (TxType.BURST_MINING, TxSubtypeBurstMining.REWARD_RECIPIENT_ASSIGNMENT): _(
         "Reward Recipient Assignment"
+    ),
+    (TxType.BURST_MINING, TxSubtypeBurstMining.COMMITMENT_ADD): _(
+        "Add Commitment"
+    ),
+    (TxType.BURST_MINING, TxSubtypeBurstMining.COMMITMENT_REMOVE): _(
+        "Remove Commitment"
     ),
     (TxType.ADVANCED_PAYMENT, TxSubtypeAdvancedPayment.ESCROW_CREATION): _(
         "Escrow Creation"

@@ -53,6 +53,9 @@ class TxSubtypeColoredCoins:
     BID_ORDER_PLACEMENT = 3
     ASK_ORDER_CANCELLATION = 4
     BID_ORDER_CANCELLATION = 5
+    ASSET_MINT = 6
+    ADD_TREASURY_ACCOUNT = 7
+    DISTRIBUTE_TO_HOLDERS = 8
 
 
 class TxSubtypeDigitalGoods:
@@ -72,6 +75,8 @@ class TxSubtypeAccountControl:
 
 class TxSubtypeBurstMining:
     REWARD_RECIPIENT_ASSIGNMENT = 0
+    COMMITMENT_ADD = 1
+    COMMITMENT_REMOVE = 2
 
 
 class TxSubtypeAdvancedPayment:
