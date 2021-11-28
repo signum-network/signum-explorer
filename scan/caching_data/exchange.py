@@ -5,6 +5,7 @@ from pycoingecko import CoinGeckoAPI
 
 from scan.caching_data.base import CachingDataBase
 
+import os
 
 @dataclass
 class ExchangeData:
@@ -38,7 +39,7 @@ class CachingExchangeData(CachingDataBase):
 
         cg = CoinGeckoAPI()
         response = cg.get_price(
-            ids="signum",
+            ids=os.environ.get("COINGECKO_PRICE_ID"),
             vs_currencies=["usd", "btc"],
             include_market_cap="true",
             include_24hr_change="true",
