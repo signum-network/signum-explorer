@@ -22,6 +22,13 @@
             <table class="table small table-sm">
               <tbody>
               <tr>
+                <th style="width: 160px;">Address</th>
+                <th>
+                  {{ at.id|num2rs }}
+                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ at.id }}"><i class="far fa-copy"></i></a>
+                </th>
+              </tr>
+              <tr>
                 <th style="width: 160px;">ID</th>
                 <th>
                   {{ at.id }}
@@ -42,10 +49,12 @@
                   {% include "account_link.html" with account_id=at.creator_id account_name=at.creator_name oneline=True %}
                 </td>
               </tr>
+              <!--
               <tr>
                 <th style="min-width: 160px;">Block</th>
                 <td><a href="{% url 'block-detail' at.height %}">{{ at.height }}</a></td>
               </tr>
+              -->
               <tr>
                 <th>Creation Block</th>
                 <td>
@@ -78,7 +87,7 @@
               </tr>
               -->
               <tr>
-                <th>Code</th>
+                <th>Code bytes</th>
                 <td class="text-monospace">
                   <textarea id="ap_code" class="form-control" spellcheck="false" rows="5" disabled>{{ at.ap_code|bin2hex }}</textarea>
                   <label for="ap_code"></label>

@@ -22,7 +22,7 @@
           <table class="table table-hover small table-sm">
             <thead>
             <tr>
-              <th scope="col">Contract Id</th>
+              <th scope="col">Contract</th>
               <th scope="col">Name</th>
               <th scope="col">Creator</th>
             </tr>
@@ -30,7 +30,12 @@
             <tbody>
             {% for at in ats %}
               <tr>
-                <td><a href="{% url 'at-detail' at.id %}">{{ at.id|truncatechars:10 }}</a></td>
+                <!--
+                <td class="text-nowrap">
+                  {% include "account_link.html" with account_id=at.id account_name=at.name url_detail='at-detail' %}
+                </td>
+                -->
+                <td><a href="{% url 'at-detail' at.id %}">{{ at.id|num2rs }}</a></td>
                 <td style="word-wrap: break-word; max-width: 250px">{{ at.name }}</td>
                 <td class="text-nowrap">
                   {% include "account_link.html" with account_id=at.creator_id account_name=at.creator_name %}
