@@ -257,7 +257,7 @@ DEFAULT_API_V1_PORT = int(os.environ.get("DEFAULT_API_V1_PORT", 8125))
 BRS_P2P_VERSION = "3.0.1"
 MIN_PEER_VERSION = "3.0.0"
 
-BRS_NODE = os.environ.get("BRS_NODE")
+SIGNUM_NODE = os.environ.get("SIGNUM_NODE")
 
 WALLET_URL = os.environ.get("WALLET_URL")
 

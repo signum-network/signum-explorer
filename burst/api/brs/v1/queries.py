@@ -129,6 +129,42 @@ class GetPeer(QueryBase):
     }
 
 
+class GetAsset(QueryBase):
+    _request_type = "getAsset"
+    _http_method = "GET"
+    _required_params = {"asset"}
+    _response_json_schema = {
+        "type": "object",
+        "properties": {
+            "account": {"type": "string"},
+            "accountRS": {"type": "string"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "decimals": {"type": "number"},
+            "mintable": {"type": "boolean"},
+            "quantityQNT": {"type": "string"},
+            "quantityCirculatingQNT": {"type": "string"},
+            "asset": {"type": "string"},
+            "numberOfTransfers": {"type": "number"},
+            "numberOfAccounts": {"type": "number"},
+            "requestProcessingTime": {"type": "number"},
+        },
+        "required": [
+            "account",
+            "accountRS",
+            "name",
+            "description",
+            "decimals",
+            "mintable",
+            "quantityQNT",
+            "quantityCirculatingQNT",
+            "asset",
+            "numberOfTransfers",
+            "numberOfAccounts",
+            "requestProcessingTime",
+        ],
+    }
+
 class GetBlockChainStatus(QueryBase):
     _request_type = "getBlockchainStatus"
     _http_method = "GET"

@@ -79,7 +79,7 @@ class BrsApiBase:
 
 
 class BrsApi(BrsApiBase):
-    """The BrsApi class provides convenient access to Brs API."""
+    """The BrsApi class provides convenient access to Signum Node API."""
 
     def get_peers(self) -> list:
         return self._request(queries.GetPeers())["peers"]
@@ -89,6 +89,9 @@ class BrsApi(BrsApiBase):
 
     def get_block_chain_status(self) -> dict:
         return self._request(queries.GetBlockChainStatus())
+    
+    def get_asset(self, asset_id: int) -> dict:
+        return self._request(queries.GetAsset({"asset": asset_id}))
 
     def get_mining_info(self) -> dict:
         return self._request(queries.GetMiningInfo())

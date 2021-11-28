@@ -17,7 +17,7 @@ class CachingPendingTxs(CachingDataBase):
     default_data_if_empty = []
 
     def _get_live_data(self):
-        txs_pending = BrsApi(settings.BRS_NODE).get_unconfirmed_transactions()
+        txs_pending = BrsApi(settings.SIGNUM_NODE).get_unconfirmed_transactions()
 
         for t in txs_pending:
             t["timestamp"] = datetime.fromtimestamp(

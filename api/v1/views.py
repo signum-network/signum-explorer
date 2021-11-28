@@ -12,7 +12,7 @@ class PendingTxsList(ViewSet):
     @staticmethod
     def list(request):
         try:
-            txs = BrsApi(settings.BRS_NODE).get_unconfirmed_transactions()
+            txs = BrsApi(settings.SIGNUM_NODE).get_unconfirmed_transactions()
             txs.sort(key=lambda _x: int(_x["feeNQT"]), reverse=True)
 
             serializer = PendingTxsSerializer(txs, many=True)

@@ -32,7 +32,6 @@
               <th>Name</th>
               <td>
                 {{ asset.name }}
-                {% if asset.id == 14686983107863035136 %}❤️{% endif %}
               </td>
             </tr>
             <tr>
@@ -46,6 +45,16 @@
                   {{ asset.quantity|intcomma }}
                 {% else %}
                   {{ asset.quantity|div_decimals:asset.decimals|floatformat:0|intcomma }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th>Circulating Quantity</th>
+              <td>
+                {% if asset.decimals == 0 %}
+                  {{ asset.id|asset_circulating|intcomma }}
+                {% else %}
+                  {{ asset.id|asset_circulating|div_decimals:asset.decimals|floatformat:0|intcomma }}
                 {% endif %}
               </td>
             </tr>

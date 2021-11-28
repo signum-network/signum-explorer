@@ -2,11 +2,14 @@ from datetime import datetime, timedelta
 from math import ceil
 
 from django import template
+from django.conf import settings
 
 from burst.constants import MAX_BASE_TARGET
 from burst.libs.functions import calc_block_reward
 from burst.libs.reed_solomon import ReedSolomon
 from burst.libs.transactions import get_message
+from burst.api.brs.v1.api import BrsApi
+
 from java_wallet.fields import get_desc_tx_type
 from java_wallet.models import Block, Transaction
 from scan.caching_data.exchange import CachingExchangeData
@@ -26,6 +29,10 @@ def block_reward(block: Block) -> int:
 def block_reward_with_fee(block: Block) -> float:
     return calc_block_reward(block.height) + block.total_fee / 10 ** 8
 
+@register.filter
+def asset_circulating(asset_id: int) -> int:
+    asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
+    return int(asset_details["quantityCirculatingQNT"])
 
 @register.filter
 def burst_amount(value: int) -> float:
