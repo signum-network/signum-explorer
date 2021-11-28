@@ -76,7 +76,7 @@
             </tr>
             <tr>
               <th>Value</th>
-              <td>{{ tx.amount|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
+              <td>{{ tx|tx_amount|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ tx|tx_amount|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
             </tr>
             <tr>
               <th>Transaction Fee</th>

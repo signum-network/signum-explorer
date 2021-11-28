@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 from math import ceil
+import sys
 
 from django import template
 from django.conf import settings
 
-from burst.constants import MAX_BASE_TARGET
+from burst.constants import MAX_BASE_TARGET, TxSubtypeBurstMining, TxType
 from burst.libs.functions import calc_block_reward
 from burst.libs.reed_solomon import ReedSolomon
 from burst.libs.transactions import get_message
@@ -76,6 +77,11 @@ def tx_message(tx: Transaction) -> str:
 def tx_type(tx: Transaction) -> str:
     return get_desc_tx_type(tx.type, tx.subtype)
 
+@register.filter
+def tx_amount(tx: Transaction) -> int:
+    if tx.type == TxType.BURST_MINING and (tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD or tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE):
+        return int.from_bytes(tx.attachment_bytes[1:], byteorder=sys.byteorder)
+    return tx.amount
 
 @register.filter
 def num2rs(value: str or int) -> str:
