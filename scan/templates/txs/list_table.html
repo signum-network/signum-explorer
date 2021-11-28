@@ -40,8 +40,8 @@
             {{ tx|tx_type }}
           {% endif %}
         </td>
-        <td class="text-nowrap">{{ tx.amount|burst_amount|rounding:5|intcomma }} Burst</td>
-        <td class="text-nowrap">{{ tx.fee|burst_amount|rounding:5|intcomma }} Burst</td>
+        <td class="text-nowrap">{{ tx.amount|burst_amount|rounding:5|intcomma|append_symbol }} </td>
+        <td class="text-nowrap">{{ tx.fee|burst_amount|rounding:5|intcomma|append_symbol }} </td>
       </tr>
     {% endfor %}
     </tbody>
