@@ -5,7 +5,7 @@
 
 {% block content %}
 
-  <h5 class="p-2">Asset Trades
+  <h5 class="p-2">Token Trades
     {% if 'asset' in request.GET %}
       <small class="text-muted">For asset #<a href="{% url 'asset-detail' request.GET.asset %}">{{ request.GET.asset }}</a></small>
     {% elif 'a' in request.GET %}
