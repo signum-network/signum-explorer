@@ -25,7 +25,9 @@
           {% endif %}
         </td>
         <td>
-          {{ asset.quantity|div:asset.total_quantity|mul:100|floatformat:2|intcomma }} %
+          {% with circulating=asset.asset_id|asset_circulating %}
+            {{ asset.quantity|div:circulating|mul:100|floatformat:3|intcomma }} %
+          {% endwith %}
         </td>
         <td><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
       </tr>
