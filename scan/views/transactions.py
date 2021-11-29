@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.views.generic import ListView
+from burst.constants import TxSubtypeBurstMining, TxType
 
 from burst.libs.multiout import MultiOutPack
 from java_wallet.models import Transaction

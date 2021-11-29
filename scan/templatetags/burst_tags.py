@@ -5,14 +5,15 @@ import sys
 from django import template
 from django.conf import settings
 
-from burst.constants import MAX_BASE_TARGET, TxSubtypeBurstMining, TxType
+from burst.constants import MAX_BASE_TARGET, TxSubtypeBurstMining, TxSubtypePayment, TxType
 from burst.libs.functions import calc_block_reward
+from burst.libs.multiout import MultiOutPack
 from burst.libs.reed_solomon import ReedSolomon
 from burst.libs.transactions import get_message
 from burst.api.brs.v1.api import BrsApi
 
 from java_wallet.fields import get_desc_tx_type
-from java_wallet.models import Block, Transaction
+from java_wallet.models import Block, IndirectRecipient, Transaction
 from scan.caching_data.exchange import CachingExchangeData
 
 import struct
@@ -72,7 +73,6 @@ def tx_message(tx: Transaction) -> str:
         return ""
     return get_message(tx.attachment_bytes)
 
-
 @register.filter
 def tx_type(tx: Transaction) -> str:
     return get_desc_tx_type(tx.type, tx.subtype)
@@ -82,6 +82,37 @@ def tx_amount(tx: Transaction) -> int:
     if tx.type == TxType.BURST_MINING and (tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD or tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE):
         return int.from_bytes(tx.attachment_bytes[1:], byteorder=sys.byteorder)
     return tx.amount
+
+def group_list(lst: list or tuple, n: int):
+    for i in range(0, len(lst), n):
+        val = lst[i : i + n]
+        if len(val) == n:
+            yield tuple(val)
+
+@register.filter
+def tx_recipients(tx: Transaction) -> Transaction:
+    if not tx.recipients:
+        if tx.type == TxType.PAYMENT and tx.subtype == TxSubtypePayment.MULTI_OUT:
+            data = MultiOutPack().unpack_multi_out(tx.attachment_bytes)
+            recipients = []
+            amounts = []
+            for r, a in group_list(data, 2):
+                recipient = IndirectRecipient()
+                recipient.amount = a
+                recipient.id = r
+                recipients.append(recipient)
+            tx.recipients = recipients
+        elif tx.type == TxType.PAYMENT and tx.subtype == TxSubtypePayment.MULTI_OUT_SAME:
+            data = MultiOutPack().unpack_multi_out_same(tx.attachment_bytes)
+            recipients = []
+            for r in data:
+                recipient = IndirectRecipient()
+                recipient.amount = tx.amount / len(data)
+                recipient.id = r
+                recipients.append(recipient)
+
+            tx.recipients = recipients
+    return tx
 
 @register.filter
 def num2rs(value: str or int) -> str:

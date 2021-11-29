@@ -376,6 +376,10 @@ class Trade(models.Model):
         db_table = 'trade'
         unique_together = (('ask_order_id', 'bid_order_id'),)
 
+class IndirectRecipient:
+    amount = None
+    id = None
+    asset_id = None
 
 class Transaction(models.Model):
     db_id = models.BigAutoField(primary_key=True)
@@ -403,11 +407,23 @@ class Transaction(models.Model):
     ec_block_height = models.IntegerField(blank=True, null=True)
     ec_block_id = PositiveBigIntegerField(blank=True, null=True)
     has_encrypttoself_message = models.IntegerField()
+    recipients = None
 
     class Meta:
         managed = True
         db_table = 'transaction'
 
+class IndirecIncoming(models.Model):
+    db_id = models.BigAutoField(primary_key=True)
+    account_id = PositiveBigIntegerField()
+    transaction_id = PositiveBigIntegerField()
+    height = models.IntegerField()
+    amount = PositiveBigIntegerField(null=True)
+    quantity = PositiveBigIntegerField(null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'indirect_incoming'
 
 class UnconfirmedTransaction(models.Model):
     db_id = models.BigAutoField(primary_key=True)

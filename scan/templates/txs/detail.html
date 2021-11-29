@@ -56,30 +56,14 @@
             <tr>
               <th>To</th>
               <td>
-                {% if not tx.multiout %}
-                {% include "recipient_link.html" with account_id=tx.recipient_id account_name=tx.recipient_name oneline=True %}
-                {% else %}
-{#              refact it#}
-{% if tx.subtype == 1 %}
-  {% for r in tx.attachment.recipients %}
-    {{ r.0|num2rs }} - {{ r.1|burst_amount|rounding:5|intcomma }}<BR>
-  {% endfor %}
-{% elif tx.subtype == 2 %}
-  {% with tx.amount|div:tx.multiout as amount %}
-    {% for r in tx.attachment.recipients %}
-      {{ r|num2rs }} - {{ amount|burst_amount|rounding:5|intcomma }}<BR>
-    {% endfor %}
-  {% endwith %}
-{% endif %}
-                {% endif %}
+                {% include "recipient_link.html" with tx=tx|tx_recipients oneline=True %}
               </td>
             </tr>
-            <tr>
               <th>Value</th>
               <td>{{ tx|tx_amount|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ tx|tx_amount|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
             </tr>
             <tr>
-              <th>Transaction Fee</th>
+              <th>Fee</th>
               <td>{{ tx.fee|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ tx.fee|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
             </tr>
             <tr class="collapse show_more_info">

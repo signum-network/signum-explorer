@@ -6,6 +6,7 @@ from java_wallet.models import (
     AccountAsset,
     AssetTransfer,
     Block,
+    IndirecIncoming,
     Trade,
     Transaction,
 )
@@ -60,10 +61,15 @@ class AddressDetailView(IntSlugDetailView):
         obj = context[self.context_object_name]
 
         # transactions
+        indirects = (
+            IndirecIncoming.objects.using("java_wallet")
+            .values_list('transaction_id', flat=True)
+            .filter(account_id=obj.id)
+        )
 
         txs = (
             Transaction.objects.using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
+            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id) | Q(id__in=indirects))
             .order_by("-height")[:15]
         )
 
@@ -73,7 +79,7 @@ class AddressDetailView(IntSlugDetailView):
         context["txs"] = txs
         context["txs_cnt"] = (
             Transaction.objects.using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
+            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id) | Q(id__in=indirects))
             .count()
         )
 
