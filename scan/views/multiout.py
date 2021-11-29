@@ -12,29 +12,3 @@ def fill_data_multiouts(obj):
     if obj.recipient_id:
         obj.recipient_name = get_account_name(obj.recipient_id)
 
-
-class MultiOutListView(ListView):
-    model = MultiOut
-    queryset = MultiOut.objects.all()
-    template_name = "mos/list.html"
-    context_object_name = "mos"
-    paginator_class = CachingPaginator
-    paginate_by = 25
-    ordering = ("-height", "-tx_timestamp")
-
-    def get_queryset(self):
-        filter_set = MultiOutFilter(self.request.GET, queryset=super().get_queryset())
-        qs = filter_set.qs
-        if not filter_set.data:
-            qs = qs[:10000]
-
-        return qs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["mos_cnt"] = CachingTotalMultioutCount().cached_data
-        obj = context[self.context_object_name]
-        for t in obj:
-            fill_data_multiouts(t)
-
-        return context

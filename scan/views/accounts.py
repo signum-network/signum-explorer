@@ -83,20 +83,6 @@ class AddressDetailView(IntSlugDetailView):
             .count()
         )
 
-        # multiouts
-
-        mos = MultiOut.objects.filter(
-            Q(sender_id=obj.id) | Q(recipient_id=obj.id)
-        ).order_by("-height")[:15]
-
-        for t in mos:
-            fill_data_multiouts(t)
-
-        context["mos"] = mos
-        context["mos_cnt"] = MultiOut.objects.filter(
-            Q(sender_id=obj.id) | Q(recipient_id=obj.id)
-        ).count()
-
         # assets
 
         assets = (

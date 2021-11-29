@@ -32,7 +32,6 @@ from scan.views.marketplace import (
     MarketPlaceListView,
     MarketPlacePurchasesListView,
 )
-from scan.views.multiout import MultiOutListView
 from scan.views.peers import (
     PeerMonitorDetailView,
     PeerMonitorListView,
@@ -46,7 +45,6 @@ urlpatterns = [
     path("", index, name="index"),
     path("blocks/", BlockListView.as_view(), name="blocks"),
     path("block/<str:height>", BlockDetailView.as_view(), name="block-detail"),
-    path("mos/", MultiOutListView.as_view(), name="mos"),
     path("txsPending/", pending_transactions, name="txs-pending"),
     path("txs/", TxListView.as_view(), name="txs"),
     path("tx/<str:id>", TxDetailView.as_view(), name="tx-detail"),
