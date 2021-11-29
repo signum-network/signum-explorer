@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="{% block description %}{% endblock %}">
     <meta name="author" content="Lev Lybin">
-    <title>Signum {% if test_net %}TestNet {% endif %}Blockchain Explorer{% block title %}{% endblock %}</title>
-    <link href="{% static 'favicon.ico' %}" rel="icon">
+    <title>Signum {% if test_net %}TestNet {% endif %} Explorer{% block title %}{% endblock %}</title>
+    <link href="{% static 'favicon.png' %}" rel="icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.min.css' %}" />
@@ -18,12 +18,12 @@
       <header>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-3">
-          <a class="mb-2" href="/"><img alt="SIGNUM" src="{% static 'Signum_Logo_V1_black.png' %}" height="32px"></a>
-          <a href="/">
+          <a class="mb-2" href="/"><img alt="SIGNUM" src="{% static 'Signum_node_black.svg' %}" height="32px"></a>
+          <a class="p-3" href="/">
           {% if test_net %}
-            <span class="navbar-brand my-0 mr-md-auto mb-2 text-danger">Explorer TestNet</span>
+            <span class="navbar-brand my-0 mr-md-auto mb-2 text-danger">Signum TestNet Explorer</span>
           {% else %}
-            <span class="navbar-brand my-0 mr-md-auto mb-2"></span>
+            <span class="navbar-brand my-0 mr-md-auto mb-2">Signum Explorer</span>
           {% endif %}
           </a>
 
@@ -89,7 +89,7 @@
           {% if request.path != '/' %}
           <form class="form-inline my-2 my-lg-0 input-group col-lg-4" action="{% url 'search' %}">
             <input class="form-control mr-sm-2" type="text" name="q" placeholder="Address / Block / Transaction / Token / Contract" title="Fill to search" aria-label="Search">
-            <button class="btn btn-outline-primary my-sm-0" type="submit" name="submit" value="Search">Search</button>
+            <button class="btn btn-outline-dark my-sm-0" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
           </form>
           {% else %}
             <div class="col-lg-3"></div>
