@@ -10,7 +10,27 @@
 {{ at.description }}
 {% endblock %}
 
+{% block scripts %}
+  <script>jQuery('#qr_code').qrcode({text: "{{ at.id|num2rs }}", width: 240, height: 240});</script>
+{% endblock %}
+
 {% block content %}
+  <!-- QRModal -->
+  <div class="modal fade" id="QRModal" tabindex="-1" role="dialog" aria-labelledby="QRModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-break small" id="QRModalLabel">{{ at.id|num2rs }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <div id="qr_code" title="S-{{ at.id|num2rs }}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <h5 class="p-2">Contract Details</h5>
 
@@ -25,9 +45,11 @@
                 <th style="width: 160px;">Address</th>
                 <th>
                   {{ at.id|num2rs }}
-                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ at.id }}"><i class="far fa-copy"></i></a>
+                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ at.id|num2rs }}"><i class="far fa-copy"></i></a>
+                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
                 </th>
               </tr>
+              <!--
               <tr>
                 <th style="width: 160px;">ID</th>
                 <th>
@@ -35,6 +57,7 @@
                   <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ at.id }}"><i class="far fa-copy"></i></a>
                 </th>
               </tr>
+              -->
               <tr>
                 <th>Name</th>
                 <td style="word-wrap: break-word; max-width: 250px">{{ at.name }}</td>
