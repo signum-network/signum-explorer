@@ -23,10 +23,15 @@ sudo apt install python3-dev default-libmysqlclient-dev build-essential redis-se
 
 The following python modules are required as well:
 ```
-pip install celery django django-cache-memoize django-cors-headers django-filter django-redis djangorestframework django-static-fontawesome gunicorn jsonschema mysqlclient pycoingecko python-redis-lock requests sentry-sdk simplejson supervisor whitenoise python-dotenv
+pip3 install celery django django-cache-memoize django-cors-headers django-filter django-redis djangorestframework django-static-fontawesome gunicorn jsonschema mysqlclient pycoingecko python-redis-lock requests sentry-sdk simplejson supervisor whitenoise python-dotenv
 ```
 
-Download the [free version of fontawesome](https://use.fontawesome.com/releases/v5.15.4/fontawesome-free-5.15.4-web.zip) and extract to the `static` folder.
+Download the [free version of fontawesome](https://use.fontawesome.com/releases/v5.15.4/fontawesome-free-5.15.4-web.zip) and extract to the `static` folder:
+```
+cd static
+wget https://use.fontawesome.com/releases/v5.15.4/fontawesome-free-5.15.4-web.zip
+unzip fontawesome-free-5.15.4-web.zip
+```
 
 ## Set-up
 
