@@ -17,7 +17,7 @@
       <header>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-3">
-          <a class="mb-2" href="/"><img alt="SIGNUM" src="https://hostingwire.net/wp-content/uploads/2021/06/Signum_Logo_V1_black.png" height="32px"></a>
+          <a class="mb-2" href="/"><img alt="SIGNUM" src="{% static 'Signum_Logo_V1_black.png' %}" height="32px"></a>
           <a href="/">
           {% if test_net %}
             <span class="navbar-brand my-0 mr-md-auto mb-2 text-danger">Explorer TestNet</span>
@@ -44,7 +44,6 @@
                 <div class="dropdown-menu" aria-labelledby="transactions-nav">
                   <a class="dropdown-item" href="{% url 'txs' %}">Transactions</a>
                   <a class="dropdown-item" href="{% url 'txs-pending' %}">Pending transactions</a>
-                  <a class="dropdown-item" href="{% url 'mos' %}">MultiOut</a>
                   <a class="dropdown-item" href="{% url 'ats' %}">Contracts</a>
                 </div>
               </li>
