@@ -37,12 +37,12 @@
             <thead>
             <tr>
               <th scope="col">Height</th>
-              <th scope="col">Timestamp</th>
-              <th scope="col">Txn</th>
+              <th scope="col" class="d-none d-sm-table-cell">Timestamp</th>
+              <th scope="col" class="d-none d-sm-table-cell">Txn</th>
               <th scope="col">Sent</th>
-              <th scope="col">Reward</th>
-              <th scope="col">Size</th>
-              <th scope="col">Miner</th>
+              <th scope="col" class="d-none d-sm-table-cell">Reward</th>
+              <th scope="col" class="d-none d-sm-table-cell">Size</th>
+              <th scope="col" class="d-none d-sm-table-cell">Miner</th>
               <th scope="col">Pool</th>
             </tr>
             </thead>
@@ -50,8 +50,8 @@
             {% for block in blocks %}
               <tr>
                 <td><a href="{% url 'block-detail' block.height %}">{{ block.height }}</a></td>
-                <td class="text-nowrap">{{ block.timestamp|naturaltime }}</td>
-                <td>
+                <td class="text-nowrap d-none d-sm-table-cell">{{ block.timestamp|naturaltime }}</td>
+                <td class="d-none d-sm-table-cell">
                   {% if block.txs_cnt > 0 %}
                     <a href="{% url 'txs' %}?block={{ block.height }}">{{ block.txs_cnt|intcomma }}</a>
                   {% else %}
@@ -59,9 +59,9 @@
                   {% endif %}
                 </td>
                 <td class="text-nowrap">{{ block.total_amount|burst_amount|rounding:5|intcomma|append_symbol }} </td>
-                <td class="text-nowrap">{{ block|block_reward_with_fee|rounding:5|intcomma|append_symbol }} </td>
-                <td>{{ block.payload_length|filesizeformat }}</td>
-                <td class="text-nowrap">
+                <td class="text-nowrap d-none d-sm-table-cell">{{ block|block_reward_with_fee|rounding:5|intcomma|append_symbol }} </td>
+                <td class="d-none d-sm-table-cell">{{ block.payload_length|filesizeformat }}</td>
+                <td class="text-nowrap d-none d-sm-table-cell">
                   {% include "account_link.html" with account_id=block.generator_id account_name=block.generator_name filtered_account=request.GET.m %}
                 </td>
                 <td class="text-nowrap">
