@@ -21,7 +21,7 @@
           <small class="my-0 mr-md-auto text-muted">
             {% if 'a' not in request.GET and assets_transfers_cnt > paginator.count %}
               More than > {{ assets_transfers_cnt|intcomma }} transfers found<br>
-              <small>(Showing the last 100k records)</small>
+              <small>(Showing the lastest 10k records)</small>
             {% else %}
               A total of
               {% if assets_transfers %}

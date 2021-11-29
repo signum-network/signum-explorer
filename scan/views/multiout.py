@@ -26,7 +26,7 @@ class MultiOutListView(ListView):
         filter_set = MultiOutFilter(self.request.GET, queryset=super().get_queryset())
         qs = filter_set.qs
         if not filter_set.data:
-            qs = qs[:100000]
+            qs = qs[:10000]
 
         return qs
 

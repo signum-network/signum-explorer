@@ -54,7 +54,7 @@ class AssetTradesListView(ListView):
     def get_queryset(self):
         self.filter_set = TradeFilter(self.request.GET, queryset=super().get_queryset())
         if self.filter_set.is_valid() and self.filter_set.data:
-            qs = self.filter_set.qs[:100000]
+            qs = self.filter_set.qs[:10000]
         else:
             raise Http404()
 
@@ -85,7 +85,7 @@ class AssetTransfersListView(ListView):
             self.request.GET, queryset=super().get_queryset()
         )
         if self.filter_set.is_valid() and self.filter_set.data:
-            qs = self.filter_set.qs[:100000]
+            qs = self.filter_set.qs[:10000]
         else:
             raise Http404()
 

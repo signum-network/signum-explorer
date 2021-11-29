@@ -42,7 +42,7 @@ class TxListView(ListView):
         self.filter_set = TxFilter(self.request.GET, queryset=super().get_queryset())
         qs = self.filter_set.qs
         if not self.filter_set.data:
-            qs = qs[:100000]
+            qs = qs[:10000]
 
         return qs
 

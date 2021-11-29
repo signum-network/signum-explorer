@@ -21,7 +21,7 @@
           <small class="my-0 mr-md-auto text-muted">
             {% if 'a' not in request.GET and assets_trades_cnt > paginator.count %}
               More than > {{ assets_trades_cnt|intcomma }} trades found<br>
-              <small>(Showing the last 100k records)</small>
+              <small>(Showing the lastest 10k records)</small>
             {% else %}
               A total of
               {% if assets_trades %}
