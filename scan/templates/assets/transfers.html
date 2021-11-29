@@ -9,7 +9,7 @@
     {% if 'asset' in request.GET %}
       <small class="text-muted">For asset #<a href="{% url 'asset-detail' request.GET.asset %}">{{ request.GET.asset }}</a></small>
     {% elif 'a' in request.GET %}
-      <small class="text-muted">For address #<a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a }}</a></small>
+      <small class="text-muted">for address #<a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
     {% endif %}
   </h5>
 
