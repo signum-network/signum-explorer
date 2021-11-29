@@ -4,7 +4,8 @@ This documentation is a work in progress. More details to follow.
 
 ## Requirements
 
-A [Signum Node](https://github.com/signum-network/signum-node) with MariaDB version 3.3 or up is required.
+ - A [Signum Node](https://github.com/signum-network/signum-node) with MariaDB version 3.3.0 or up is required.
+ - Python3, Redis server, and many python modules.
 
 ### Linux
 
@@ -34,12 +35,6 @@ Make a copy of the default environment configuration:
 `cp .env.default .env`
 
 Edit the `.env` to suit your needs.
-
-See [DB ENGINES PARAMS](https://docs.djangoproject.com/en/2.2/ref/settings/#engine)
-
-`DB_JAVA_WALLET` (signum full node database) Only requires read access
-
-See additional info about set up DB [here](java_wallet)
 
 To initilize the explorer database (DB_DEFAULT) run the following command:
 `python manage.py migrate --no-input`
