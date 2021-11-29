@@ -28,28 +28,8 @@
           {% include "account_link.html" with account_id=tx.sender account_name=tx.sender_name %}
         </td>
         <td class="text-nowrap">
-          {% if tx.recipient or tx.multiout %}
-            {% if tx.recipient %}
-              {% if tx.recipient_exists %}
-                {% include "account_link.html" with account_id=tx.recipient account_name=tx.recipient_name %}
-              {% else %}
-                {{ tx.recipient|num2rs }}
-              {% endif %}
-            {% elif tx.type == 0 and tx.subtype == 1 or tx.type == 0 and tx.subtype == 2 %}
-{#              refact it#}
-              <span class="text-info" title="
-{% if tx.subtype == 1 %}
-  {% for r in tx.attachment.recipients %}
-{{ r.0|num2rs }} - {{ r.1|burst_amount|rounding:5|intcomma }}
-  {% endfor %}
-{% elif tx.subtype == 2 %}
-  {% with tx.amountNQT|div:tx.multiout as amount %}
-    {% for r in tx.attachment.recipients %}
-{{ r|num2rs }} - {{ amount|burst_amount|rounding:5|intcomma }}
-    {% endfor %}
-  {% endwith %}
-{% endif %}">{{ tx.multiout }} recipients</span>
-            {% endif %}
+          {% if tx.recipient %}
+            {% include "recipient_link.html" with account_id=tx.recipient account_name=tx.recipient_name %}
           {% else %}
             {{ tx.tx_name }}
           {% endif %}

@@ -36,14 +36,11 @@ class CachingPendingTxs(CachingDataBase):
                 if t["recipient_exists"]:
                     t["recipient_name"] = get_account_name(int(t["recipient"]))
 
+            t["attachment_bytes"] = None
+            if "attachmentBytes" in t:
+                t["attachment_bytes"] =  bytes.fromhex(t["attachmentBytes"])
             if "attachment" in t and "recipients" in t["attachment"]:
                 t["multiout"] = len(t["attachment"]["recipients"])
-
-                for i, x in enumerate(t["attachment"]["recipients"]):
-                    if t["subtype"] == TxSubtypePayment.MULTI_OUT:
-                        t["attachment"]["recipients"][i] = [int(x[0]), int(x[1])]
-                    elif t["subtype"] == TxSubtypePayment.MULTI_OUT_SAME:
-                        t["attachment"]["recipients"][i] = int(x)
 
             t["tx_name"] = get_desc_tx_type(t["type"], t["subtype"])
 
