@@ -42,10 +42,10 @@ Make a copy of the default environment configuration:
 Edit the `.env` to suit your needs.
 
 To initilize the explorer database (DB_DEFAULT) run the following command:
-`python manage.py migrate --no-input`
+```python manage.py migrate --no-input```
 
-Start a django webserver to test if your instance works:
-`python manage.py runserver 0.0.0.0:5000`
+Start the django webserver:
+```python manage.py runserver 0.0.0.0:5000```
 
 To run in production use the provided supervisord.conf to run the service with supervisord:
-`/path/to/your/supervisord -c /supervisord.conf`
+```/path/to/your/supervisord -c /supervisord.conf```
