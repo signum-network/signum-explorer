@@ -88,8 +88,10 @@
 
           {% if request.path != '/' %}
           <form class="form-inline my-2 my-lg-0 input-group col-lg-4" action="{% url 'search' %}">
-            <input class="form-control mr-sm-2" type="text" name="q" placeholder="Address / Block / Transaction / Token / Contract" title="Fill to search" aria-label="Search">
-            <button class="btn btn-outline-dark my-sm-0" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
+            <input class="form-control" type="text" name="q" placeholder="Address / Block / Transaction / Token / Contract" title="Fill to search" aria-label="Search">
+            <div class="input-group-append">
+              <button class="btn btn-outline-dark my-sm-0" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
+            </div>
           </form>
           {% else %}
             <div class="col-lg-3"></div>
