@@ -12,7 +12,7 @@ SEARCH_BY = [
     ("Account", "id", "/address/{}"),
     ("Asset", "id", "/asset/{}"),
 #    ("Goods", "id", "/mp/{}"),
-    ("Contract", "id", "/at/{}"),
+    ("At", "id", "/at/{}"),
     ("Transaction", "id", "/tx/{}"),
 ]
 
