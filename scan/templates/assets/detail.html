@@ -22,7 +22,7 @@
           <table class="table small table-sm">
             <tbody>
             <tr>
-              <th style="width: 160px;">ID</th>
+              <th style="width: 130px;">ID</th>
               <th>
                 {{ asset.id }}
                 <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ asset.id }}"><i class="far fa-copy"></i></a>
@@ -49,7 +49,7 @@
               </td>
             </tr>
             <tr>
-              <th>Circulating Quantity</th>
+              <th>Total Circulating</th>
               <td>
                 {% if asset.decimals == 0 %}
                   {{ asset.id|asset_circulating|intcomma }}
