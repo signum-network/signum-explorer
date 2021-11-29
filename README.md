@@ -44,8 +44,11 @@ Edit the `.env` to suit your needs.
 To initilize the explorer database (DB_DEFAULT) run the following command:
 ```python manage.py migrate --no-input```
 
-Start the django webserver:
+Start the django webserver as development:
 ```python manage.py runserver 0.0.0.0:5000```
+
+Start with gunicorn:
+```gunicorn config.wsgi -c gunicorn.conf.py```
 
 To run in production use the provided supervisord.conf to run the service with supervisord:
 ```/path/to/your/supervisord -c /supervisord.conf```

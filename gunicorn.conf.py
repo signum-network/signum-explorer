@@ -11,7 +11,6 @@ timeout = 30
 keepalive = 2
 max_requests = 500
 max_requests_jitter = 100
-chdir = "/home/julia/burst_explorer"
 worker_tmp_dir = "/dev/shm"
 forwarded_allow_ips = "*"
 proxy_allow_ips = "*"
