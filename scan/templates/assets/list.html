@@ -24,8 +24,8 @@
             <tr>
               <th scope="col">Token Id</th>
               <th scope="col">Name</th>
-              <th scope="col">Issuer</th>
-              <th scope="col">Initial Quantity</th>
+              <th scope="col" class="d-none d-sm-table-cell">Issuer</th>
+              <th scope="col" class="d-none d-sm-table-cell">Initial Quantity</th>
             </tr>
             </thead>
             <tbody>
@@ -36,10 +36,10 @@
                   {{ asset.name }}
                   {% if asset.id == 14686983107863035136 %}❤️{% endif %}
                 </td>
-                <td class="text-nowrap">
+                <td class="text-nowrap d-none d-sm-table-cell">
                     {% include "account_link.html" with account_id=asset.account_id account_name=asset.account_name %}
                 </td>
-                <td>
+                <td  class="d-none d-sm-table-cell">
                   {% if asset.decimals == 0 %}
                     {{ asset.quantity|intcomma }}
                   {% else %}

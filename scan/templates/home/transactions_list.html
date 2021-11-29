@@ -20,7 +20,7 @@
             {{ tx|tx_type }}
           {% endif %}
         </td>
-        <td class="text-nowrap" title="Amount">{{ tx.amount|burst_amount|rounding:5|intcomma|append_symbol }} </td>
+        <td class="text-nowrap d-none d-sm-table-cell" title="Amount">{{ tx.amount|burst_amount|rounding:5|intcomma|append_symbol }} </td>
       </tr>
     {% endfor %}
     </tbody>

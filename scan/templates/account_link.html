@@ -7,7 +7,11 @@
     {{ account_id|num2rs }}
   </a>
 {% endif %}
-{% if not oneline %}<br>{% endif %}
+{% if not oneline %}
+  <br>
+{% else %}
+  <br class="d-md-none" />
+{% endif %}
 <small>
   {% if account_name %}
     <span class="text-success" title="{{ account_name }}">{{ account_name|truncatechars:30 }}</span>

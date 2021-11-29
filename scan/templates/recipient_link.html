@@ -11,8 +11,10 @@
       <tbody>
       {% for r in tx.recipients %}
         <tr>
-          <td>{% include "account_link.html" with account_id=r.id account_name=' ' oneline=oneline %}</td>
-          <td>{{ r.amount|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ r.amount|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
+          <td>
+            <span>{% include "account_link.html" with account_id=r.id account_name=' ' oneline=oneline %}</span>
+            <span>{{ r.amount|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ r.amount|burst_amount|in_usd|rounding:4|intcomma }})</span></span>
+          </td>
         </tr>
       {% endfor %}
       </tbody>
