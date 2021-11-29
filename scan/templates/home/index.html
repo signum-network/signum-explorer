@@ -93,9 +93,9 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last
   </div>
 
   <div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm">
+    <div class="card mb-4">
       <div class="card-header">
-        <h5 class="my-0 font-weight-normal">Latest Blocks</h5>
+        <h5 class="card-header-title">Latest Blocks</h5>
       </div>
       <div class="card-body">
         {% include "home/blocks_list.html" %}
@@ -104,9 +104,9 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last
         <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'blocks' %}">View all blocks</a>
       </div>
     </div>
-    <div class="card mb-4 shadow-sm">
+    <div class="card mb-4">
       <div class="card-header">
-        <h5 class="my-0 font-weight-normal">Transactions</h5>
+        <h5 class="card-header-title">Transactions</h5>
       </div>
       <div class="card-body">
         {% include "home/transactions_list.html" %}
