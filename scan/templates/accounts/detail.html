@@ -3,15 +3,15 @@
 {% load humanize %}
 {% load burst_tags %}
 
-{% block title %} - Account #{{ address.id }}{% endblock %}
+{% block title %} - Address {{ address.id|num2rs }}{% endblock %}
 
 {% block description %}
-S-{{ address.id|num2rs }}
+{{ address.id|num2rs }}
 {% if address.name %}{{ address.name }}{% endif %}
 {% endblock %}
 
 {% block scripts %}
-  <script>jQuery('#qr_code').qrcode({text: "S-{{ address.id|num2rs }}", width: 240, height: 240});</script>
+  <script>jQuery('#qr_code').qrcode({text: "{{ address.id|num2rs }}", width: 240, height: 240});</script>
 {% endblock %}
 
 {% block content %}
@@ -20,7 +20,7 @@ S-{{ address.id|num2rs }}
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-break small" id="QRModalLabel">BURST-{{ address.id|num2rs }}</h5>
+          <h5 class="modal-title text-break small" id="QRModalLabel">{{ address.id|num2rs }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -32,8 +32,8 @@ S-{{ address.id|num2rs }}
     </div>
   </div>
 
-  <h5 class="p-2">Account #{{ address.id }}
-    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="S-{{ address.id|num2rs }}"><i class="far fa-copy"></i></a>
+  <h5 class="p-2">Address {{ address.id|num2rs }}
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ address.id|num2rs }}"><i class="far fa-copy"></i></a>
     <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
   </h5>
 
@@ -102,7 +102,6 @@ S-{{ address.id|num2rs }}
           <nav>
             <div class="nav nav-tabs small" id="nav-tab" role="tablist">
               <a class="nav-item nav-link active" id="nav-transactions-tab" data-toggle="tab" href="#nav-transactions" role="tab" aria-controls="nav-transactions" aria-selected="true">{{ txs_cnt|intcomma }} Transactions</a>
-              <a class="nav-item nav-link" id="nav-multiout-tab" data-toggle="tab" href="#nav-multiout" role="tab" aria-controls="nav-multiout" aria-selected="false">{{ mos_cnt|intcomma }} MultiOut</a>
               <a class="nav-item nav-link" id="nav-blocks-tab" data-toggle="tab" href="#nav-blocks" role="tab" aria-controls="nav-blocks" aria-selected="false">{{ mined_blocks_cnt|intcomma }} Blocks</a>
               <a class="nav-item nav-link" id="nav-asset-hold-tab" data-toggle="tab" href="#nav-asset-hold" role="tab" aria-controls="nav-asset-hold" aria-selected="false">{{ assets_cnt|intcomma }} Token holdings</a>
               <a class="nav-item nav-link" id="nav-asset-trades-tab" data-toggle="tab" href="#nav-asset-trades" role="tab" aria-controls="nav-asset-trades" aria-selected="false">{{ assets_trades_cnt|intcomma }} Token trades</a>
@@ -121,19 +120,6 @@ S-{{ address.id|num2rs }}
                 transactions
               </p>
               {% include "txs/list_table.html" with filtered_account=address.id %}
-            </div>
-
-            <div class="tab-pane fade" id="nav-multiout" role="tabpanel" aria-labelledby="nav-multiout-tab">
-              <p class="small p-1" style="margin-top: 10px">
-                Latest {{ mos.count }} from a total of
-                {% if mos_cnt > 0 %}
-                  <a href="{% url 'mos' %}?a={{ address.id }}">{{ mos_cnt|intcomma }}</a>
-                {% else %}
-                  0
-                {% endif %}
-                transactions
-              </p>
-              {% include "mos/list_table.html" with filtered_account=address.id %}
             </div>
 
             <div class="tab-pane fade" id="nav-blocks" role="tabpanel" aria-labelledby="nav-blocks-tab">
