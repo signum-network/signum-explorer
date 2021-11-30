@@ -9,10 +9,10 @@ import os
 
 SEARCH_BY = [
     ("Block", "height", "/block/{}"),
+    ("At", "id", "/at/{}"),
     ("Account", "id", "/address/{}"),
     ("Asset", "id", "/asset/{}"),
 #    ("Goods", "id", "/mp/{}"),
-    ("At", "id", "/at/{}"),
     ("Transaction", "id", "/tx/{}"),
 ]
 
@@ -49,12 +49,21 @@ def search_view(request):
                 query = query[len(os.environ.get("ADDRESS_PREFIX")):]
             numeric_id = ReedSolomon().decode(query)
             exists = (
-                models.Account.objects.using("java_wallet")
+                models.At.objects.using("java_wallet")
                 .filter(id=numeric_id)
                 .exists()
             )
             if exists:
-                redirect_url = f"/address/{numeric_id}"
+                redirect_url = f"/at/{numeric_id}"
+            else:
+                exists = (
+                    models.Account.objects.using("java_wallet")
+                    .filter(id=numeric_id)
+                    .exists()
+                )
+                if exists:
+                    redirect_url = f"/address/{numeric_id}"
+            
         except ReedSolomonError:
             pass
 

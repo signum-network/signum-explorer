@@ -3,7 +3,7 @@
 {% load humanize %}
 {% load burst_tags %}
 
-{% block title %} - Address {{ address.id|num2rs }}{% endblock %}
+{% block title %} - Account {{ address.id|num2rs }}{% endblock %}
 
 {% block description %}
 {{ address.id|num2rs }}
@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <h5 class="p-2">Address {{ address.id|num2rs }}
+  <h5 class="p-2">Account<br class="d-md-none" /> {{ address.id|num2rs }}
     <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ address.id|num2rs }}"><i class="far fa-copy"></i></a>
     <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
   </h5>
@@ -48,6 +48,10 @@
               <th>Address</th>
               <th>{{ address.id|num2rs }}</th>
             </tr>
+            <tr>
+              <th>ID</th>
+              <th>{{ address.id }}</th>
+            </tr>            
             <tr>
               <th style="width: 160px;">Name</th>
               <td style="word-wrap: break-word; max-width: 250px">{% if address.name %}{{ address.name }}{% endif %}</td>

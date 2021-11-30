@@ -32,7 +32,10 @@
     </div>
   </div>
 
-  <h5 class="p-2">Contract Details</h5>
+  <h5 class="p-2">Contract<br class="d-md-none" /> {{ at.id|num2rs }}
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ at.id|num2rs }}"><i class="far fa-copy"></i></a>
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
+  </h5>
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
@@ -42,24 +45,19 @@
             <table class="table small table-sm">
               <tbody>
               <tr>
-                <th style="width: 160px;">Address</th>
+                <th>Address</th>
                 <th>
                   {{ at.id|num2rs }}
-                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ at.id|num2rs }}"><i class="far fa-copy"></i></a>
-                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
                 </th>
               </tr>
-              <!--
               <tr>
-                <th style="width: 160px;">ID</th>
+                <th>ID</th>
                 <th>
                   {{ at.id }}
-                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ at.id }}"><i class="far fa-copy"></i></a>
                 </th>
               </tr>
-              -->
               <tr>
-                <th>Name</th>
+                <th style="width: 130px;">Name</th>
                 <td style="word-wrap: break-word; max-width: 250px">{{ at.name }}</td>
               </tr>
               <tr>
@@ -88,7 +86,7 @@
                 <td>{{ at.version }}</td>
               </tr>
               <tr>
-                <th>Code hash id</th>
+                <th>Code Hash ID</th>
                 <td>{{ at.ap_code_hash_id }}</td>
               </tr>
               <!--

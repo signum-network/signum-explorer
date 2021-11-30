@@ -24,7 +24,7 @@
             <tr>
               <th scope="col">Contract</th>
               <th scope="col">Name</th>
-              <th scope="col">Creator</th>
+              <th scope="col" class="d-none d-sm-table-cell">Creator</th>
             </tr>
             </thead>
             <tbody>
@@ -37,7 +37,7 @@
                 -->
                 <td><a href="{% url 'at-detail' at.id %}">{{ at.id|num2rs }}</a></td>
                 <td style="word-wrap: break-word; max-width: 250px">{{ at.name }}</td>
-                <td class="text-nowrap">
+                <td class="text-nowrap d-none d-sm-table-cell">
                   {% include "account_link.html" with account_id=at.creator_id account_name=at.creator_name %}
                 </td>
               </tr>
