@@ -48,6 +48,9 @@ def append_symbol(value: float) -> str:
 def coin_symbol() -> str:
     return os.environ.get("COIN_SYMBOL")
 
+@register.filter
+def env(key):
+    return os.environ.get(key, None)
 
 @register.filter
 def in_usd(value: float) -> float:

@@ -1,4 +1,5 @@
 {% load static %}
+{% load burst_tags %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -20,11 +21,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-3">
           <a class="mb-2" href="/"><img alt="SIGNUM" src="{% static 'Signum_node_black.svg' %}" height="32px"></a>
           <a class="p-3" href="/">
-          {% if test_net %}
-            <span class="navbar-brand my-0 mr-md-auto mb-2 text-danger">Signum TestNet Explorer</span>
-          {% else %}
-            <span class="navbar-brand my-0 mr-md-auto mb-2">Signum Explorer</span>
-          {% endif %}
+            <span class="navbar-brand my-0 mr-md-auto mb-2">{{ 'SITE_TITLE'|env }}</span>
           </a>
 
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsMenu" aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation">
