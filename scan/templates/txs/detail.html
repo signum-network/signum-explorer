@@ -12,7 +12,9 @@
 
 {% block content %}
 
-  <h5 class="p-2">Transaction Details</h5>
+  <h5 class="p-2">Transaction ID<br class="d-md-none" /> {{ tx.id }}
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ tx.id }}"><i class="far fa-copy"></i></a>
+  </h5>
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
@@ -21,6 +23,7 @@
         <div class="table-responsive">
           <table class="table small table-sm">
             <tbody>
+            <!--
             <tr>
               <th style="width: 130px;">ID</th>
               <th>
@@ -28,11 +31,13 @@
                 <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ tx.id }}"><i class="far fa-copy"></i></a>
               </th>
             </tr>
+            -->
             <tr>
-              <th>Height</th>
+              <th style="width: 130px;">Height</th>
               <td>
                 {% if tx.height != 0 %}
                   <a href="{% url 'block-detail' tx.block.height %}">{{ tx.block.height }}</a>
+                  <br class="d-md-none" />
                   {% include "block_confirmation.html" with blocks_confirm=tx.blocks_confirm %}
                 {% else %}
                   Pending...
