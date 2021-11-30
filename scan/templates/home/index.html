@@ -24,11 +24,11 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last
     </div>
   </div>
 
-{% if not test_net %}
   <div class="card-deck mb-3 text-center">
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
         <div class="row mx-gutters-md-1">
+          {% if not test_net %}
           <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-md">
             <div class="media align-items-center">
               <div class="text-left">
@@ -46,6 +46,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last
               </div>
             </div>
           </div>
+          {% endif %}
 
           <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-lg">
             <div class="media align-items-center">
@@ -80,8 +81,6 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last
       </div>
     </div>
   </div>
-
-{% endif %}
 
   <div class="card-deck mb-3 text-center">
     <div class="card mb-4 shadow-sm">
