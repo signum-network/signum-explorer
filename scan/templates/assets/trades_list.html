@@ -47,7 +47,9 @@
             {{ asset.quantity|div_decimals:asset.decimals|intcomma }}
           {% endif %}
         </td>
-        <td class="text-nowrap">{{ asset.price|burst_amount|mul_decimals:asset.decimals|intcomma|append_symbol }} </td>
+        <td class="text-nowrap">{{ asset.price|burst_amount|mul_decimals:asset.decimals|intcomma }}
+          <br><span class="text-success"> {% coin_symbol %} </span>
+        </td>
       </tr>
     {% endfor %}
     </tbody>

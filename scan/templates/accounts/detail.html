@@ -114,29 +114,29 @@
           </nav>
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-transactions" role="tabpanel" aria-labelledby="nav-transactions-tab">
-              <p class="small p-1" style="margin-top: 10px">
-                Latest {{ txs.count }} from a total of
-                {% if txs_cnt > 0 %}
-                  <a href="{% url 'txs' %}?a={{ address.id }}">{{ txs_cnt|intcomma }}</a>
-                {% else %}
-                  0
-                {% endif %}
-                transactions
-              </p>
-              {% include "txs/list_table.html" with filtered_account=address.id %}
+              {% if txs_cnt > 0 %}
+                <p class="small p-1" style="margin-top: 10px">
+                  Latest {{ txs.count }} from a total of
+                    <a href="{% url 'txs' %}?a={{ address.id }}">{{ txs_cnt|intcomma }}</a>
+                    transactions
+                </p>
+                {% include "txs/list_table.html" with filtered_account=address.id %}
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No transactions found</p>
+              {% endif %}
             </div>
 
             <div class="tab-pane fade" id="nav-blocks" role="tabpanel" aria-labelledby="nav-blocks-tab">
-              <p class="small p-1" style="margin-top: 10px">
-                Latest {{ mined_blocks.count }} from a total of
-                {% if mined_blocks_cnt > 0 %}
+              {% if mined_blocks_cnt > 0 %}
+                <p class="small p-1" style="margin-top: 10px">
+                  Latest {{ mined_blocks.count }} from a total of
                   <a href="{% url 'blocks' %}?m={{ address.id }}">{{ mined_blocks_cnt|intcomma }}</a>
-                {% else %}
-                  0
-                {% endif %}
-                mined blocks
-              </p>
-              {% include "accounts/mined_blocks.html" %}
+                  mined blocks
+                </p>
+                {% include "accounts/mined_blocks.html" %}
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No blocks mined</p>
+              {% endif %}
             </div>
 
             <div class="tab-pane fade" id="nav-asset-hold" role="tabpanel" aria-labelledby="nav-asset-hold-tab">
@@ -147,29 +147,31 @@
             </div>
 
             <div class="tab-pane fade" id="nav-asset-trades" role="tabpanel" aria-labelledby="nav-asset-trades-tab">
+              {% if assets_trades_cnt > 0 %}
               <p class="small p-1" style="margin-top: 10px">
-                Latest {{ assets_trades.count }} from a total of
-                {% if assets_trades_cnt > 0 %}
-                  <a href="{% url 'asset-trades' %}?a={{ address.id }}">{{ assets_trades_cnt|intcomma }}</a>
-                {% else %}
-                  0
-                {% endif %}
-                token trades found
-              </p>
-              {% include "assets/trades_list.html" with filtered_account=address.id %}
+                  Latest {{ assets_trades.count }} from a total of
+                  <a href="{% url 'asset-trades' %}?asset={{ asset.id }}">{{ assets_trades_cnt|intcomma }}</a>
+                  token trades found
+                </p>
+                {% include "assets/trades_list.html" with asset_specific=1 %}
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No trades found</p>
+              {% endif %}
             </div>
 
             <div class="tab-pane fade" id="nav-asset-transfer" role="tabpanel" aria-labelledby="nav-asset-transfer-tab">
-              <p class="small p-1" style="margin-top: 10px">
-                Latest {{ assets_transfers.count }} from a total of
-                {% if assets_transfers_cnt > 0 %}
-                  <a href="{% url 'asset-transfers' %}?a={{ address.id }}">{{ assets_transfers_cnt|intcomma }}</a>
-                {% else %}
-                  0
-                {% endif %}
-                assets transfers found
-              </p>
-              {% include "assets/transfers_list.html" with filtered_account=address.id %}
+              {% if assets_transfers_cnt > 0 %}
+                <p class="small p-1" style="margin-top: 10px">
+                  Latest {{ assets_transfers.count }} from a total of
+                    <a href="{% url 'asset-transfers' %}?a={{ address.id }}">{{ assets_transfers_cnt|intcomma }}</a>
+                    token transfers found
+                </p>
+                {% include "assets/transfers_list.html" with filtered_account=address.id %}
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">
+                  No token transfers found
+                </p>
+              {% endif %}
             </div>
 
           </div>
