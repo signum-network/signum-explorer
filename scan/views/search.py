@@ -68,14 +68,28 @@ def search_view(request):
             pass
 
     else:
-        peer = (
-            PeerMonitor.objects.filter(announced_address__icontains=query)
-            .values("announced_address")
-            .order_by("-height")
-            .first()
-        )
-        if peer:
-            redirect_url = f'/peer/{peer["announced_address"]}'
+        account_exists = (
+                    models.Account.objects.using("java_wallet")
+                    .filter(name=query).exists()
+                )
+        if account_exists:
+            account_id = (
+                models.Account.objects.using("java_wallet")
+                .filter(name=query)
+                .order_by("-height")
+                .values_list("id", flat=True)
+                .first()
+            )
+            redirect_url = f"/address/{account_id}"
+
+        # peer = (
+        #     PeerMonitor.objects.filter(announced_address__icontains=query)
+        #     .values("announced_address")
+        #     .order_by("-height")
+        #     .first()
+        # )
+        # if peer:
+        #     redirect_url = f'/peer/{peer["announced_address"]}'
 
     if redirect_url:
         return redirect(redirect_url)

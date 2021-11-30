@@ -104,7 +104,11 @@
           </div>
           {% if submit == 'Search' %}
             <div class="alert alert-danger" role="alert">
-              Nothing found.
+              {% if request.GET.q %}
+                No exact match when searching for '{{ request.GET.q }}'.
+              {% else %}
+                Nothing found.
+              {% endif %}
             </div>
           {% endif %}
           {% block content %}
