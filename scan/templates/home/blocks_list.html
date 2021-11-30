@@ -25,7 +25,11 @@
             0 txns
           {% endif %}
         </td>
-        <td class="text-nowrap d-none d-sm-table-cell" title="Block reward">{{ block|block_reward_with_fee|rounding:5|intcomma|append_symbol }} </td>
+        
+        <td class="text-nowrap d-none d-sm-table-cell" title="Block reward">
+          <span>{{ block|block_reward_with_fee|rounding:5|intcomma }}</span><br>
+          <span class="text-success"> {% coin_symbol %} </span>
+        </td>
       </tr>
     {% endfor %}
     </tbody>

@@ -7,12 +7,12 @@
     <thead>
       <tr>
         <th scope="col">Txn id</th>
-        <th scope="col">Type</th>
+        <th scope="col" class="d-none d-sm-table-cell">Type</th>
         <th scope="col">From</th>
-        <th scope="col">To</th>
-        <th scope="col">Value</th>
-        <th scope="col">Txn Fee</th>
-        <th scope="col">Deadline</th>
+        <th scope="col" class="d-none d-sm-table-cell">To</th>
+        <th scope="col" class="d-none d-sm-table-cell">Value</th>
+        <th scope="col" class="d-none d-sm-table-cell">Txn Fee</th>
+        <th scope="col" class="d-none d-sm-table-cell">Deadline</th>
       </tr>
     </thead>
   {% endif %}
@@ -23,21 +23,27 @@
           <a href="{% url 'tx-detail' tx.transaction %}">{{ tx.transaction|truncatechars:10 }}</a><br>
           <span class="small">{{ tx.timestamp|naturaltime }}</span>
         </td>
-        <td>{{ tx.tx_name }}</td>
+        <td class="d-none d-sm-table-cell">{{ tx.tx_name }}</td>
         <td class="text-nowrap">
           {% include "account_link.html" with account_id=tx.sender account_name=tx.sender_name %}
         </td>
-        <td class="text-nowrap">
+        <td class="text-nowrap d-none d-sm-table-cell">
           {% if tx.recipient %}
             {% include "recipient_link.html" with account_id=tx.recipient account_name=tx.recipient_name %}
           {% else %}
             {{ tx.tx_name }}
           {% endif %}
         </td>
-        <td class="text-nowrap" title="Amount">{{ tx.amountNQT|burst_amount|rounding:5|intcomma|append_symbol }} </td>
-        <td class="text-nowrap" title="Fee">{{ tx.feeNQT|burst_amount|rounding:5|intcomma|append_symbol }} </td>
+        <td class="text-nowrap d-none d-sm-table-cell" title="Amount">
+          <span>{{ tx.amountNQT|burst_amount|rounding:5|intcomma }}</span><br>
+          <span class="text-success"> {% coin_symbol %} </span>
+        </td>
+        <td class="text-nowrap d-none d-sm-table-cell" title="Fee">
+          <span>{{ tx.feeNQT|burst_amount|rounding:5|intcomma }}</span><br>
+          <span class="text-success"> {% coin_symbol %} </span>
+        </td>
         {% if show_head %}
-        <td class="text-nowrap" title="Deadline">{{ tx|tx_deadline|smooth_timedelta }}</td>
+        <td class="text-nowrap d-none d-sm-table-cell" title="Deadline">{{ tx|tx_deadline|smooth_timedelta }}</td>
         {% endif %}
       </tr>
     {% empty %}
