@@ -61,7 +61,7 @@
             <tr>
               <th>To</th>
               <td>
-                {% include "recipient_link.html" with tx=tx|tx_recipients oneline=True %}
+                {% include "recipient_link.html" with tx=tx|tx_load_recipients oneline=True %}
               </td>
             </tr>
               <th>Value</th>

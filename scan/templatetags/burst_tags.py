@@ -93,7 +93,7 @@ def group_list(lst: list or tuple, n: int):
             yield tuple(val)
 
 @register.filter
-def tx_recipients(tx: Transaction) -> Transaction:
+def tx_load_recipients(tx: Transaction) -> Transaction:
     if not tx.recipients:
         if tx.type == TxType.PAYMENT and tx.subtype == TxSubtypePayment.MULTI_OUT:
             data = MultiOutPack().unpack_multi_out(tx.attachment_bytes)

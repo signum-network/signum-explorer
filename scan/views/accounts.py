@@ -19,10 +19,8 @@ from scan.helpers.queries import (
     get_pool_id_for_account,
     get_pool_id_for_block,
 )
-from scan.models import MultiOut
 from scan.views.assets import fill_data_asset_trade, fill_data_asset_transfer
 from scan.views.base import IntSlugDetailView
-from scan.views.multiout import fill_data_multiouts
 from scan.views.transactions import fill_data_transaction
 
 
