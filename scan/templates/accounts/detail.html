@@ -140,10 +140,14 @@
             </div>
 
             <div class="tab-pane fade" id="nav-asset-hold" role="tabpanel" aria-labelledby="nav-asset-hold-tab">
-              <p class="small p-1" style="margin-top: 10px">
+              {% if assets_cnt > 0 %}
+                <p class="small p-1" style="margin-top: 10px">
                 {{ assets_cnt|intcomma }} tokens found
-              </p>
-              {% include "accounts/assets.html" %}
+                </p>
+                {% include "accounts/assets.html" %}
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No tokens found</p>
+              {% endif %}
             </div>
 
             <div class="tab-pane fade" id="nav-asset-trades" role="tabpanel" aria-labelledby="nav-asset-trades-tab">

@@ -12,7 +12,7 @@ This documentation is a work in progress. More details to follow.
 Install the following packages
 
 ```
-sudo apt install python3-dev default-libmysqlclient-dev build-essential redis-server supervisor
+sudo apt install python3-dev default-libmysqlclient-dev build-essential redis-server gunicorn supervisor
 ```
 
 ### Windows
