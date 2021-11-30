@@ -12,7 +12,9 @@
 
 {% block content %}
 
-  <h5 class="p-2">Token Details</h5>
+  <h5 class="p-2">Token<br class="d-md-none" /> {{ asset.id }}
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ asset.id }}"><i class="far fa-copy"></i></a>
+  </h5>
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
@@ -21,16 +23,17 @@
         <div class="table-responsive">
           <table class="table small table-sm">
             <tbody>
+            <!--
             <tr>
               <th style="width: 130px;">ID</th>
               <th>
                 {{ asset.id }}
-                <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ asset.id }}"><i class="far fa-copy"></i></a>
               </th>
             </tr>
+            -->
             <tr>
-              <th>Name</th>
-              <td>
+              <th>Ticker</th>
+              <td class="text-uppercase">
                 {{ asset.name }}
               </td>
             </tr>

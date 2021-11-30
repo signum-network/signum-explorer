@@ -5,18 +5,18 @@
   <table class="table table-hover small table-sm">
     <thead>
     <tr>
-      <th scope="col">Token id</th>
-      <th scope="col">Name</th>
+      <th scope="col" class="d-none d-sm-table-cell">Token ID</th>
+      <th scope="col">Ticker</th>
       <th scope="col">Quantity</th>
-      <th scope="col">Token share</th>
-      <th scope="col">Since block</th>
+      <th scope="col">Share</th>
+      <th scope="col">Since Block</th>
     </tr>
     </thead>
     <tbody>
     {% for asset in assets %}
       <tr>
-        <td><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a></td>
-        <td class="text-nowrap"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.name }}</a></td>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a></td>
+        <td class="text-nowrap text-uppercase"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.name }}</a></td>
         <td>
           {% if asset.decimals == 0 %}
             {{ asset.quantity|intcomma }}

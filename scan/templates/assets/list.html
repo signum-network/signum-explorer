@@ -22,8 +22,8 @@
           <table class="table table-hover small table-sm">
             <thead>
             <tr>
-              <th scope="col">Token Id</th>
-              <th scope="col">Name</th>
+              <th scope="col">Token ID</th>
+              <th scope="col">Ticker</th>
               <th scope="col" class="d-none d-sm-table-cell">Issuer</th>
               <th scope="col" class="d-none d-sm-table-cell">Initial Quantity</th>
             </tr>
@@ -32,7 +32,7 @@
             {% for asset in assets %}
               <tr>
                 <td><a href="{% url 'asset-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
-                <td class="text-nowrap">
+                <td class="text-nowrap text-uppercase">
                   {{ asset.name }}
                   {% if asset.id == 14686983107863035136 %}❤️{% endif %}
                 </td>
