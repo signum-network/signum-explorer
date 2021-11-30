@@ -83,18 +83,6 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last
   </div>
 
   <div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h5 class="card-header-title">Pending Transactions</h5>
-      </div>
-      <div class="card-body">
-        {% include "txs_pending/txs_pendings.html" %}
-        <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'txs-pending' %}">View all pending transactions</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="card-deck mb-3 text-center">
     <div class="card mb-4">
       <div class="card-header">
         <h5 class="card-header-title">Latest Blocks</h5>
@@ -115,6 +103,18 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last
       </div>
       <div class="card-footer">
         <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'txs' %}">View all transactions</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-deck mb-3 text-center">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header">
+        <h5 class="card-header-title">Pending Transactions</h5>
+      </div>
+      <div class="card-body">
+        {% include "txs_pending/txs_pendings.html" %}
+        <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'txs-pending' %}">View all pending transactions</a>
       </div>
     </div>
   </div>
