@@ -1,3 +1,5 @@
+import os
+
 from cache_memoize import cache_memoize
 
 from java_wallet.models import Account, Asset, Block, RewardRecipAssign, Transaction
@@ -15,12 +17,23 @@ def get_account_name(account_id: int) -> str:
 
 @cache_memoize(None)
 def get_asset_details(asset_id: int) -> (str, int, int, bool):
-    asset_details = (
-        Asset.objects.using("java_wallet")
-        .filter(id=asset_id)
-        .values_list("name", "decimals", "quantity", "mintable")
-        .first()
-    )
+    version = os.environ.get('BRS_P2P_VERSION')
+
+    if version.startswith('3.3'):
+        asset_details = (
+            Asset.objects.using("java_wallet")
+            .filter(id=asset_id)
+            .values_list("name", "decimals", "quantity", "mintable")
+            .first()
+        )
+    else:
+        asset_details = (
+            Asset.objects.using("java_wallet")
+            .filter(id=asset_id)
+            .values_list("name", "decimals", "quantity")
+            .first()
+        )
+        asset_details.append(False)
 
     return asset_details
 

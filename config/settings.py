@@ -254,8 +254,8 @@ GOOGLE_TRACKING_ID = os.environ.get("GOOGLE_TRACKING_ID")
 DEFAULT_P2P_PORT = int(os.environ.get("DEFAULT_P2P_PORT", 8123))
 DEFAULT_API_V1_PORT = int(os.environ.get("DEFAULT_API_V1_PORT", 8125))
 
-BRS_P2P_VERSION = "3.0.1"
-MIN_PEER_VERSION = "3.0.0"
+BRS_P2P_VERSION = os.environ.get("BRS_P2P_VERSION", "3.2.1")
+MIN_PEER_VERSION = os.environ.get("MIN_PEER_VERSION", "3.2.0")
 
 SIGNUM_NODE = os.environ.get("SIGNUM_NODE")
 

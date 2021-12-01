@@ -5,6 +5,7 @@
 #   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
 #   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+import os
 from django.db import models
 from .fields import PositiveBigIntegerField, TimestampField
 
@@ -101,7 +102,11 @@ class Asset(models.Model):
     quantity = PositiveBigIntegerField()
     decimals = models.IntegerField()
     height = models.IntegerField()
-    mintable = models.BooleanField()
+    mintable = False
+    
+    version = os.environ.get('BRS_P2P_VERSION')
+    if version.startswith('3.3'):
+        mintable = models.BooleanField()
 
     class Meta:
         managed = True
