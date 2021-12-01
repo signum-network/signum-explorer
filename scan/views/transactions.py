@@ -9,7 +9,6 @@ from scan.caching_data.pending_txs import CachingPendingTxs
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
 from scan.caching_paginator import CachingPaginator
 from scan.helpers.queries import get_account_name
-from scan.models import MultiOut
 from scan.views.base import IntSlugDetailView
 from scan.views.filters.transactions import TxFilter
 
@@ -24,8 +23,6 @@ def fill_data_transaction(obj, list_page=True):
             # TODO: quick hack pending transaction
             return
         v, obj.multiout = MultiOutPack().unpack_header(obj.attachment_bytes)
-        if not list_page:
-            obj.recipients = MultiOut.objects.filter(tx_id=obj.id).all()
 
 
 class TxListView(ListView):
