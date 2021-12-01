@@ -3,10 +3,10 @@
 
 <div class="table-responsive">
   <table class="table table-hover small table-sm align-items-left">
-  {% if show_head %}
+  {% if show_head and txs_pending|length > 0 %}
     <thead>
       <tr>
-        <th scope="col">Txn id</th>
+        <th scope="col">ID</th>
         <th scope="col" class="d-none d-sm-table-cell">Type</th>
         <th scope="col">From</th>
         <th scope="col" class="d-none d-sm-table-cell">To</th>
