@@ -33,8 +33,8 @@
               {% endif %}
               transactions found
               {% if 'a' in request.GET %}
-                <a href="{% url 'account-csv' request.GET.a %}">
-                <i class="fas fa-file-csv"></i> latest 2k txs</a>
+                <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" title="Download the latest 2k txs" href="{% url 'account-csv' request.GET.a %}">
+                <i class="fas fa-file-csv"></i></a>
               {% endif %}
             {% endif %}
           </small>

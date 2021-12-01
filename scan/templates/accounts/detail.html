@@ -116,9 +116,11 @@
             <div class="tab-pane fade show active" id="nav-transactions" role="tabpanel" aria-labelledby="nav-transactions-tab">
               {% if txs_cnt > 0 %}
                 <p class="small p-1" style="margin-top: 10px">
-                  Latest {{ txs.count }} from a total of
-                    <a href="{% url 'txs' %}?a={{ address.id }}">{{ txs_cnt|intcomma }}</a>
-                    transactions<br class="d-md-none" /> <a href="{% url 'account-csv' address.id %}"><i class="fas fa-file-csv"></i> latest 2k txs</a>
+                  Latest {{ txs.count }}
+                  from a total of
+                  <a href="{% url 'txs' %}?a={{ address.id }}">{{ txs_cnt|intcomma }}</a>
+                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" title="Download the latest 2k txs" href="{% url 'account-csv' address.id %}"><i class="fas fa-file-csv"></i></a>
+                  transactions
                 </p>
                 {% include "txs/list_table.html" with filtered_account=address.id %}
               {% else %}
