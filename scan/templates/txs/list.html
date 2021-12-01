@@ -32,6 +32,10 @@
                 0
               {% endif %}
               transactions found
+              {% if 'a' in request.GET %}
+                <a href="{% url 'account-csv' request.GET.a %}">
+                <i class="fas fa-file-csv"></i> latest 2k txs</a>
+              {% endif %}
             {% endif %}
           </small>
           {% include "paginator.html" %}

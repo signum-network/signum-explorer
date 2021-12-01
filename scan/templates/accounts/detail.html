@@ -118,7 +118,7 @@
                 <p class="small p-1" style="margin-top: 10px">
                   Latest {{ txs.count }} from a total of
                     <a href="{% url 'txs' %}?a={{ address.id }}">{{ txs_cnt|intcomma }}</a>
-                    transactions
+                    transactions<br class="d-md-none" /> <a href="{% url 'account-csv' address.id %}"><i class="fas fa-file-csv"></i> latest 2k txs</a>
                 </p>
                 {% include "txs/list_table.html" with filtered_account=address.id %}
               {% else %}

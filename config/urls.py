@@ -39,7 +39,7 @@ from scan.views.peers import (
 )
 from scan.views.pending_transactions import pending_transactions
 from scan.views.search import search_view
-from scan.views.transactions import TxDetailView, TxListView
+from scan.views.transactions import TxDetailView, TxListView, tx_export_csv
 
 urlpatterns = [
     path("", index, name="index"),
@@ -50,6 +50,7 @@ urlpatterns = [
     path("tx/<str:id>", TxDetailView.as_view(), name="tx-detail"),
     path("accounts/", AccountsListView.as_view(), name="accounts"),
     path("address/<str:id>", AddressDetailView.as_view(), name="address-detail"),
+    path("csv/<str:id>", tx_export_csv, name="account-csv"),
     path("asset/trades", AssetTradesListView.as_view(), name="asset-trades"),
     path("asset/transfers", AssetTransfersListView.as_view(), name="asset-transfers"),
     path("assets/", AssetListView.as_view(), name="assets"),

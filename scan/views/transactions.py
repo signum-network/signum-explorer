@@ -1,9 +1,14 @@
+import csv
+
+from django.db.models.query_utils import Q
 from django.http import Http404
+from django.http.response import HttpResponse, StreamingHttpResponse
 from django.views.generic import ListView
 from burst.constants import TxSubtypeBurstMining, TxType
+from scan.templatetags.burst_tags import burst_amount, num2rs, tx_load_recipients
 
 from burst.libs.multiout import MultiOutPack
-from java_wallet.models import Transaction
+from java_wallet.models import IndirecIncoming, Transaction
 from scan.caching_data.last_height import CachingLastHeight
 from scan.caching_data.pending_txs import CachingPendingTxs
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
@@ -54,6 +59,49 @@ class TxListView(ListView):
             context["txs_cnt"] = CachingTotalTxsCount().cached_data
 
         return context
+
+
+def tx_export_csv(request, id : int):
+
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': f'attachment; filename="{id}.csv"'},
+    )
+    writer = csv.writer(response)
+
+    indirects = (
+        IndirecIncoming.objects.using("java_wallet")
+        .values_list('transaction_id', flat=True)
+        .filter(account_id=id)
+    )
+
+    txs = (
+            Transaction.objects.using("java_wallet")
+            .filter(Q(sender_id=id) | Q(recipient_id=id) | Q(id__in=indirects))
+            .order_by("-height")
+        )[:2000]
+
+    header = ['ID', 'Height', 'timestamp', 'From', 'To', 'Amount']
+    writer.writerow(header)
+
+    id = int(id)
+    id_rs = num2rs(id)
+    for tx in txs:
+        amount = tx.amount
+        from_rs = id_rs if tx.sender_id == id else num2rs(tx.sender_id)
+        to_rs = num2rs(tx.recipient_id) if tx.recipient_id else None
+        if not tx.recipient_id:
+            # multiout or something like that
+            tx = tx_load_recipients(tx)
+            for r in tx.recipients:
+                if r.id == id:
+                    to_rs = id_rs
+                    amount = r.amount
+                    break
+
+        writer.writerow([tx.id, tx.height, tx.block_timestamp, from_rs, to_rs, burst_amount(amount)])
+
+    return response
 
 
 class TxDetailView(IntSlugDetailView):
