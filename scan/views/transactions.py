@@ -73,7 +73,7 @@ def tx_export_csv(request, id : int):
         IndirecIncoming.objects.using("java_wallet")
         .values_list('transaction_id', flat=True)
         .filter(account_id=id)
-    )[:2000]
+    )
 
     txs = (
             Transaction.objects.using("java_wallet")
