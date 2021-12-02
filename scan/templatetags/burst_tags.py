@@ -87,8 +87,16 @@ def tx_type(tx: Transaction) -> str:
     return get_desc_tx_type(tx.type, tx.subtype)
 
 @register.filter
-def tx_amount(tx: Transaction) -> int:
-    if tx.type == TxType.BURST_MINING and (tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD or tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE):
+def tx_amount(tx: Transaction, account_id : int = None) -> int:
+    if account_id and tx.type == TxType.PAYMENT and (tx.subtype == TxSubtypePayment.MULTI_OUT or tx.subtype == TxSubtypePayment.MULTI_OUT_SAME):
+        tx = tx_load_recipients(tx)
+        for r in tx.recipients:
+            if r.id == account_id:
+                return r.amount
+
+        return int.from_bytes(tx.attachment_bytes[1:], byteorder=sys.byteorder)
+    
+    elif tx.type == TxType.BURST_MINING and (tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD or tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE):
         return int.from_bytes(tx.attachment_bytes[1:], byteorder=sys.byteorder)
 
     elif tx.type == TxType.COLORED_COINS:
