@@ -27,10 +27,14 @@
           {% include "account_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
         </td>
         <td>
-          {% if filtered_account|slugify == tx.sender_id|slugify %}
-            <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(255, 214, 214)!important; color: rgb(140, 45, 80); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">OUT</span>
-          {% elif filtered_account|slugify == tx.recipient_id|slugify or filtered_account and tx.multiout %}
-            <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(222, 249, 210)!important; color: rgb(35, 118, 64); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">IN</span>
+          {% if filtered_account %}
+            {% if tx|tx_is_out:filtered_account %}
+              <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(255, 214, 214)!important; color: rgb(140, 45, 80); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">
+                OUT</span>
+            {% elif tx|tx_is_in:filtered_account %}
+              <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(222, 249, 210)!important; color: rgb(35, 118, 64); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">
+                IN</span>
+            {% endif %}
           {% endif %}
         </td>
         <td class="text-nowrap d-none d-sm-table-cell">

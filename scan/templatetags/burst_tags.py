@@ -87,6 +87,41 @@ def tx_type(tx: Transaction) -> str:
     return get_desc_tx_type(tx.type, tx.subtype)
 
 @register.filter
+def tx_is_in(tx: Transaction, account_id : int = None) -> bool:
+    if account_id:
+        if tx.sender_id==account_id :
+            return False
+        
+        if tx.recipient_id==account_id and tx.amount > 0:
+            return True
+        
+        if tx.type == TxType.PAYMENT and tx.subtype in [TxSubtypePayment.MULTI_OUT or tx.subtype == TxSubtypePayment.MULTI_OUT_SAME]:
+            tx = tx_load_recipients(tx)
+            for r in tx.recipients:
+                if r.id == account_id:
+                    return True
+
+        if tx.type == TxType.BURST_MINING and tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE:
+            return True
+        
+        if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
+            return True
+
+    return False
+
+
+@register.filter
+def tx_is_out(tx: Transaction, account_id : int = None) -> bool:
+    if account_id:
+        if tx.sender_id==account_id:
+            if tx.amount > 0:
+                return True
+            elif tx.type == TxType.BURST_MINING and tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD:
+                return True
+
+    return False
+
+@register.filter
 def tx_amount(tx: Transaction, account_id : int = None) -> int:
     if account_id and tx.sender_id!=account_id and tx.type == TxType.PAYMENT and (tx.subtype == TxSubtypePayment.MULTI_OUT or tx.subtype == TxSubtypePayment.MULTI_OUT_SAME):
         tx = tx_load_recipients(tx)
