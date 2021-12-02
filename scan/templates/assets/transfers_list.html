@@ -25,7 +25,7 @@
           <td class="d-none d-sm-table-cell"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a></td>
         {% endif %}
         <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
-        <td class="text-nowrap">{{ asset.timestamp|naturaltime }}</td>
+        <td class="text-nowrap"><a href="{% url 'tx-detail' asset.id %}">{{ asset.timestamp|naturaltime }}</a></td>
         <td class="text-nowrap d-none d-sm-table-cell">
           {% include "account_link.html" with account_id=asset.sender_id account_name=asset.sender_name %}
         </td>
