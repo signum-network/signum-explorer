@@ -12,8 +12,9 @@ def index(request):
 
     # redirect the old style accounts
     if 'account' in request.GET:
-        print(request.GET['account'])
         return redirect('address/' + request.GET['account'])
+    if 'action' in request.GET and request.GET['action'] == 'transaction' and 'id' in request.GET:
+        return redirect('tx/' + request.GET['id'])
 
     txs = Transaction.objects.using("java_wallet").order_by("-height")[:5]
 
