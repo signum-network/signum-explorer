@@ -57,32 +57,37 @@
               <td style="word-wrap: break-word; max-width: 250px">{% if address.name %}{{ address.name }}{% endif %}</td>
             </tr>
             <tr>
-              <th>Description</th>
-              <td style="word-wrap: break-word; max-width: 250px">{% if address.description %}{{ address.description }}{% endif %}</td>
+              <th class="d-none d-sm-table-cell">Description</th>
+              <td class="d-none d-sm-table-cell" style="word-wrap: break-word; max-width: 250px">{% if address.description %}{{ address.description }}{% endif %}</td>
             </tr>
             <tr>
               <th>Total Balance</th>
               <td>
-                {{ address.balance|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ address.balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
+                {{ address.balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
+                <span class="text-info">(${{ address.balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
               </td>
             </tr>
             <tr>
               <th>Free Balance</th>
               <td>
-                {{ address.unconfirmed_balance|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
+                {{ address.unconfirmed_balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
+                <span class="text-info">(${{ address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
               </td>
             </tr>
             <tr>
               <th>Locked Balance</th>
               <td>
-                {{ address.balance|sub:address.unconfirmed_balance|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ address.balance|sub:address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
+                {{ address.balance|sub:address.unconfirmed_balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
+                <span class="text-info">(${{ address.balance|sub:address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
               </td>
             </tr>
             <tr>
               <th>Public Key</th>
               <td style="word-wrap: break-word; max-width: 250px">
                 {% if address.key_height %}
-                  <span class="text-monospace">{{ address.public_key|bin2hex }}</span> at <a href="{% url 'block-detail' address.key_height %}">block {{ address.key_height }}</a>
+                  <span class="text-monospace">{{ address.public_key|bin2hex }}</span>
+                  <br class="d-md-none" />
+                  at <a href="{% url 'block-detail' address.key_height %}">block {{ address.key_height }}</a>
                 {% endif %}
               </td>
             </tr>
