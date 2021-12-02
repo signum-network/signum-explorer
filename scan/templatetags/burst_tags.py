@@ -157,9 +157,7 @@ def div_decimals(a: int or float, b: int) -> float:
 
 @register.filter
 def mul_decimals(a: int or float, b: int) -> float:
-    for i in range(b-1):
-        a = a * 10;
-    return a
+    return a * 10 ** b
 
 
 @register.filter
