@@ -42,7 +42,7 @@ def asset_circulating(asset_id: int) -> int:
 
 @register.filter
 def burst_amount(value: int) -> float:
-    return value / 100000000.0
+    return round(value / 100000000.0, 8)
 
 @register.filter
 def append_symbol(value: float) -> str:
