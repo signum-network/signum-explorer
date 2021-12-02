@@ -158,7 +158,7 @@
                   <a href="{% url 'asset-trades' %}?asset={{ asset.id }}">{{ assets_trades_cnt|intcomma }}</a>
                   token trades found
                 </p>
-                {% include "assets/trades_list.html" with asset_specific=1 %}
+                {% include "assets/trades_list.html" %}
               {% else %}
                 <p class="small p-1" style="margin-top: 10px">No trades found</p>
               {% endif %}

@@ -6,14 +6,14 @@
     <thead>
     <tr>
       {% if not asset_specific %}
-        <th scope="col" class="d-none d-sm-table-cell">Token ID</th>
         <th scope="col">Ticker</th>
+        <th scope="col" class="d-none d-sm-table-cell">Token ID</th>
       {% endif %}
-      <th scope="col">Block</th>
+      <th scope="col" class="d-none d-sm-table-cell">Block</th>
       <th scope="col">Timestamp</th>
-      <th scope="col">From</th>
+      <th scope="col" class="d-none d-sm-table-cell">From</th>
       <th scope="col"></th>
-      <th scope="col">To</th>
+      <th scope="col" class="d-none d-sm-table-cell">To</th>
       <th scope="col">Quantity</th>
     </tr>
     </thead>
@@ -21,12 +21,12 @@
     {% for asset in assets_transfers %}
       <tr>
         {% if not asset_specific %}
-          <td class="d-none d-sm-table-cell"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a></td>
           <td class="text-nowrap text-uppercase"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.name }}</a></td>
+          <td class="d-none d-sm-table-cell"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a></td>
         {% endif %}
-        <td><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
         <td class="text-nowrap">{{ asset.timestamp|naturaltime }}</td>
-        <td class="text-nowrap">
+        <td class="text-nowrap d-none d-sm-table-cell">
           {% include "account_link.html" with account_id=asset.sender_id account_name=asset.sender_name %}
         </td>
         <td>
@@ -36,7 +36,7 @@
             <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(222, 249, 210)!important; color: rgb(35, 118, 64); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">IN</span>
           {% endif %}
         </td>
-        <td class="text-nowrap">
+        <td class="text-nowrap d-none d-sm-table-cell">
           {% include "account_link.html" with account_id=asset.recipient_id account_name=asset.recipient_name %}
         </td>
         <td>
