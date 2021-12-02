@@ -5,7 +5,7 @@ import sys
 from django import template
 from django.conf import settings
 
-from burst.constants import MAX_BASE_TARGET, TxSubtypeBurstMining, TxSubtypePayment, TxType
+from burst.constants import MAX_BASE_TARGET, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxSubtypePayment, TxType
 from burst.libs.functions import calc_block_reward
 from burst.libs.multiout import MultiOutPack
 from burst.libs.reed_solomon import ReedSolomon
@@ -18,6 +18,8 @@ from scan.caching_data.exchange import CachingExchangeData
 
 import struct
 import os
+
+from scan.helpers.queries import get_asset_details
 
 register = template.Library()
 
@@ -88,7 +90,30 @@ def tx_type(tx: Transaction) -> str:
 def tx_amount(tx: Transaction) -> int:
     if tx.type == TxType.BURST_MINING and (tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD or tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE):
         return int.from_bytes(tx.attachment_bytes[1:], byteorder=sys.byteorder)
+
+    elif tx.type == TxType.COLORED_COINS:
+        if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
+            asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
+            name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+            quantity = int.from_bytes(tx.attachment_bytes[9:17], byteorder=sys.byteorder)
+            return mul_decimals(quantity, 8-decimals)
+
+        elif tx.subtype in [TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]:
+            quantity = int.from_bytes(tx.attachment_bytes[9:17], byteorder=sys.byteorder)
+            price = int.from_bytes(tx.attachment_bytes[18:27], byteorder=sys.byteorder)
+            return quantity*price
+
     return tx.amount
+
+@register.filter
+def tx_symbol(tx: Transaction) -> str:
+    if tx.type == TxType.COLORED_COINS:
+        if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
+            asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
+            name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+            return name.upper()
+
+    return coin_symbol()
 
 def group_list(lst: list or tuple, n: int):
     for i in range(0, len(lst), n):
