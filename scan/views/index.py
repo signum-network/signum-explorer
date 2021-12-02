@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
 
 from java_wallet.models import Block, Transaction
@@ -9,6 +9,12 @@ from scan.views.transactions import fill_data_transaction
 
 @cache_page(5)
 def index(request):
+
+    # redirect the old style accounts
+    if 'account' in request.GET:
+        print(request.GET['account'])
+        return redirect('address/' + request.GET['account'])
+
     txs = Transaction.objects.using("java_wallet").order_by("-height")[:5]
 
     for t in txs:
