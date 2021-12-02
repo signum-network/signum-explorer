@@ -33,7 +33,7 @@ def get_asset_details(asset_id: int) -> (str, int, int, bool):
             .values_list("name", "decimals", "quantity")
             .first()
         )
-        asset_details.append(False)
+        asset_details += (False,)
 
     return asset_details
 
