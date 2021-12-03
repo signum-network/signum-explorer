@@ -58,6 +58,9 @@ class AddressDetailView(IntSlugDetailView):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
 
+        if obj.id == 0:
+            obj.name = "Burn Address";
+
         # transactions
         indirects = (
             IndirecIncoming.objects.using("java_wallet")

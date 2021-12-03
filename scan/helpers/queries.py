@@ -7,6 +7,8 @@ from java_wallet.models import Account, Asset, Block, RewardRecipAssign, Transac
 
 @cache_memoize(3600)
 def get_account_name(account_id: int) -> str:
+    if account_id == 0:
+        return "Burn Address"
     return (
         Account.objects.using("java_wallet")
         .filter(id=account_id, latest=True)
