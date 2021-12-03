@@ -6,7 +6,7 @@
 {% elif tx.recipient_id %}
   {% include "account_link.html" with account_id=tx.recipient_id account_name=tx.recipient_name oneline=oneline %}
 {% elif tx.type == 0 and tx.subtype == 1 or tx.type == 0 and tx.subtype == 2 %}
-  {% if tx.recipients %}
+  {% if tx.recipients and oneline %}
     <table class="table table-hover small no-border text-nowrap" style="max-width: 250px; margin-left: -5px; margin-bottom: -5px;">
       <tbody>
       {% for r in tx.recipients %}
