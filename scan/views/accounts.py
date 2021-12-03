@@ -65,21 +65,22 @@ class AddressDetailView(IntSlugDetailView):
             .filter(account_id=obj.id)
         )
 
+        txs_cnt = (
+            Transaction.objects.using("java_wallet")
+            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
+            .count() + indirects.count()
+        )
         txs = (
             Transaction.objects.using("java_wallet")
             .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id) | Q(id__in=indirects))
-            .order_by("-height")[:15]
+            .order_by("-height")[:min(txs_cnt, 15)]
         )
 
         for t in txs:
             fill_data_transaction(t, list_page=True)
 
         context["txs"] = txs
-        context["txs_cnt"] = (
-            Transaction.objects.using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-            .count() + indirects.count()
-        )
+        context["txs_cnt"] = txs_cnt
 
         # assets
 
@@ -103,41 +104,43 @@ class AddressDetailView(IntSlugDetailView):
 
         # assets transfer
 
+        assets_transfers_cnt = (
+            AssetTransfer.objects.using("java_wallet")
+            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
+            .count()
+        )
         assets_transfers = (
             AssetTransfer.objects.using("java_wallet")
             .using("java_wallet")
             .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-            .order_by("-height")[:15]
+            .order_by("-height")[:min(assets_transfers_cnt, 15)]
         )
 
         for transfer in assets_transfers:
             fill_data_asset_transfer(transfer)
 
         context["assets_transfers"] = assets_transfers
-        context["assets_transfers_cnt"] = (
-            AssetTransfer.objects.using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-            .count()
-        )
+        context["assets_transfers_cnt"] = assets_transfers_cnt
 
         # assets trades
 
+        assets_trades_cnt = (
+            Trade.objects.using("java_wallet")
+            .filter(Q(buyer_id=obj.id) | Q(seller_id=obj.id))
+            .count()
+        )
         assets_trades = (
             Trade.objects.using("java_wallet")
             .using("java_wallet")
             .filter(Q(buyer_id=obj.id) | Q(seller_id=obj.id))
-            .order_by("-height")[:15]
+            .order_by("-height")[:min(assets_trades_cnt, 15)]
         )
 
         for trade in assets_trades:
             fill_data_asset_trade(trade)
 
         context["assets_trades"] = assets_trades
-        context["assets_trades_cnt"] = (
-            Trade.objects.using("java_wallet")
-            .filter(Q(buyer_id=obj.id) | Q(seller_id=obj.id))
-            .count()
-        )
+        context["assets_trades_cnt"] = assets_trades_cnt
 
         # pool info
 
