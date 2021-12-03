@@ -45,7 +45,7 @@
           {% endif %}
         </td>
         <td class="text-nowrap">
-          <span>{{ tx|tx_amount:filtered_account|burst_amount|rounding:5|intcomma }}</span><br>
+          <span>{{ tx|tx_amount:filtered_account|rounding:5|intcomma }}</span><br>
           <span class="text-success"> {{ tx|tx_symbol }} </span>
         </td>
         <td class="text-nowrap d-none d-sm-table-cell">

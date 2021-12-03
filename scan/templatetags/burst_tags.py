@@ -128,29 +128,29 @@ def tx_is_out(tx: Transaction, account_id : int = None) -> bool:
     return False
 
 @register.filter
-def tx_amount(tx: Transaction, account_id : int = None) -> int:
+def tx_amount(tx: Transaction, account_id : int = None) -> float:
     if account_id and tx.sender_id!=account_id and tx.type == TxType.PAYMENT and (tx.subtype == TxSubtypePayment.MULTI_OUT or tx.subtype == TxSubtypePayment.MULTI_OUT_SAME):
         tx = tx_load_recipients(tx)
         for r in tx.recipients:
             if r.id == account_id:
-                return r.amount
+                return burst_amount(r.amount)
 
     elif tx.type == TxType.BURST_MINING and (tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD or tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE):
-        return int.from_bytes(tx.attachment_bytes[1:], byteorder=sys.byteorder)
+        return burst_amount(int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder))
 
     elif tx.type == TxType.COLORED_COINS:
         if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
             asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
             quantity = int.from_bytes(tx.attachment_bytes[9:17], byteorder=sys.byteorder)
-            return mul_decimals(quantity, 8-decimals)
+            return div_decimals(quantity, decimals)
 
         elif tx.subtype in [TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]:
             quantity = int.from_bytes(tx.attachment_bytes[9:17], byteorder=sys.byteorder)
-            price = int.from_bytes(tx.attachment_bytes[18:27], byteorder=sys.byteorder)
-            return quantity*price
+            price = int.from_bytes(tx.attachment_bytes[17:25], byteorder=sys.byteorder)
+            return burst_amount(quantity*price)
 
-    return tx.amount
+    return burst_amount(tx.amount)
 
 @register.filter
 def tx_symbol(tx: Transaction) -> str:

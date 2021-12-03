@@ -65,10 +65,10 @@
               </td>
             </tr>
               <th>Value</th>
-              <td>{{ tx|tx_amount|burst_amount|intcomma }} {{ tx|tx_symbol }}
+              <td>{{ tx|tx_amount|intcomma }} {{ tx|tx_symbol }}
                 <!-- do not show usd value of token transfers, they are in the token units -->
                 {% if tx.type != 2 %}
-                <span class="text-info">(${{ tx|tx_amount|burst_amount|in_usd|rounding:4|intcomma }})</span>
+                <span class="text-info">(${{ tx|tx_amount|in_usd|rounding:4|intcomma }})</span>
                 {% endif %}
               </td>
             </tr>
