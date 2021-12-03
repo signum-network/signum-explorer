@@ -122,6 +122,8 @@ def tx_is_out(tx: Transaction, account_id : int = None) -> bool:
                 return True
             elif tx.type == TxType.BURST_MINING and tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD:
                 return True
+            if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
+                return True
 
     return False
 
