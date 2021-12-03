@@ -77,8 +77,8 @@ class AddressDetailView(IntSlugDetailView):
         context["txs"] = txs
         context["txs_cnt"] = (
             Transaction.objects.using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id) | Q(id__in=indirects))
-            .count()
+            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
+            .count() + indirects.count()
         )
 
         # assets
