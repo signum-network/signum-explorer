@@ -84,10 +84,15 @@ class AddressDetailView(IntSlugDetailView):
 
         # assets
 
+        assets_cnt = (
+            AccountAsset.objects.using("java_wallet")
+            .filter(account_id=obj.id, latest=True)
+            .count()
+        )
         assets = (
             AccountAsset.objects.using("java_wallet")
             .filter(account_id=obj.id, latest=True)
-            .order_by("-db_id")
+            .order_by("-db_id")[:assets_cnt]
         )
 
         for asset in assets:
@@ -96,11 +101,7 @@ class AddressDetailView(IntSlugDetailView):
             )
 
         context["assets"] = assets
-        context["assets_cnt"] = (
-            AccountAsset.objects.using("java_wallet")
-            .filter(account_id=obj.id, latest=True)
-            .count()
-        )
+        context["assets_cnt"] = assets_cnt
 
         # assets transfer
 
