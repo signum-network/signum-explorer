@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from math import ceil
 import sys
+from cache_memoize import cache_memoize
 
 from django import template
 from django.conf import settings
@@ -58,9 +59,13 @@ def coin_symbol() -> str:
 def env(key):
     return os.environ.get(key, None)
 
+@cache_memoize(180)
+def get_exchange_data():
+    return CachingExchangeData().cached_data
+
 @register.filter
 def in_usd(value: float) -> float:
-    data = CachingExchangeData().cached_data
+    data = get_exchange_data()
     return value * data.price_usd
 
 
@@ -74,7 +79,6 @@ def bin2hex(value: bytes) -> str:
     if not value:
         return ""
     return value.hex().upper()
-
 
 @register.filter
 def tx_message(tx: Transaction) -> str:
