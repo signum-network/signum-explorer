@@ -7,8 +7,10 @@
 
   <h5 class="p-2">Token Trades
     {% if 'asset' in request.GET %}
-      <small class="text-muted">for ID #<a href="{% url 'asset-detail' request.GET.asset %}">{{ request.GET.asset }}</a></small>
+      <br class="d-md-none" />
+      <small class="text-muted">for token ID #<a href="{% url 'asset-detail' request.GET.asset %}">{{ request.GET.asset }}</a></small>
     {% elif 'a' in request.GET %}
+      <br class="d-md-none" />
       <small class="text-muted">for address #<a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
     {% endif %}
   </h5>
