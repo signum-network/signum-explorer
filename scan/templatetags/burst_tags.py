@@ -224,11 +224,15 @@ def mul(a: int or float, b: int or float) -> int or float:
 
 @register.filter
 def div_decimals(a: int or float, b: int) -> float:
+    if b == 0:
+        return a
     return a / 10 ** b
 
 
 @register.filter
 def mul_decimals(a: int or float, b: int) -> float:
+    if b == 0:
+        return a
     return a * 10 ** b
 
 
