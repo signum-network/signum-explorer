@@ -14,7 +14,7 @@ from burst.libs.transactions import get_message
 from burst.api.brs.v1.api import BrsApi
 
 from java_wallet.fields import get_desc_tx_type
-from java_wallet.models import Block, IndirectRecipient, Transaction
+from java_wallet.models import Block, IndirectRecipient, Trade, Transaction
 from scan.caching_data.exchange import CachingExchangeData
 
 import struct
@@ -161,6 +161,21 @@ def tx_symbol(tx: Transaction) -> str:
             return name.upper()
 
     return coin_symbol()
+
+
+@cache_memoize(300)
+@register.filter
+def asset_price(asset_id : int) -> float:
+    latest_trade = assets_trades = (
+        Trade.objects.using("java_wallet")
+        .using("java_wallet")
+        .filter(asset_id=asset_id)
+        .order_by("-height").first()
+    )
+    if latest_trade:
+        return latest_trade.price
+    return 0
+
 
 def group_list(lst: list or tuple, n: int):
     for i in range(0, len(lst), n):

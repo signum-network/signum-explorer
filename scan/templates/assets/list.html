@@ -7,6 +7,54 @@
 
 {% block content %}
 
+  {% if featured_assets %}
+  <h5 class="p-2">Featured Tokens</h5>
+  <div class="card-deck mb-3">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover small table-sm">
+            <thead>
+            <tr>
+              <th scope="col">Ticker</th>
+              <th scope="col">ID</th>
+              <th scope="col" class="d-none d-sm-table-cell">Issuer</th>
+              <th scope="col" class="d-none d-sm-table-cell">Initial Quantity</th>
+              <th scope="col">Price</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for asset in featured_assets %}
+              <tr>
+                <td class="text-nowrap text-uppercase">
+                  <a href="{% url 'asset-detail' asset.id %}">{{ asset.name }}</a>
+                </td>
+                <td><a href="{% url 'asset-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
+                <td class="text-nowrap d-none d-sm-table-cell">
+                    {% include "account_link.html" with account_id=asset.account_id account_name=asset.account_name %}
+                </td>
+                <td  class="d-none d-sm-table-cell">
+                  {% if asset.decimals == 0 %}
+                    {{ asset.quantity|intcomma }}
+                  {% else %}
+                    {{ asset.quantity|div_decimals:asset.decimals|floatformat:0|intcomma }}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap">
+                  <span>{{ asset.id|asset_price|mul_decimals:asset.decimals|burst_amount|rounding:5|intcomma }}</span><br>
+                  <span class="text-success"> {% coin_symbol %} </span>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   <h5 class="p-2">Tokens</h5>
 
   <div class="card-deck mb-3">
@@ -22,20 +70,20 @@
           <table class="table table-hover small table-sm">
             <thead>
             <tr>
-              <th scope="col">Token ID</th>
               <th scope="col">Ticker</th>
+              <th scope="col">ID</th>
               <th scope="col" class="d-none d-sm-table-cell">Issuer</th>
               <th scope="col" class="d-none d-sm-table-cell">Initial Quantity</th>
+              <th scope="col">Price</th>
             </tr>
             </thead>
             <tbody>
             {% for asset in assets %}
               <tr>
-                <td><a href="{% url 'asset-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
                 <td class="text-nowrap text-uppercase">
-                  {{ asset.name }}
-                  {% if asset.id == 14686983107863035136 %}❤️{% endif %}
+                  <a href="{% url 'asset-detail' asset.id %}">{{ asset.name }}</a>
                 </td>
+                <td><a href="{% url 'asset-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
                 <td class="text-nowrap d-none d-sm-table-cell">
                     {% include "account_link.html" with account_id=asset.account_id account_name=asset.account_name %}
                 </td>
@@ -45,6 +93,10 @@
                   {% else %}
                     {{ asset.quantity|div_decimals:asset.decimals|floatformat:0|intcomma }}
                   {% endif %}
+                </td>
+                <td class="text-nowrap">
+                  <span>{{ asset.id|asset_price|mul_decimals:asset.decimals|burst_amount|rounding:5|intcomma }}</span><br>
+                  <span class="text-success"> {% coin_symbol %} </span>
                 </td>
               </tr>
             {% endfor %}
