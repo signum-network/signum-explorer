@@ -10,14 +10,14 @@ from java_wallet.models import (
     Trade,
     Transaction,
 )
-from scan.caching_data.total_accounts_count import CachingTotalAccountsCount
-from scan.caching_data.total_burst_circulation import CachingTotalBurstCirculation
 from scan.caching_paginator import CachingPaginator
 from scan.helpers.queries import (
     get_account_name,
     get_asset_details,
     get_pool_id_for_account,
     get_pool_id_for_block,
+    get_total_accounts_count,
+    get_total_circulating,
 )
 from scan.views.assets import fill_data_asset_trade, fill_data_asset_transfer
 from scan.views.base import IntSlugDetailView
@@ -27,7 +27,8 @@ from scan.views.transactions import fill_data_transaction
 class AccountsListView(ListView):
     model = Account
     queryset = (
-        Account.objects.using("java_wallet").filter(latest=True).exclude(id=0).all()
+        Account.objects.using("java_wallet").filter(latest=True)
+            .exclude(id=0).all()
     )
     template_name = "accounts/list.html"
     context_object_name = "accounts"
@@ -41,8 +42,8 @@ class AccountsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["balance__sum"] = CachingTotalBurstCirculation().cached_data
-        context["accounts_cnt"] = CachingTotalAccountsCount().cached_data
+        context["balance__sum"] = get_total_circulating()
+        context["accounts_cnt"] = get_total_accounts_count()
         return context
 
 

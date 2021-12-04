@@ -1,6 +1,8 @@
 import datetime, time
 import os
 
+from django.db.models import Sum
+
 from cache_memoize import cache_memoize
 from burst.constants import TxSubtypeBurstMining, TxType
 
@@ -63,6 +65,24 @@ def get_pool_id_for_block_db(block: Block) -> int:
         .values_list("recipient_id", flat=True)
         .order_by("-height")
         .first()
+    )
+
+@cache_memoize(3600 * 24)
+def get_total_circulating():
+    return (
+        Account.objects.using("java_wallet")
+        .filter(latest=True)
+        .exclude(id=0)
+        .aggregate(Sum("balance"))["balance__sum"]
+    )
+
+@cache_memoize(3600 * 24)
+def get_total_accounts_count():
+    return (
+        Account.objects.using("java_wallet")
+        .filter(latest=True)
+        .exclude(id=0)
+        .count()
     )
 
 @cache_memoize(None)
