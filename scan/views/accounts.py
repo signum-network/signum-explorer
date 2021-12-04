@@ -27,7 +27,7 @@ from scan.views.transactions import fill_data_transaction
 class AccountsListView(ListView):
     model = Account
     queryset = (
-        Account.objects.using("java_wallet").filter(latest=True)
+        Account.objects.using("java_wallet").filter(latest=True,balance__gte=10000000000000)
             .exclude(id=0).all()
     )
     template_name = "accounts/list.html"
