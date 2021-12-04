@@ -37,7 +37,7 @@ class AccountsListView(ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs[:10000]
+        return qs[:1000]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

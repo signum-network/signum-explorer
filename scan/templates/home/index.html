@@ -5,7 +5,10 @@
 
 {% block description %}
 Latest block: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.height }}{% endwith %}{% endif %}
-Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.base_target|net_capacity_tib|format_capacity }}{% endwith %}{% endif %}
+Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
+{{ last_block.base_target|net_capacity_tib|format_capacity }}
++ {{ last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %}/TiB
+{% endwith %}{% endif %}
 {% endblock %}
 
 {% block revision %}{{ last_block.height }}{% endblock %}

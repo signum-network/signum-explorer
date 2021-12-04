@@ -1,3 +1,4 @@
+import datetime, time
 import os
 
 from cache_memoize import cache_memoize
@@ -46,8 +47,15 @@ def get_txs_count_in_block(block_id: int) -> int:
     return Transaction.objects.using("java_wallet").filter(block_id=block_id).count()
 
 
-@cache_memoize(None)
 def get_pool_id_for_block(block: Block) -> int:
+    elapsed = datetime.datetime.now() - block.timestamp
+
+    # For the more recent blocks we do not use the cache, since we could have short lived forks
+    if elapsed.total_seconds() < 240*4:
+        return get_pool_id_for_block_db(block)
+    return get_pool_id_for_block_cached(block)
+
+def get_pool_id_for_block_db(block: Block) -> int:
     return (
         Transaction.objects.using("java_wallet")
         .filter(type=TxType.BURST_MINING, subtype=TxSubtypeBurstMining.REWARD_RECIPIENT_ASSIGNMENT,
@@ -57,6 +65,9 @@ def get_pool_id_for_block(block: Block) -> int:
         .first()
     )
 
+@cache_memoize(None)
+def get_pool_id_for_block_cached(block: Block) -> int:
+    return get_pool_id_for_block_db(block)
 
 @cache_memoize(3600)
 def get_pool_id_for_account(address_id: int) -> int:
