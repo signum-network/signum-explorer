@@ -1,6 +1,7 @@
 import os
 
 from cache_memoize import cache_memoize
+from burst.constants import TxSubtypeBurstMining, TxType
 
 from java_wallet.models import Account, Asset, Block, RewardRecipAssign, Transaction
 
@@ -49,7 +50,8 @@ def get_txs_count_in_block(block_id: int) -> int:
 def get_pool_id_for_block(block: Block) -> int:
     return (
         Transaction.objects.using("java_wallet")
-        .filter(type=20, height__lte=block.height, sender_id=block.generator_id)
+        .filter(type=TxType.BURST_MINING, subtype=TxSubtypeBurstMining.REWARD_RECIPIENT_ASSIGNMENT,
+            height__lte=block.height, sender_id=block.generator_id)
         .values_list("recipient_id", flat=True)
         .order_by("-height")
         .first()
