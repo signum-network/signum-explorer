@@ -25,10 +25,14 @@
           {% endif %}
         </td>
         <td>
-          {% with circulating=asset.asset_id|asset_circulating %}
-            {{ asset.quantity|div:circulating|mul:100|floatformat:2|intcomma }} %
-          {% endwith %}
-        </td>
+          {% if asset|is_asset_treasury:filtered_account %}
+            Treasury
+          {% else %}
+            {% with circulating=asset.asset_id|asset_circulating %}
+              {{ asset.quantity|div:circulating|mul:100|floatformat:2|intcomma }} %
+            {% endwith %}
+          {% endif %}
+          </td>
         <td><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
       </tr>
     {% endfor %}

@@ -138,7 +138,7 @@
                 <p class=style="margin-top: 10px">
                   <div class="float-left small p-1">Account holds {{ assets_cnt|intcomma }} tokens</div>
                 </p>
-                {% include "accounts/assets.html" %}
+                {% include "accounts/assets.html" with filtered_account=address.id %}
               {% else %}
                 <p class="small p-1" style="margin-top: 10px">No tokens found</p>
               {% endif %}

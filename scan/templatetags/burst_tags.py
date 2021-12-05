@@ -177,6 +177,24 @@ def asset_price(asset_id : int) -> float:
         return latest_trade.price
     return 0
 
+@cache_memoize(3600)
+@register.filter
+def is_asset_treasury(asset, account_id) -> bool:
+    full_hash = (Transaction.objects.using("java_wallet")
+        .values_list('full_hash', flat=True)
+        .filter(id=asset.asset_id).first()
+    )
+
+    add_treasury = (Transaction.objects.using("java_wallet")
+        .values_list('referenced_transaction_fullhash', flat=True)
+        .filter(sender_id=asset.account_id, type=TxType.COLORED_COINS,
+            subtype=TxSubtypeColoredCoins.ADD_TREASURY_ACCOUNT,
+            recipient_id=account_id
+        ).all()
+    )
+
+    return full_hash in add_treasury
+
 
 def group_list(lst: list or tuple, n: int):
     for i in range(0, len(lst), n):
