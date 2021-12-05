@@ -91,8 +91,9 @@ def tx_type(tx: Transaction) -> str:
     return get_desc_tx_type(tx.type, tx.subtype)
 
 @register.filter
-def tx_is_in(tx: Transaction, account_id : int = None) -> bool:
+def tx_is_in(tx: Transaction, account_id = None) -> bool:
     if account_id:
+        account_id = int(account_id)
         if tx.sender_id==account_id :
             return False
         
@@ -115,15 +116,14 @@ def tx_is_in(tx: Transaction, account_id : int = None) -> bool:
 
 
 @register.filter
-def tx_is_out(tx: Transaction, account_id : int = None) -> bool:
-    if account_id:
-        if tx.sender_id==account_id:
-            if tx.amount > 0:
-                return True
-            elif tx.type == TxType.BURST_MINING and tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD:
-                return True
-            if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
-                return True
+def tx_is_out(tx: Transaction, account_id : None) -> bool:
+    if account_id and tx.sender_id==int(account_id):
+        if tx.amount > 0:
+            return True
+        elif tx.type == TxType.BURST_MINING and tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD:
+            return True
+        if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
+            return True
 
     return False
 
