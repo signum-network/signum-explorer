@@ -21,7 +21,7 @@
         {% for country in countries %}['{{ country.country_code }}', {{ country.cnt }}],{% endfor %}
       ]);
 
-      var options = {};
+      var options = {colorAxis: {colors: ['#efefef', '#337ab7']}, datalessRegionColor: '#fdfdfd',};
 
       var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
 

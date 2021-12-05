@@ -15,8 +15,10 @@
 
         <div class="d-flex flex-column flex-md-row align-items-center">
           <small class="my-0 mr-md-auto text-muted">
-            More than > {{ accounts_cnt|intcomma }} accounts found<br>
+
+            More than {{ accounts_cnt|intcomma }} accounts found<br>
             <small>(Showing the 1k top accounts only)</small>
+
           </small>
 
           {% include "paginator.html" %}

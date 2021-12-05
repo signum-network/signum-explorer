@@ -6,6 +6,7 @@ from datetime import timedelta
 from distutils.version import LooseVersion
 from functools import lru_cache
 from urllib.parse import urlparse
+from time import sleep
 
 import requests
 from cache_memoize import cache_memoize
@@ -25,6 +26,8 @@ from scan.models import PeerMonitor
 
 logger = logging.getLogger(__name__)
 
+logger.info("Waiting...")
+sleep(300) # delay before processing data and running again
 
 def get_ip_by_domain(peer: str) -> str or None:
     # truncating port if exists
@@ -276,3 +279,4 @@ def peer_cmd():
         modified_at=timezone.now(),
     )
     logger.info("Done")
+    
