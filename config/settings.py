@@ -84,6 +84,8 @@ MIDDLEWARE = [
 
 if DEBUG:
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+    MIDDLEWARE += ["django_cprofile_middleware.middleware.ProfilerMiddleware"]
+    DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
 
 ROOT_URLCONF = "config.urls"
 
@@ -260,6 +262,8 @@ MIN_PEER_VERSION = os.environ.get("MIN_PEER_VERSION", "3.2.0")
 SIGNUM_NODE = os.environ.get("SIGNUM_NODE")
 
 WALLET_URL = os.environ.get("WALLET_URL")
+
+BLOCKED_TOKENS = json.loads(os.environ.get("BLOCKED_TOKENS", "[]"))
 
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 

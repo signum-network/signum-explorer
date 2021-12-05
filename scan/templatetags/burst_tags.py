@@ -12,6 +12,7 @@ from burst.libs.multiout import MultiOutPack
 from burst.libs.reed_solomon import ReedSolomon
 from burst.libs.transactions import get_message
 from burst.api.brs.v1.api import BrsApi
+from config.settings import BLOCKED_TOKENS
 
 from java_wallet.fields import get_desc_tx_type
 from java_wallet.models import Block, IndirectRecipient, Trade, Transaction
@@ -159,6 +160,8 @@ def tx_symbol(tx: Transaction) -> str:
         if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
             asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+            if name in BLOCKED_TOKENS:
+                return str(asset_id)[0:10]
             return name.upper()
 
     return coin_symbol()
