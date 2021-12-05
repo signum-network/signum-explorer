@@ -1,6 +1,10 @@
+import datetime, time
 import os
 
+from django.db.models import Sum
+
 from cache_memoize import cache_memoize
+from burst.constants import TxSubtypeBurstMining, TxType
 
 from java_wallet.models import Account, Asset, Block, RewardRecipAssign, Transaction
 
@@ -45,16 +49,45 @@ def get_txs_count_in_block(block_id: int) -> int:
     return Transaction.objects.using("java_wallet").filter(block_id=block_id).count()
 
 
-@cache_memoize(None)
 def get_pool_id_for_block(block: Block) -> int:
+    elapsed = datetime.datetime.now() - block.timestamp
+
+    # For the more recent blocks we do not use the cache, since we could have short lived forks
+    if elapsed.total_seconds() < 240*4:
+        return get_pool_id_for_block_db(block)
+    return get_pool_id_for_block_cached(block)
+
+def get_pool_id_for_block_db(block: Block) -> int:
     return (
         Transaction.objects.using("java_wallet")
-        .filter(type=20, height__lte=block.height, sender_id=block.generator_id)
+        .filter(type=TxType.BURST_MINING, subtype=TxSubtypeBurstMining.REWARD_RECIPIENT_ASSIGNMENT,
+            height__lte=block.height, sender_id=block.generator_id)
         .values_list("recipient_id", flat=True)
         .order_by("-height")
         .first()
     )
 
+@cache_memoize(3600 * 24)
+def get_total_circulating():
+    return (
+        Account.objects.using("java_wallet")
+        .filter(latest=True)
+        .exclude(id=0)
+        .aggregate(Sum("balance"))["balance__sum"]
+    )
+
+@cache_memoize(3600 * 24)
+def get_total_accounts_count():
+    return (
+        Account.objects.using("java_wallet")
+        .filter(latest=True)
+        .exclude(id=0)
+        .count()
+    )
+
+@cache_memoize(None)
+def get_pool_id_for_block_cached(block: Block) -> int:
+    return get_pool_id_for_block_db(block)
 
 @cache_memoize(3600)
 def get_pool_id_for_account(address_id: int) -> int:

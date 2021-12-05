@@ -9,8 +9,10 @@
 
   <h5 class="p-2">Transactions
     {% if 'block' in request.GET %}
+      <br class="d-md-none" />
       <small class="text-muted">for block #<a href="{% url 'block-detail' request.GET.block %}">{{ request.GET.block }}</a></small>
     {% elif 'a' in request.GET %}
+      <br class="d-md-none" />
       <small class="text-muted">for address <a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
     {% endif %}
   </h5>

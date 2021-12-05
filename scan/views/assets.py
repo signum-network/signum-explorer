@@ -1,3 +1,6 @@
+import os
+import simplejson as json
+
 from django.db.models import Q
 from django.http import Http404
 from django.views.generic import ListView
@@ -37,6 +40,13 @@ class AssetListView(ListView):
         obj = context[self.context_object_name]
         for t in obj:
             t.account_name = get_account_name(t.account_id)
+
+        asset_list = os.environ.get('FEATURED_ASSETS')
+        if asset_list:
+            featured_assets = Asset.objects.using("java_wallet").filter(id__in=list(map(int, json.loads(asset_list))))
+            for t in featured_assets:
+                t.account_name = get_account_name(t.account_id)
+            context["featured_assets"] = featured_assets
 
         return context
 
