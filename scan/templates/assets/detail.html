@@ -42,17 +42,7 @@
               <td>{{ asset.description }}</td>
             </tr>
             <tr>
-              <th>Initial Quantity</th>
-              <td>
-                {% if asset.decimals == 0 %}
-                  {{ asset.quantity|intcomma }}
-                {% else %}
-                  {{ asset.quantity|div_decimals:asset.decimals|floatformat:0|intcomma }}
-                {% endif %}
-              </td>
-            </tr>
-            <tr>
-              <th>Total Circulating</th>
+              <th>Circulating Quantity</th>
               <td>
                 {% if asset.decimals == 0 %}
                   {{ asset.id|asset_circulating|intcomma }}

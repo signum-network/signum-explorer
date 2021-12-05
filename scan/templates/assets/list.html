@@ -19,7 +19,7 @@
               <th scope="col">Ticker</th>
               <th scope="col">ID</th>
               <th scope="col" class="d-none d-sm-table-cell">Issuer</th>
-              <th scope="col" class="d-none d-sm-table-cell">Initial Quantity</th>
+              <th scope="col" class="d-none d-sm-table-cell">Circulating Quantity</th>
               <th scope="col">Price</th>
             </tr>
             </thead>
@@ -36,9 +36,9 @@
                 </td>
                 <td  class="d-none d-sm-table-cell">
                   {% if asset.decimals == 0 %}
-                    {{ asset.quantity|intcomma }}
+                    {{ asset.id|asset_circulating|intcomma }}
                   {% else %}
-                    {{ asset.quantity|div_decimals:asset.decimals|floatformat:0|intcomma }}
+                    {{ asset.id|asset_circulating|div_decimals:asset.decimals|floatformat:0|intcomma }}
                   {% endif %}
                 </td>
                 <td class="text-nowrap">
@@ -73,7 +73,7 @@
               <th scope="col">Ticker</th>
               <th scope="col">ID</th>
               <th scope="col" class="d-none d-sm-table-cell">Issuer</th>
-              <th scope="col" class="d-none d-sm-table-cell">Initial Quantity</th>
+              <th scope="col" class="d-none d-sm-table-cell">Circulating Quantity</th>
               <th scope="col">Price</th>
             </tr>
             </thead>
@@ -89,9 +89,9 @@
                 </td>
                 <td  class="d-none d-sm-table-cell">
                   {% if asset.decimals == 0 %}
-                    {{ asset.quantity|intcomma }}
+                    {{ asset.id|asset_circulating|intcomma }}
                   {% else %}
-                    {{ asset.quantity|div_decimals:asset.decimals|floatformat:0|intcomma }}
+                    {{ asset.id|asset_circulating|div_decimals:asset.decimals|floatformat:0|intcomma }}
                   {% endif %}
                 </td>
                 <td class="text-nowrap">
