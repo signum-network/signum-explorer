@@ -20,14 +20,12 @@ from requests.exceptions import RequestException
 
 from burst.api.brs.p2p import P2PApi
 from burst.api.exceptions import BurstException
+from config.settings import PEERS_SCAN_DELAY
 from java_wallet.models import Block
 from scan.helpers.decorators import lock_decorator
 from scan.models import PeerMonitor
 
 logger = logging.getLogger(__name__)
-
-logger.info("Waiting...")
-sleep(300) # delay before processing data and running again
 
 def get_ip_by_domain(peer: str) -> str or None:
     # truncating port if exists
@@ -278,5 +276,9 @@ def peer_cmd():
         availability=100 - (F("downtime") / F("lifetime") * 100),
         modified_at=timezone.now(),
     )
+    if PEERS_SCAN_DELAY > 0:
+        logger.info(f"Sleeping for {PEERS_SCAN_DELAY} seconds...")
     logger.info("Done")
+    sleep(PEERS_SCAN_DELAY)
+
     
