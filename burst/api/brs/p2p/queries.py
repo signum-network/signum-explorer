@@ -42,7 +42,6 @@ class GetInfo(QueryBase):
             "shareAddress": {"type": "boolean"},
         },
         "required": [
-            "announcedAddress",
             "application",
             "version",
             "platform",

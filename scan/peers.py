@@ -110,14 +110,18 @@ def explore_peer(address: str, updates: dict):
         return
 
     try:
-        peer_info = P2PApi(address).get_info()
+        p2p_api = P2PApi(address)
+        peer_info = p2p_api.get_info()
         if not is_good_version(peer_info["version"]):
             logger.debug("Old version: %s", peer_info["version"])
             updates[address] = None
             return
-        peer_info.update(P2PApi(address).get_cumulative_difficulty())
+        if not "announcedAddress" in peer_info:
+            peer_info["announcedAddress"] = address
+
+        peer_info.update(p2p_api.get_cumulative_difficulty())
     except BurstException:
-        logger.debug("Can't connect to peer: %s", address)
+        logger.debug("Can't connect to peer: %s", p2p_api.node_url)
         updates[address] = None
         return
 
