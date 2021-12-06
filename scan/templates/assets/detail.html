@@ -6,7 +6,7 @@
 {% block title %} - Token #{{ asset.id }}{% endblock %}
 
 {% block description %}
-{{ asset.name }}
+{{ asset.name }} {% if asset|is_asset_blocked %} ! Potential phishing ! {% endif %}
 {{ asset.description }}
 {% endblock %}
 
