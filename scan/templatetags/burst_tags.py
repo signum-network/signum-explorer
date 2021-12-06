@@ -160,9 +160,10 @@ def tx_symbol(tx: Transaction) -> str:
         if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
             asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+            name = name.upper()
             if name in BLOCKED_TOKENS:
                 return str(asset_id)[0:10]
-            return name.upper()
+            return name
 
     return coin_symbol()
 
@@ -179,6 +180,10 @@ def asset_price(asset_id : int) -> float:
     if latest_trade:
         return latest_trade.price
     return 0
+
+@register.filter
+def is_asset_blocked(asset) -> bool:
+    return asset.name.upper() in BLOCKED_TOKENS
 
 @cache_memoize(3600)
 @register.filter

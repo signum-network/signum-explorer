@@ -4,7 +4,7 @@ import simplejson as json
 from django.db.models import Q
 from django.http import Http404
 from django.views.generic import ListView
-from config.settings import BLOCKED_TOKENS
+from config.settings import BLOCKED_TOKENS, FEATURED_ASSETS
 
 from java_wallet.models import Asset, AssetTransfer, Trade
 from scan.caching_paginator import CachingPaginator
@@ -40,12 +40,15 @@ class AssetListView(ListView):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
 
+        context["BLOCKED_TOKENS"] = BLOCKED_TOKENS
+
         for t in obj:
             t.account_name = get_account_name(t.account_id)
+            t.name = t.name.upper()
             if t.name in BLOCKED_TOKENS:
                 t.name = str(t.id)[0:10]
 
-        asset_list = os.environ.get('FEATURED_ASSETS')
+        asset_list = FEATURED_ASSETS
         if asset_list:
             featured_assets = Asset.objects.using("java_wallet").filter(id__in=list(map(int, json.loads(asset_list))))
             for t in featured_assets:

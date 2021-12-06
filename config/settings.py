@@ -263,6 +263,8 @@ SIGNUM_NODE = os.environ.get("SIGNUM_NODE")
 
 WALLET_URL = os.environ.get("WALLET_URL")
 
+FEATURED_ASSETS = json.loads(os.environ.get("FEATURED_ASSETS", "[]"))
+
 BLOCKED_TOKENS = json.loads(os.environ.get("BLOCKED_TOKENS", "[]"))
 
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))

@@ -16,7 +16,12 @@
     {% for asset in assets %}
       <tr>
         <td class="d-none d-sm-table-cell"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a></td>
-        <td class="text-nowrap text-uppercase"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.name }}</a></td>
+        <td class="text-nowrap text-uppercase">
+          <a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.name }}</a>
+          {% if asset|is_asset_blocked %}
+            <spam><i class="fas fa-exclamation-circle"></i>Potential phishing</spam>
+          {% endif %}
+        </td>
         <td>
           {% if asset.decimals == 0 %}
             {{ asset.quantity|intcomma }}

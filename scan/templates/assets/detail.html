@@ -35,6 +35,9 @@
               <th>Ticker</th>
               <td class="text-uppercase">
                 {{ asset.name }}
+                {% if asset|is_asset_blocked %}
+                  <spam><i class="fas fa-exclamation-circle"></i>Potential phishing</spam>
+                {% endif %}
               </td>
             </tr>
             <tr>
