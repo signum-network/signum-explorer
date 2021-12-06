@@ -54,7 +54,7 @@ class PeerMonitorListView(ListView):
     template_name = "peers/list.html"
     context_object_name = "peers"
     paginate_by = 25
-    ordering = ("-height", "announced_address")
+    ordering = ("-height", "-availability", "announced_address")
 
 
 class PeerMonitorDetailView(DetailView):
