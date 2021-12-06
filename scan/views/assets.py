@@ -48,12 +48,11 @@ class AssetListView(ListView):
             if t.name in BLOCKED_TOKENS:
                 t.name = str(t.id)[0:10]
 
-        asset_list = FEATURED_ASSETS
-        if asset_list:
-            featured_assets = Asset.objects.using("java_wallet").filter(id__in=list(map(int, json.loads(asset_list))))
+        if FEATURED_ASSETS:
+            featured_assets = Asset.objects.using("java_wallet").filter(id__in=list(map(int, FEATURED_ASSETS)))
+            context["featured_assets"] = featured_assets
             for t in featured_assets:
                 t.account_name = get_account_name(t.account_id)
-            context["featured_assets"] = featured_assets
 
         return context
 
