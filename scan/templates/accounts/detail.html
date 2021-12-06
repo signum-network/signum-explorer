@@ -128,6 +128,10 @@
                   </div>
                 </p>
                 {% include "txs/list_table.html" with filtered_account=address.id %}
+                <div class="float-right  small p-1">
+                  <a href="{% url 'txs' %}?a={{ address.id }}">View all transactions</a>
+                  <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" title="Download the latest 2k txs" href="{% url 'account-csv' address.id %}"><i class="fas fa-file-csv"></i></a>
+                </div>
               {% else %}
                 <p class="small p-1" style="margin-top: 10px">No transactions found</p>
               {% endif %}
@@ -153,6 +157,9 @@
                   </div>
                 </p>
                 {% include "assets/trades_list.html" %}
+                <div class="float-right  small p-1">
+                  <a href="{% url 'asset-trades' %}?a={{ address.id }}">View all trades</a>
+                </div>
               {% else %}
                 <p class="small p-1" style="margin-top: 10px">No trades found</p>
               {% endif %}
@@ -167,6 +174,9 @@
                   </div>
                 </p>
                 {% include "assets/transfers_list.html" with filtered_account=address.id %}
+                <div class="float-right  small p-1">
+                  <a href="{% url 'asset-transfers' %}?a={{ address.id }}">View all transfers</a>
+                </div>
               {% else %}
                 <p class="small p-1" style="margin-top: 10px">
                   No token transfers found
@@ -183,6 +193,9 @@
                   </div>
                 </p>
                 {% include "accounts/mined_blocks.html" %}
+                <div class="float-right  small p-1">
+                  <a href="{% url 'blocks' %}?m={{ address.id }}">View all blocks</a>
+                </div>
               {% else %}
                 <p class="small p-1" style="margin-top: 10px">No blocks mined</p>
               {% endif %}
