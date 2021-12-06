@@ -12,7 +12,7 @@ class AtListViewTests(TestCase):
         response = self.client.get("/ats/")
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Contracts found")
-        self.assertContains(response, "Blockchain Explorer - ATs</title>")
+        self.assertContains(response, "Blockchain Explorer - Contracts</title>")
         self.assertQuerysetEqual(response.context["ats"], [])
 
 
