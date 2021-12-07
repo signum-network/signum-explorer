@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import simplejson as json
 
@@ -9,6 +10,7 @@ from config.settings import BLOCKED_TOKENS, FEATURED_ASSETS
 from java_wallet.models import Asset, AssetTransfer, Trade
 from scan.caching_paginator import CachingPaginator
 from scan.helpers.queries import get_account_name, get_asset_details
+from scan.templatetags.burst_tags import burst_amount, mul_decimals
 from scan.views.base import IntSlugDetailView
 from scan.views.filters.assets import AssetTransferFilter, TradeFilter
 
@@ -80,6 +82,7 @@ class AssetTradesListView(ListView):
         context = super().get_context_data(**kwargs)
         context["assets_trades_cnt"] = self.filter_set.qs.count()
         obj = context[self.context_object_name]
+
         for trade in obj:
             fill_data_asset_trade(trade)
 
@@ -130,6 +133,8 @@ class AssetDetailView(IntSlugDetailView):
         obj = context[self.context_object_name]
         obj.account_name = get_account_name(obj.account_id)
 
+        name, decimals, total_quantity, mintable = get_asset_details(obj.id)
+
         # assets transfer
 
         assets_transfers = (
@@ -163,4 +168,35 @@ class AssetDetailView(IntSlugDetailView):
         context["assets_trades_cnt"] = (
             Trade.objects.using("java_wallet").filter(asset_id=obj.id).count()
         )
+
+
+        # price history
+
+        price_query = (
+            Trade.objects.using("java_wallet")
+            .using("java_wallet")
+            .filter(asset_id=obj.id)
+            .order_by("height")[:2000]
+        )
+
+        price_history = "[\n"
+        old_time = None
+        now = datetime.now().strftime("%Y-%m-%d")
+        for trade in price_query:
+            price = burst_amount(mul_decimals(trade.price, decimals))
+            time = trade.timestamp.strftime("%Y-%m-%d")
+            last_price = price
+            if time != old_time and time != now:
+                # one per day
+                price_history += "{ time: '" + time + "', value: " + str(price) + " },\n"
+                old_time = time
+        
+        # add now as latest price
+        if last_price:
+            price_history += "{ time: '" + now + "', value: " + str(last_price) + " },\n"
+
+        price_history += "]"
+
+        context["price_history"] = price_history
+
         return context

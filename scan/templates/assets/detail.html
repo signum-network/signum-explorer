@@ -5,18 +5,133 @@
 
 {% block title %} - Token #{{ asset.id }}{% endblock %}
 
-{% if asset|is_asset_blocked %}
+{% if not asset|is_asset_blocked %}
 {% block description %}
 {{ asset.name }}
 {{ asset.description }}
 {% endblock %}
 {% endif %}
 
+
+{% block scripts %}
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <script>
+
+var container = document.getElementById('chartDiv');
+// var container = document.createElement('div');
+// document.body.appendChild(container);
+
+var width = container.clientWidth;
+var height = 240;
+
+var data = {{ price_history|safe }} ;
+
+var chart = window.tvchart  = LightweightCharts.createChart(container, {
+  width: width,
+	height: height,
+	rightPriceScale: {
+		scaleMargins: {
+			top: 0.35,
+			bottom: 0.2,
+		},
+		borderVisible: false,
+	},
+	timeScale: {
+		borderVisible: false,
+	},
+	grid: {
+		horzLines: {
+			color: '#eee',
+      visible: false,
+		},
+		vertLines: {
+			color: '#ffffff',
+		},
+	},
+  crosshair: {
+  		horzLine: {
+      	visible: false,
+        labelVisible: false
+      },
+      vertLine: {
+      	visible: true,
+        style: 0,
+        width: 2,
+        color: 'rgba(32, 38, 46, 0.1)',
+        labelVisible: false,
+      }
+  },
+});
+
+var series = chart.addAreaSeries({	
+	topColor: 'rgba(19, 68, 193, 0.4)',	
+  bottomColor: 'rgba(0, 120, 255, 0.0)',
+	lineColor: 'rgba(19, 40, 153, 1.0)',
+	lineWidth: 3
+});
+
+series.setData(data);
+chart.timeScale().fitContent();
+
+function businessDayToString(businessDay) {
+	return new Date(Date.UTC(businessDay.year, businessDay.month - 1, businessDay.day, 0, 0, 0)).toLocaleDateString();
+}
+
+var toolTipMargin = 10;
+var priceScaleWidth = 50;
+var toolTip = document.createElement('div');
+toolTip.className = 'three-line-legend';
+container.appendChild(toolTip);
+toolTip.style.display = 'block';
+toolTip.style.left = 3 + 'px';
+toolTip.style.top = 3 - height + 'px';
+
+function setLastBarText() {
+	var dateStr = data[data.length - 1].time.year + ' - ' + data[data.length - 1].time.month + ' - ' + 	data[data.length - 1].time.day;
+  var price = data[data.length-1].value + " {% coin_symbol %}"
+	 toolTip.innerHTML =	'<div style="font-size: 24px; margin: 4px 0px; color: #20262E"> {{ asset.name }}</div>'+
+    '<div style="white-space:nowrap; font-size: 16px; margin: 4px 0px; color: #20262E">' + price + '</div>' +
+		'<div>' + dateStr + '</div>';
+}
+
+setLastBarText(); 
+
+chart.subscribeCrosshairMove(function(param) {
+  if ( param === undefined || param.time === undefined || param.point.x < 0 || param.point.x > width || param.point.y < 0 || param.point.y > height ) {
+	setLastBarText();   
+} else {
+	dateStr = param.time.year +' - '+ param.time.month + ' - ' + param.time.day;
+	var price = param.seriesPrices.get(series) + " {% coin_symbol %}"
+	toolTip.innerHTML =	'<div style="font-size: 24px; margin: 4px 0px; color: #20262E"> {{ asset.name }}</div>'+
+    '<div style="white-space:nowrap; font-size: 16px; margin: 4px 0px; color: #20262E">' + price + '</div>' +
+    '<div>' + dateStr + '</div>';
+}
+  
+
+});
+
+
+var timerID;
+document.body.onresize = function() {
+  if (timerID) clearTimeout(timerID);
+  timerID = setTimeout(function() {
+    width = container.clientWidth
+    chart.resize(width, height);
+    }, 200);
+}
+
+  </script>  
+{% endblock %}
+
+
 {% block content %}
 
   <h5 class="p-2">Token<br class="d-md-none" /> {{ asset.id }}
     <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ asset.id }}"><i class="far fa-copy"></i></a>
   </h5>
+
+  <div style="height: 240px;" id="chartDiv">
+  </div>
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
