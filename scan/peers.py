@@ -198,10 +198,7 @@ def get_state(update: dict, peer_obj: PeerMonitor or None) -> int:
     _data = get_last_cumulative_difficulty()
 
     if update["height"] == _data["height"]:
-        if update["cumulative_difficulty"] == _data["cumulative_difficulty"]:
-            state = PeerMonitor.State.ONLINE
-        else:
-            state = PeerMonitor.State.FORKED
+        state = PeerMonitor.State.ONLINE
     elif update["height"] > _data["height"]:
         state = PeerMonitor.State.FORKED
     else:
