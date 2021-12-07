@@ -176,14 +176,14 @@ class AssetDetailView(IntSlugDetailView):
             Trade.objects.using("java_wallet")
             .using("java_wallet")
             .filter(asset_id=obj.id)
-            .order_by("height")[:2000]
+            .order_by("-height")[:2000]
         )
 
         price_history = "[\n"
         old_time = None
         last_price = None
         now = datetime.now().strftime("%Y-%m-%d")
-        for trade in price_query:
+        for trade in reversed(price_query):
             price = burst_amount(mul_decimals(trade.price, decimals))
             time = trade.timestamp.strftime("%Y-%m-%d")
             last_price = price
