@@ -1,10 +1,15 @@
-import datetime, time
+import time
 import os
+
+from datetime import datetime
+from django.conf import settings
 
 from django.db.models import Sum
 
 from cache_memoize import cache_memoize
-from burst.constants import TxSubtypeBurstMining, TxType
+from burst.api.brs.v1.api import BrsApi
+from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxType
+from java_wallet.fields import get_desc_tx_type
 
 from java_wallet.models import Account, Asset, Block, RewardRecipAssign, Transaction
 
@@ -50,7 +55,7 @@ def get_txs_count_in_block(block_id: int) -> int:
 
 
 def get_pool_id_for_block(block: Block) -> int:
-    elapsed = datetime.datetime.now() - block.timestamp
+    elapsed = datetime.now() - block.timestamp
 
     # For the more recent blocks we do not use the cache, since we could have short lived forks
     if elapsed.total_seconds() < 240*4:
@@ -98,3 +103,37 @@ def get_pool_id_for_account(address_id: int) -> int:
         .order_by("-height")
         .first()
     )
+
+
+@cache_memoize(60)
+def get_unconfirmed_transactions():
+    txs_pending = BrsApi(settings.SIGNUM_NODE).get_unconfirmed_transactions()
+
+    for t in txs_pending:
+        t["timestamp"] = datetime.fromtimestamp(
+            t["timestamp"] + BLOCK_CHAIN_START_AT
+        )
+        t["amountNQT"] = int(t["amountNQT"])
+        t["feeNQT"] = int(t["feeNQT"])
+        t["sender_name"] = get_account_name(int(t["sender"]))
+
+        if "recipient" in t:
+            t["recipient_exists"] = (
+                Account.objects.using("java_wallet")
+                .filter(id=t["recipient"])
+                .exists()
+            )
+            if t["recipient_exists"]:
+                t["recipient_name"] = get_account_name(int(t["recipient"]))
+
+        t["attachment_bytes"] = None
+        if "attachmentBytes" in t:
+            t["attachment_bytes"] =  bytes.fromhex(t["attachmentBytes"])
+        if "attachment" in t and "recipients" in t["attachment"]:
+            t["multiout"] = len(t["attachment"]["recipients"])
+
+        t["tx_name"] = get_desc_tx_type(t["type"], t["subtype"])
+
+    txs_pending.sort(key=lambda _x: _x["feeNQT"], reverse=True)
+
+    return txs_pending

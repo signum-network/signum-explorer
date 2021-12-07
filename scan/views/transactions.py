@@ -10,10 +10,9 @@ from scan.templatetags.burst_tags import burst_amount, num2rs, tx_load_recipient
 from burst.libs.multiout import MultiOutPack
 from java_wallet.models import IndirecIncoming, Transaction
 from scan.caching_data.last_height import CachingLastHeight
-from scan.caching_data.pending_txs import CachingPendingTxs
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
 from scan.caching_paginator import CachingPaginator
-from scan.helpers.queries import get_account_name
+from scan.helpers.queries import get_account_name, get_unconfirmed_transactions
 from scan.views.base import IntSlugDetailView
 from scan.views.filters.transactions import TxFilter
 
@@ -121,7 +120,7 @@ class TxDetailView(IntSlugDetailView):
                 filter(
                     lambda x: x.get("transaction")
                     == self.kwargs.get(self.slug_url_kwarg),
-                    CachingPendingTxs().cached_data,
+                    get_unconfirmed_transactions(),
                 )
             )
             if not txs_pending:

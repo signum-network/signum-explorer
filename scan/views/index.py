@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
 
 from java_wallet.models import Block, Transaction
-from scan.caching_data.pending_txs import CachingPendingTxs
+from scan.helpers.queries import get_unconfirmed_transactions
 from scan.views.blocks import fill_data_block
 from scan.views.transactions import fill_data_transaction
 
@@ -29,7 +29,7 @@ def index(request):
     context = {
         "txs": txs,
         "blocks": blocks,
-        "txs_pending": CachingPendingTxs().cached_data[:5],
+        "txs_pending": get_unconfirmed_transactions()[:5],
     }
 
     return render(request, "home/index.html", context)
