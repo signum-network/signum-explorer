@@ -181,6 +181,7 @@ class AssetDetailView(IntSlugDetailView):
 
         price_history = "[\n"
         old_time = None
+        last_price = None
         now = datetime.now().strftime("%Y-%m-%d")
         for trade in price_query:
             price = burst_amount(mul_decimals(trade.price, decimals))

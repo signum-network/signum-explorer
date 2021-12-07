@@ -130,8 +130,10 @@ document.body.onresize = function() {
     <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ asset.id }}"><i class="far fa-copy"></i></a>
   </h5>
 
+  {% if assets_trades_cnt > 0 %}
   <div style="height: 240px;" id="chartDiv">
   </div>
+  {% endif %}
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
