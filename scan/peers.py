@@ -27,6 +27,10 @@ from scan.models import PeerMonitor
 
 logger = logging.getLogger(__name__)
 
+if PEERS_SCAN_DELAY > 0:
+    logger.info(f"Sleeping for {PEERS_SCAN_DELAY} seconds...")
+sleep(PEERS_SCAN_DELAY)
+
 def get_ip_by_domain(peer: str) -> str or None:
     # truncating port if exists
     if not peer.startswith("http"):
@@ -192,12 +196,13 @@ def get_nodes_list() -> list:
 
 def get_state(update: dict, peer_obj: PeerMonitor or None) -> int:
     _data = get_last_cumulative_difficulty()
-
     if update["height"] == _data["height"]:
-        if update["cumulative_difficulty"] == _data["cumulative_difficulty"]:
-            state = PeerMonitor.State.ONLINE
-        else:
-            state = PeerMonitor.State.FORKED
+# TO-DO better second comparison CD drifts too much causes false forks, maybe no second needed?
+#        if update["cumulative_difficulty"] == _data["cumulative_difficulty"]:
+#            state = PeerMonitor.State.ONLINE
+#        else:
+#            state = PeerMonitor.State.FORKED
+        state = PeerMonitor.State.ONLINE
     elif update["height"] > _data["height"]:
         state = PeerMonitor.State.FORKED
     else:
@@ -280,9 +285,5 @@ def peer_cmd():
         availability=100 - (F("downtime") / F("lifetime") * 100),
         modified_at=timezone.now(),
     )
-    if PEERS_SCAN_DELAY > 0:
-        logger.info(f"Sleeping for {PEERS_SCAN_DELAY} seconds...")
-    logger.info("Done")
-    sleep(PEERS_SCAN_DELAY)
-
+logger.info("Done")
     
