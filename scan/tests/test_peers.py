@@ -70,7 +70,7 @@ class PeersListViewTests(TestCase):
     def test_ok(self):
         response = self.client.get("/peers/")
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "peers found")
+        self.assertContains(response, "nodes found")
         self.assertContains(response, "Blockchain Explorer - Public Peers List</title>")
         self.assertEqual(len(response.context["peers"]), 7)
 

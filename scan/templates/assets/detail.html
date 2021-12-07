@@ -72,6 +72,8 @@ var series = chart.addAreaSeries({
 
 series.setData(data);
 chart.timeScale().fitContent();
+// Start with latest 30 days?
+// chart.timeScale().setVisibleLogicalRange({ from: new Date().setDate(Date.now()-30) / 1000, to: Date.now() / 1000 });
 
 function businessDayToString(businessDay) {
 	return new Date(Date.UTC(businessDay.year, businessDay.month - 1, businessDay.day, 0, 0, 0)).toLocaleDateString();
