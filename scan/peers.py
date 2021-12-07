@@ -27,6 +27,10 @@ from scan.models import PeerMonitor
 
 logger = logging.getLogger(__name__)
 
+if PEERS_SCAN_DELAY > 0:
+    logger.info(f"Sleeping for {PEERS_SCAN_DELAY} seconds...")
+sleep(PEERS_SCAN_DELAY)
+
 def get_ip_by_domain(peer: str) -> str or None:
     # truncating port if exists
     if not peer.startswith("http"):
@@ -280,9 +284,5 @@ def peer_cmd():
         availability=100 - (F("downtime") / F("lifetime") * 100),
         modified_at=timezone.now(),
     )
-    if PEERS_SCAN_DELAY > 0:
-        logger.info(f"Sleeping for {PEERS_SCAN_DELAY} seconds...")
-    logger.info("Done")
-    sleep(PEERS_SCAN_DELAY)
-
+logger.info("Done")
     
