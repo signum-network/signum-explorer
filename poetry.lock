@@ -21,7 +21,7 @@ marker = "sys_platform == \"darwin\""
 [[package]]
 name = "asgiref"
 version = "3.2.10"
-description = "ASGI specs, helper code, and adapters"
+de
 category = "main"
 optional = false
 python-versions = ">=3.5"
