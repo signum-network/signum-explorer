@@ -22,10 +22,8 @@ body, html {
 
 .link_white {
   text-decoration: none;
-  color: white
+  color: white;
 }
-
-
 
 .text-muted-white {
   color: white !important;
