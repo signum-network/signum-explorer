@@ -14,12 +14,12 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
 
 {% block content %}
   <div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm bg-dark">
+    <div class="card mb-4 shadow-sm bg-primary">
       <div class="card-body">
         <form class="form-inline input-group" action="{% url 'search' %}">
           <input class="form-control" type="text" name="q" placeholder="Search by Account / Block / Transaction / Token / Contract" aria-label="Search">
           <div class="input-group-append">
-            <button class="btn btn-dark" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
+            <button class="btn btn-primary" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
           </div>
         </form>
       </div>
