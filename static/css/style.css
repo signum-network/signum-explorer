@@ -20,6 +20,13 @@ body, html {
   background-color: #eaf0f6;
 }
 
+.link_white {
+  text-decoration: none;
+  color: white
+}
+
+
+
 .text-muted-white {
   color: white !important;
 }
