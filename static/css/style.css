@@ -28,6 +28,9 @@ body, html {
   background-color: #0099ff !important;
 }
 
+.card-header:first-child {
+    border-radius: 0.8em 0.8em 0 0;
+}
 .card {
     position: relative;
     display: flex;

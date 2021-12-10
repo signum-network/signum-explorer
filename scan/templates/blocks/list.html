@@ -7,7 +7,6 @@
 
 {% block content %}
 
-  <h5 class="p-2">Blocks
     {% if 'm' in request.GET %}
       <br class="d-md-none" />
       <small class="text-muted">forged by <a href="{% url 'address-detail' request.GET.m %}">{{ request.GET.m|num2rs }}</a></small>
@@ -17,7 +16,9 @@
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
-
+       <div class="card-header">
+        <h5 class="card-header-title">Blocks</h5>
+      </div>
         <div class="d-flex flex-column flex-md-row align-items-center">
           <small class="my-0 mr-md-auto text-muted">
             {% if blocks %}
