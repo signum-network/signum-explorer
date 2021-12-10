@@ -94,7 +94,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
         {% include "home/blocks_list.html" %}
       </div>
       <div class="card-footer">
-        <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'blocks' %}">View all blocks</a>
+        <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'blocks' %}">View all blocks</a>
       </div>
     </div>
     <div class="card mb-4">
@@ -105,7 +105,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
         {% include "home/transactions_list.html" %}
       </div>
       <div class="card-footer">
-        <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'txs' %}">View all transactions</a>
+        <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'txs' %}">View all transactions</a>
       </div>
     </div>
   </div>
@@ -117,7 +117,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
       </div>
       <div class="card-body">
         {% include "txs_pending/txs_pendings.html" %}
-        <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'txs-pending' %}">View all pending transactions</a>
+        <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'txs-pending' %}">View all pending transactions</a>
       </div>
     </div>
   </div>
