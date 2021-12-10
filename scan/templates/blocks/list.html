@@ -9,7 +9,6 @@
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
-      <div class="card-body">
        <div class="card-header">
         <h5 class="card-header-title">Blocks 
           {% if 'm' in request.GET %}
@@ -18,6 +17,7 @@
           {% endif %}
           </h5>
       </div>
+      <div class="card-body">
         <div class="d-flex flex-column flex-md-row align-items-center">
           <small class="my-0 mr-md-auto text-muted">
             {% if blocks %}
