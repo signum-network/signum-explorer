@@ -6,13 +6,15 @@
 
 {% block content %}
 
-  <h5 class="p-2">Pending Transactions</h5>
 
   {% if not test_net %}
   {% endif %}
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
+       <div class="card-header">
+        <h5 class="card-header-title">Pending Transactions</h5>
+      </div>
       <div class="card-body">
         <div class="d-flex flex-column flex-md-row">
           <small class="mb-2 mr-md-auto text-muted">
