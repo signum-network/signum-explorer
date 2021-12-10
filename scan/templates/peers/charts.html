@@ -80,10 +80,11 @@
 
 {% block content %}
 
-  <h5 class="p-2">Nodes Distribution</h5>
-
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
+         <div class="card-header">
+        <h5 class="card-header-title">Nodes Distribution</h5>
+      </div>
       <div class="card-body">
         <p>Online now: {{ online_now }} <span class="small">(checked {{ last_check.modified_at|naturaltime }})</span></p>
 
