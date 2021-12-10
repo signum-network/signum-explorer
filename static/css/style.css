@@ -20,6 +20,9 @@ body, html {
   background-color: #eaf0f6;
 }
 
+.text-muted-white {
+  color: white !important;
+}
 .wrapper {
   height: auto !important;
   height: 100%;
