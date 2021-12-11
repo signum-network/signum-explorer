@@ -14,12 +14,12 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
 
 {% block content %}
   <div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm bg-dark">
+    <div class="card mb-4 shadow-sm bg-primary">
       <div class="card-body">
         <form class="form-inline input-group" action="{% url 'search' %}">
           <input class="form-control" type="text" name="q" placeholder="Search by Account / Block / Transaction / Token / Contract" aria-label="Search">
           <div class="input-group-append">
-            <button class="btn btn-dark" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
+            <button class="btn btn-primary" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
           </div>
         </form>
       </div>
@@ -94,7 +94,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
         {% include "home/blocks_list.html" %}
       </div>
       <div class="card-footer">
-        <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'blocks' %}">View all blocks</a>
+        <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'blocks' %}">View all blocks</a>
       </div>
     </div>
     <div class="card mb-4">
@@ -105,7 +105,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
         {% include "home/transactions_list.html" %}
       </div>
       <div class="card-footer">
-        <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'txs' %}">View all transactions</a>
+        <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'txs' %}">View all transactions</a>
       </div>
     </div>
   </div>
@@ -117,7 +117,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
       </div>
       <div class="card-body">
         {% include "txs_pending/txs_pendings.html" %}
-        <a class="btn btn-xs btn-block btn-outline-dark" href="{% url 'txs-pending' %}">View all pending transactions</a>
+        <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'txs-pending' %}">View all pending transactions</a>
       </div>
     </div>
   </div>
