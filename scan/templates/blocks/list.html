@@ -13,7 +13,7 @@
         <h5 class="card-header-title">Blocks 
           {% if 'm' in request.GET %}
            <br class="d-md-none" />
-            <small class="text-muted">forged by <a href="{% url 'address-detail' request.GET.m %}">{{ request.GET.m|num2rs }}</a></small>
+            <small class="text-muted-white">forged by <a class="link_white" href="{% url 'address-detail' request.GET.m %}">{{ request.GET.m|num2rs }}</a></small>
           {% endif %}
           </h5>
       </div>
