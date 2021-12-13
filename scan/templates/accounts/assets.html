@@ -34,7 +34,9 @@
           {% endif %}
         </td>
         <td>
-          {% if asset|is_asset_treasury:filtered_account %}
+          {% if filtered_account == 0 %}
+            Burnt
+          {% elif asset|is_asset_treasury:filtered_account %}
             Treasury
           {% else %}
             {% with circulating=asset.asset_id|asset_circulating %}
