@@ -209,17 +209,20 @@ document.body.onresize = function() {
             <div class="nav nav-tabs small" id="nav-tab" role="tablist">
               <a class="nav-item nav-link active" id="nav-asset-trades-tab" data-toggle="tab" href="#nav-asset-trades" role="tab" aria-controls="nav-asset-trades" aria-selected="false">{{ assets_trades_cnt|intcomma }} Token trades</a>
               <a class="nav-item nav-link" id="nav-asset-transfer-tab" data-toggle="tab" href="#nav-asset-transfer" role="tab" aria-controls="nav-asset-transfer" aria-selected="false">{{ assets_transfers_cnt|intcomma }} Token transfers</a>
+              <a class="nav-item nav-link" id="nav-asset-holders-tab" data-toggle="tab" href="#nav-asset-holders" role="tab" aria-controls="nav-asset-holders" aria-selected="false">{{ assets_holders_cnt|intcomma }} Token Holders</a>
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-asset-trades" role="tabpanel" aria-labelledby="nav-asset-trades-tab">
               {% if assets_trades_cnt > 0 %}
-                <p class="small p-1" style="margin-top: 10px">
-                  Latest {{ assets_trades.count }} from a total of
-                  <a href="{% url 'asset-trades' %}?asset={{ asset.id }}">{{ assets_trades_cnt|intcomma }}</a>
-                  token trades found
-                </p>
+                  <div class="float-left small p-1">Latest {{ assets_trades.count }} trades</div>
+                  <div class="float-right  small p-1">
+                    <a href="{% url 'asset-trades' %}?asset={{ asset.id }}">View all trades</a>
+                  </div>
                 {% include "assets/trades_list.html" with asset_specific=1 %}
+                  <div class="float-right  small p-1">
+                    <a href="{% url 'asset-trades' %}?asset={{ asset.id }}">View all trades</a>
+                  </div>
               {% else %}
                 <p class="small p-1" style="margin-top: 10px">No trades found</p>
               {% endif %}
@@ -227,16 +230,35 @@ document.body.onresize = function() {
 
             <div class="tab-pane fade" id="nav-asset-transfer" role="tabpanel" aria-labelledby="nav-asset-transfer-tab">
               {% if assets_transfers_cnt > 0 %}
-                <p class="small p-1" style="margin-top: 10px">
-                  Latest {{ assets_transfers.count }} from a total of
-                  <a href="{% url 'asset-transfers' %}?asset={{ asset.id }}">{{ assets_transfers_cnt|intcomma }}</a>
-                  token transfers found
-                </p>
+                <div class="float-left small p-1">Latest {{ assets_transfers.count }} transfers</div>
+                <div class="float-right  small p-1">
+                  <a href="{% url 'asset-transfers' %}?asset={{ asset.id }}">View all transfers</a>
+                </div>
                 {% include "assets/transfers_list.html" with asset_specific=1 %}
+                <div class="float-right  small p-1">
+                  <a href="{% url 'asset-transfers' %}?asset={{ asset.id }}">View all transfers</a>
+                </div>
               {% else %}
                 <p class="small p-1" style="margin-top: 10px">No token transfers</p>
               {% endif %}
             </div>
+
+            <div class="tab-pane fade" id="nav-asset-holders" role="tabpanel" aria-labelledby="nav-asset-holders-tab">
+              {% if assets_holders_cnt > 0 %}
+                <div class="float-left small p-1">Largest {{ assets_holders.count }} holders</div>
+                <div class="float-right  small p-1">
+                  <a href="{% url 'asset-holders' %}?asset={{ asset.id }}">View all holders</a>
+                </div>
+                {% include "assets/holders_list.html" with asset_specific=1 %}
+                <div class="float-right  small p-1">
+                  <a href="{% url 'asset-holders' %}?asset={{ asset.id }}">View all holders</a>
+                </div>
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No token holders</p>
+              {% endif %}
+            </div>
+
+
           </div>
 
         </div>

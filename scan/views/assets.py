@@ -7,7 +7,7 @@ from django.http import Http404
 from django.views.generic import ListView
 from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS, FEATURED_ASSETS
 
-from java_wallet.models import Asset, AssetTransfer, Trade
+from java_wallet.models import AccountAsset, Asset, AssetTransfer, Trade
 from scan.caching_paginator import CachingPaginator
 from scan.helpers.queries import get_account_name, get_asset_details
 from scan.templatetags.burst_tags import burst_amount, mul_decimals
@@ -120,6 +120,42 @@ class AssetTransfersListView(ListView):
 
         return context
 
+class AssetHoldersListView(ListView):
+    model = AccountAsset
+    queryset = AccountAsset.objects.using("java_wallet").filter(latest=True)
+    template_name = "assets/holders.html"
+    context_object_name = "assets_holders"
+    paginator_class = CachingPaginator
+    paginate_by = 25
+    ordering = "-quantity"
+    filter_set = None
+
+    def get_queryset(self):
+        self.filter_set = AssetTransferFilter(
+            self.request.GET, queryset=super().get_queryset()
+        )
+        if self.filter_set.is_valid() and self.filter_set.data:
+            qs = self.filter_set.qs[:10000]
+        else:
+            raise Http404()
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["assets_holders_cnt"] = self.filter_set.qs.count()
+        obj = context[self.context_object_name]
+
+        for asset in obj:
+            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(
+                asset.asset_id
+            )
+            asset.account_name = get_account_name(asset.account_id)
+
+
+        return context
+
+
 
 class AssetDetailView(IntSlugDetailView):
     model = Asset
@@ -169,6 +205,28 @@ class AssetDetailView(IntSlugDetailView):
         context["assets_trades_cnt"] = (
             Trade.objects.using("java_wallet").filter(asset_id=obj.id).count()
         )
+
+        # asset holders
+        assets_holders_cnt = (
+            AccountAsset.objects.using("java_wallet")
+            .filter(asset_id=obj.id, latest=True)
+            .count()
+        )
+        assets_holders = (
+            AccountAsset.objects.using("java_wallet")
+            .filter(asset_id=obj.id, latest=True)
+            .order_by("-quantity")[:15]
+        )
+
+        for asset in assets_holders:
+            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(
+                asset.asset_id
+            )
+            asset.account_name = get_account_name(asset.account_id)
+
+
+        context["assets_holders"] = assets_holders
+        context["assets_holders_cnt"] = assets_holders_cnt
 
 
         # price history

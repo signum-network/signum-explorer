@@ -1,0 +1,43 @@
+{% load humanize %}
+{% load burst_tags %}
+
+<div class="table-responsive">
+  <table class="table table-hover small table-sm">
+    <thead>
+    <tr>
+      <th class="d-none d-sm-table-cell" scope="col">Since Block</th>
+      <th scope="col">Holder</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Share</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for asset in assets_holders %}
+      <tr>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
+        <td class="text-nowrap">
+          {% include "account_link.html" with account_id=asset.account_id account_name=asset.account_name %}
+        </td>
+        <td>
+          {% if asset.decimals == 0 %}
+            {{ asset.quantity|intcomma }}
+          {% else %}
+            {{ asset.quantity|div_decimals:asset.decimals|intcomma }}
+          {% endif %}
+        </td>
+        <td>
+          {% if asset.account_id == 0 %}
+            Burnt
+          {% elif asset|is_asset_treasury:asset.account_id %}
+            Treasury
+          {% else %}
+            {% with circulating=asset.asset_id|asset_circulating %}
+              {{ asset.quantity|div:circulating|mul:100|floatformat:2|intcomma }} %
+            {% endwith %}
+          {% endif %}
+          </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
