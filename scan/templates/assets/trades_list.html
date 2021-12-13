@@ -22,7 +22,15 @@
     {% for asset in assets_trades %}
       <tr>
         {% if not asset_specific %}
-          <td class="text-nowrap text-uppercase"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.name }}</a></td>
+          <td class="text-nowrap text-uppercase">
+            <a href="{% url 'asset-detail' asset.asset_id %}">
+              {% if asset|is_asset_phishing %}
+                {{ asset.asset_id|truncatechars:10 }}
+              {% else %}
+                {{ asset.name }}
+              {% endif %}
+            </a>
+          </td>
           <td class="d-none d-sm-table-cell"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a></td>
         {% endif %}
         <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
