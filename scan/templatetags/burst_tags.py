@@ -102,7 +102,7 @@ def tx_is_in(tx: Transaction, account_id = None) -> bool:
         if tx.recipient_id==account_id and tx.amount > 0:
             return True
         
-        if tx.type == TxType.PAYMENT and tx.subtype in [TxSubtypePayment.MULTI_OUT or tx.subtype == TxSubtypePayment.MULTI_OUT_SAME]:
+        if tx.type == TxType.PAYMENT and tx.subtype in [TxSubtypePayment.MULTI_OUT, TxSubtypePayment.MULTI_OUT_SAME]:
             tx = tx_load_recipients(tx)
             for r in tx.recipients:
                 if r.id == account_id:
