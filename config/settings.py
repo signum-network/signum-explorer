@@ -265,7 +265,8 @@ WALLET_URL = os.environ.get("WALLET_URL")
 
 FEATURED_ASSETS = json.loads(os.environ.get("FEATURED_ASSETS", "[]"))
 
-BLOCKED_TOKENS = json.loads(os.environ.get("BLOCKED_TOKENS", "[]"))
+BLOCKED_ASSETS = json.loads(os.environ.get("BLOCKED_ASSETS", "[]"))
+PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 
