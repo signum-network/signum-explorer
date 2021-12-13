@@ -5,7 +5,7 @@ import simplejson as json
 from django.db.models import Q
 from django.http import Http404
 from django.views.generic import ListView
-from config.settings import BLOCKED_TOKENS, FEATURED_ASSETS
+from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS, FEATURED_ASSETS
 
 from java_wallet.models import Asset, AssetTransfer, Trade
 from scan.caching_paginator import CachingPaginator
@@ -42,12 +42,13 @@ class AssetListView(ListView):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
 
-        context["BLOCKED_TOKENS"] = BLOCKED_TOKENS
+        context["BLOCKED_ASSETS"] = BLOCKED_ASSETS
+        context["PHISHING_ASSETS"] = PHISHING_ASSETS
 
         for t in obj:
             t.account_name = get_account_name(t.account_id)
             t.name = t.name.upper()
-            if t.name in BLOCKED_TOKENS:
+            if t.name in BLOCKED_ASSETS or t.name in PHISHING_ASSETS:
                 t.name = str(t.id)[0:10]
 
         if FEATURED_ASSETS:
