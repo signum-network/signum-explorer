@@ -37,7 +37,11 @@
           {% include "paginator.html" %}
         </div>
 
-        {% include "assets/trades_list.html" with asset_specific=1 filtered_account=request.GET.a %}
+        {% if 'asset' in request.GET %}
+          {% include "assets/trades_list.html" with asset_specific=1 %}
+        {% elif 'a' in request.GET %}
+          {% include "assets/trades_list.html" with filtered_account=request.GET.a %}
+        {% endif %}
 
         {% include "paginator.html" %}
 
