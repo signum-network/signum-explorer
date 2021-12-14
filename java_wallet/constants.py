@@ -83,9 +83,9 @@ TX_TYPES = {
         "Subscription Payment"
     ),
     (TxType.AUTOMATED_TRANSACTIONS, TxSubtypeAutomatedTransactions.CREATION): _(
-        "AT Creation"
+        "Deploy Contract"
     ),
     (TxType.AUTOMATED_TRANSACTIONS, TxSubtypeAutomatedTransactions.PAYMENT): _(
-        "AT Payment"
+        "Contract Payment"
     ),
 }
