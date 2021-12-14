@@ -33,6 +33,15 @@ def get_account_name(account_id: int) -> str:
         )
     return account_name
 
+def check_is_contract(account_id: int) -> bool:
+    at_id = (
+            At.objects.using("java_wallet")
+            .filter(id=account_id, latest=True)
+            .values_list("id", flat=True)
+            .first()
+        )
+    return at_id != None
+
 
 
 @cache_memoize(None)

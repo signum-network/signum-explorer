@@ -46,12 +46,18 @@
             <tbody>
             <tr>
               <th>Address</th>
-              <th>{{ address.id|num2rs }}</th>
+              <th>{{ address.id|num2rs }}
+                {% if address.is_contract %}
+                  <br class="d-md-none" />
+                  <a href="{% url 'at-detail' address.id %}"><i class="fas fa-file-code"></i>
+                    Contract details</a>
+                {% endif %}
+              </th>
             </tr>
             <tr>
               <th>ID</th>
               <th>{{ address.id }}</th>
-            </tr>            
+            </tr>
             <tr>
               <th style="width: 160px;">Name</th>
               <td style="word-wrap: break-word; max-width: 250px">{% if address.name %}{{ address.name }}{% endif %}</td>
@@ -81,6 +87,7 @@
                 <span class="text-info">(${{ address.balance|sub:address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
               </td>
             </tr>
+            {% if not address.is_contract %}
             <tr>
               <th>Public Key</th>
               <td style="word-wrap: break-word; max-width: 250px">
@@ -91,6 +98,7 @@
                 {% endif %}
               </td>
             </tr>
+            {% endif %}
             <tr>
               <th>Creation Block</th>
               <td><a href="{% url 'block-detail' address.creation_height %}">{{ address.creation_height }}</a></td>
