@@ -216,7 +216,7 @@ def group_list(lst: list or tuple, n: int):
 
 @register.filter
 def tx_load_recipients(tx: Transaction) -> Transaction:
-    if not tx.recipients:
+    if not tx.recipients and tx.attachment_bytes:
         if tx.type == TxType.PAYMENT and tx.subtype == TxSubtypePayment.MULTI_OUT:
             data = MultiOutPack().unpack_multi_out(tx.attachment_bytes)
             recipients = []
