@@ -15,7 +15,7 @@ from burst.api.brs.v1.api import BrsApi
 from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS
 
 from java_wallet.fields import get_desc_tx_type
-from java_wallet.models import Block, IndirectRecipient, Trade, Transaction
+from java_wallet.models import Block, IndirecIncoming, IndirectRecipient, Trade, Transaction
 from scan.caching_data.exchange import CachingExchangeData
 
 import struct
@@ -152,12 +152,20 @@ def tx_amount(tx: Transaction, account_id : int = None) -> float:
             price = int.from_bytes(tx.attachment_bytes[17:25], byteorder=sys.byteorder)
             return burst_amount(quantity*price)
 
+        elif tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and account_id:
+            indirect = (IndirecIncoming.objects.using("java_wallet")
+                .filter(account_id=account_id, transaction_id=tx.id)
+                .order_by("-height").first()
+            )
+            return burst_amount(indirect.amount)
+
     return burst_amount(tx.amount)
 
 @register.filter
 def tx_symbol(tx: Transaction) -> str:
-    if tx.type == TxType.COLORED_COINS:
-        if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
+    if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
+        if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,
+            TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]):
             asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
             name = name.upper()
@@ -170,7 +178,7 @@ def tx_symbol(tx: Transaction) -> str:
 
 @register.filter
 def tx_asset_id(tx: Transaction) -> int:
-    if tx.type == TxType.COLORED_COINS:
+    if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,
             TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]):
             asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
