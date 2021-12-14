@@ -155,11 +155,11 @@ document.body.onresize = function() {
               <th>Ticker</th>
               <td class="text-uppercase">
                 {% if asset|is_asset_blocked %}
-                  <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold"><spam><i class="fas fa-exclamation-circle"></i> Name blocked</spam></span>
+                  <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold text-uppercase"><spam><i class="fas fa-exclamation-circle"></i> Name blocked</spam></span>
                 {% else %}
                   {{ asset.name }}
                   {% if asset|is_asset_phishing %}
-                    <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold"><spam><i class="fas fa-exclamation-circle"></i> Potential phishing</spam></span>
+                    <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold text-uppercase"><spam><i class="fas fa-exclamation-circle"></i> Potential phishing</spam></span>
                   {% endif %}
                 {% endif %}
               </td>
@@ -168,7 +168,7 @@ document.body.onresize = function() {
               <th>Description</th>
               <td>
                 {% if asset|is_asset_blocked %}
-                  <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold"><spam><i class="fas fa-exclamation-circle"></i> Description blocked</spam></span>
+                  <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold text-uppercase"><spam><i class="fas fa-exclamation-circle"></i> Description blocked</spam></span>
                 {% else %}
                   {{ asset.description }}
                 {% endif %}
