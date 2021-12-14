@@ -20,6 +20,7 @@ from django.urls import include, path
 from scan.views.accounts import AccountsListView, AddressDetailView
 from scan.views.assets import (
     AssetDetailView,
+    AssetHoldersListView,
     AssetListView,
     AssetTradesListView,
     AssetTransfersListView,
@@ -53,6 +54,7 @@ urlpatterns = [
     path("csv/<str:id>", tx_export_csv, name="account-csv"),
     path("asset/trades", AssetTradesListView.as_view(), name="asset-trades"),
     path("asset/transfers", AssetTransfersListView.as_view(), name="asset-transfers"),
+    path("asset/holders", AssetHoldersListView.as_view(), name="asset-holders"),
     path("assets/", AssetListView.as_view(), name="assets"),
     path("asset/<str:id>", AssetDetailView.as_view(), name="asset-detail"),
     path("mps/purchases", MarketPlacePurchasesListView.as_view(), name="mps-purchases"),
