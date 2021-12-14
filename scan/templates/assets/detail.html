@@ -5,12 +5,12 @@
 
 {% block title %} - Token #{{ asset.id }}{% endblock %}
 
-{% if not asset|is_asset_phishing %}
 {% block description %}
+{% if not asset|is_asset_phishing %}
 {{ asset.name }}
 {{ asset.description }}
-{% endblock %}
 {% endif %}
+{% endblock %}
 
 
 {% block scripts %}
