@@ -12,7 +12,7 @@ from burst.libs.multiout import MultiOutPack
 from burst.libs.reed_solomon import ReedSolomon
 from burst.libs.transactions import get_message
 from burst.api.brs.v1.api import BrsApi
-from config.settings import BLOCKED_TOKENS
+from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS
 
 from java_wallet.fields import get_desc_tx_type
 from java_wallet.models import Block, IndirectRecipient, Trade, Transaction
@@ -131,13 +131,13 @@ def tx_is_out(tx: Transaction, account_id : None) -> bool:
 
 @register.filter
 def tx_amount(tx: Transaction, account_id : int = None) -> float:
-    if account_id and tx.sender_id!=account_id and tx.type == TxType.PAYMENT and (tx.subtype == TxSubtypePayment.MULTI_OUT or tx.subtype == TxSubtypePayment.MULTI_OUT_SAME):
+    if account_id and tx.sender_id!=account_id and tx.type == TxType.PAYMENT and tx.subtype in [TxSubtypePayment.MULTI_OUT, TxSubtypePayment.MULTI_OUT_SAME]:
         tx = tx_load_recipients(tx)
         for r in tx.recipients:
             if r.id == account_id:
                 return burst_amount(r.amount)
 
-    elif tx.type == TxType.BURST_MINING and (tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD or tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE):
+    elif tx.type == TxType.BURST_MINING and tx.subtype in [TxSubtypeBurstMining.COMMITMENT_ADD, TxSubtypeBurstMining.COMMITMENT_REMOVE]:
         return burst_amount(int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder))
 
     elif tx.type == TxType.COLORED_COINS:
@@ -161,7 +161,7 @@ def tx_symbol(tx: Transaction) -> str:
             asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
             name = name.upper()
-            if name in BLOCKED_TOKENS:
+            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
 
@@ -183,7 +183,11 @@ def asset_price(asset_id : int) -> float:
 
 @register.filter
 def is_asset_blocked(asset) -> bool:
-    return asset.name.upper() in BLOCKED_TOKENS
+    return asset.name.upper() in BLOCKED_ASSETS
+
+@register.filter
+def is_asset_phishing(asset) -> bool:
+    return asset.name.upper() in PHISHING_ASSETS or asset.name.upper() in BLOCKED_ASSETS
 
 @cache_memoize(3600)
 @register.filter
