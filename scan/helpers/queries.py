@@ -11,19 +11,28 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, Asset, Block, RewardRecipAssign, Transaction
+from java_wallet.models import Account, Asset, At, Block, RewardRecipAssign, Transaction
 
 
 @cache_memoize(3600)
 def get_account_name(account_id: int) -> str:
     if account_id == 0:
         return "Burn Address"
-    return (
+    account_name = (
         Account.objects.using("java_wallet")
         .filter(id=account_id, latest=True)
         .values_list("name", flat=True)
         .first()
     )
+    if not account_name:
+        account_name = (
+            At.objects.using("java_wallet")
+            .filter(id=account_id, latest=True)
+            .values_list("name", flat=True)
+            .first()
+        )
+    return account_name
+
 
 
 @cache_memoize(None)

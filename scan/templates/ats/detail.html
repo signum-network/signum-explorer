@@ -47,13 +47,13 @@
               <tr>
                 <th>Address</th>
                 <th>
-                  {{ at.id|num2rs }}
+                  {% include "account_link.html" with account_id=at.id %}
                 </th>
               </tr>
               <tr>
                 <th>ID</th>
                 <th>
-                  {{ at.id }}
+                  <a href="{% url 'tx-detail' at.id %}">{{ at.id }}</a>
                 </th>
               </tr>
               <tr>

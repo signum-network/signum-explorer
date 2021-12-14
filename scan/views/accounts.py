@@ -62,6 +62,10 @@ class AddressDetailView(IntSlugDetailView):
         if obj.id == 0:
             obj.name = "Burn Address";
 
+        # To also show contract names when checking as an account
+        if not obj.name:
+            obj.name = get_account_name(obj.id)
+
         # transactions
         indirects = (
             IndirecIncoming.objects.using("java_wallet")
