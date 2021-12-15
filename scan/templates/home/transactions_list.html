@@ -21,8 +21,8 @@
           {% endif %}
         </td>
         <td class="text-nowrap d-none d-sm-table-cell" title="Amount">
-          <span>{{ tx.amount|burst_amount|rounding:5|intcomma }}</span><br>
-          <span class="text-success"> {% coin_symbol %} </span>
+          <span>{{ tx|tx_amount|rounding:5|intcomma }}</span><br>
+          <span class="text-success"> {{ tx|tx_symbol }} </span>
         </td>
       </tr>
     {% endfor %}
