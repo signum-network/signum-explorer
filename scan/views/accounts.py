@@ -18,6 +18,7 @@ from scan.helpers.queries import (
     get_pool_id_for_block,
     get_total_accounts_count,
     get_total_circulating,
+    check_is_contract,
 )
 from scan.views.assets import fill_data_asset_trade, fill_data_asset_transfer
 from scan.views.base import IntSlugDetailView
@@ -59,13 +60,12 @@ class AddressDetailView(IntSlugDetailView):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
 
-        if obj.id == 0:
-            obj.name = "Burn Address";
-
         # To also show contract names when checking as an account
         if not obj.name:
             obj.name = get_account_name(obj.id)
 
+        obj.is_contract = check_is_contract(obj.id)
+        
         # transactions
         indirects = (
             IndirecIncoming.objects.using("java_wallet")
