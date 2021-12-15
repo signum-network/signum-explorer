@@ -48,6 +48,16 @@
               <th>Type</th>
               <td>{{ tx|tx_type }}</td>
             </tr>
+            {% if tx.type == 2 and tx|tx_asset_id != 0 %}
+            <tr>
+              <th>Token Ticker</th>
+              <td><a href="{% url 'asset-detail' tx|tx_asset_id %}">{{ tx|tx_symbol }}</a></td>
+            </tr>
+            <tr>
+              <th>Token ID</th>
+              <td><a href="{% url 'asset-detail' tx|tx_asset_id %}">{{ tx|tx_asset_id }}</a></td>
+            </tr>
+            {% endif %}
             <tr>
               <th>Timestamp</th>
               <td>{{ tx.timestamp|naturaltime }} ({{ tx.timestamp|date:'Y-m-d H:i:s' }} UTC)</td>
@@ -64,6 +74,7 @@
                 {% include "recipient_link.html" with tx=tx|tx_load_recipients oneline=True %}
               </td>
             </tr>
+            <tr>
               <th>Value</th>
               <td>{{ tx|tx_amount|intcomma }} {{ tx|tx_symbol }}
                 <!-- do not show usd value of token transfers, they are in the token units -->
