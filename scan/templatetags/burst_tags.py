@@ -167,6 +167,16 @@ def tx_symbol(tx: Transaction) -> str:
 
     return coin_symbol()
 
+@register.filter
+def tx_asset_id(tx: Transaction) -> int:
+    if tx.type == TxType.COLORED_COINS:
+        if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,
+            TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]):
+            asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
+            return asset_id
+
+    return 0
+
 
 @cache_memoize(300)
 @register.filter
