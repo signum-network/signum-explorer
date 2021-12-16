@@ -10,50 +10,6 @@ html {
 
 main > .container {
   padding: 110px 15px 0;
-  max-width: 1140px;
-}
-
-body, html {
-  height: 100%
-}
-
-.wrapper {
-  height: auto !important;
-  height: 100%;
-  margin: 0 auto -80px;
-  min-height: 100%;
-  background-color: #f8f9fa !important
-}
-
-.table > tbody > tr:first-child > th,
-.table > tbody > tr:first-child > td {
-  border: none;
-}
-
-.no-border td, .no-border th {
-  border: none;
-}
-
-#push {
-  height: 80px
-}
-
-.table td, .table th {
-  vertical-align: middle;
-}
-
-.footer {html {
-  font-size: 14px;
-}
-
-@media (min-width: 1140px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-main > .container {
-  padding: 110px 15px 0;
   max-width: 1300px;
 }
 
@@ -136,33 +92,3 @@ body, html {
 
 svg > g:last-child > g:last-child { pointer-events: none }
 div.google-visualization-tooltip { pointer-events: none }
-
-  background-color: #f5f5f5;
-}
-
-.footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-.card{
-  border-radius: 0.8em;
-}
-
-.three-line-legend {
-	width: 96px;
-	height: 70px;
-	position: relative;
-  top: 8px;
-	padding: 8px;
-	font-size: 12px;
-	color: '#20262E';
-	background-color: rgba(255, 255, 255, 0.23);
-	text-align: left;
-	z-index: 1000;
-	pointer-events: none;
-}
-
-svg > g:last-child > g:last-child { pointer-events: none }
-div.google-visualization-tooltip { pointer-events: none }
-
