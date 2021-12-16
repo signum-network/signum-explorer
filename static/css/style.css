@@ -98,6 +98,16 @@ body, html {
   background: #0099FF;
 }
 
+.link_grey {
+  text-decoration: none;
+  color: #888890;
+  font-weight: normal;
+}
+
+.link_grey:hover {
+  text-decoration: none;
+  color: #888890;
+}
 
 
 
