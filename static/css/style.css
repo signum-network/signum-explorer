@@ -92,5 +92,14 @@ body, html {
 	pointer-events: none;
 }
 
+.line {
+  height: 1px;
+  display: block;
+  background: #0099FF;
+}
+
+
+
+
 svg > g:last-child > g:last-child { pointer-events: none }
 div.google-visualization-tooltip { pointer-events: none }
