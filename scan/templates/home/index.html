@@ -13,9 +13,9 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
 {% block revision %}{{ last_block.height }}{% endblock %}
 
 {% block content %}
-  <div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm bg-primary">
-      <div class="card-body">
+  <div class="card-deck mb-5 text-center">
+    <div class="card card-search mb-4 shadow-sm bg-primary">
+      <div class="card-body py-0 px-0">
         <form class="form-inline input-group" action="{% url 'search' %}">
           <input class="form-control" type="text" name="q" placeholder="Search by Account / Block / Transaction / Token / Contract" aria-label="Search">
           <div class="input-group-append">
