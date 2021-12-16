@@ -7,19 +7,18 @@
 
 {% block content %}
 
+  <h5 class="p-2">Transactions
+    {% if 'block' in request.GET %}
+      <br class="d-md-none" />
+      <small class="text-muted">for block #<a href="{% url 'block-detail' request.GET.block %}">{{ request.GET.block }}</a></small>
+    {% elif 'a' in request.GET %}
+      <br class="d-md-none" />
+      <small class="text-muted">for address <a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
+    {% endif %}
+  </h5>
+
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h5 class="card-header-title">Transactions
-          {% if 'block' in request.GET %}
-             <br class="d-md-none" />
-              <small class="text-muted-white">for block #<a class="link_white" href="{% url 'block-detail' request.GET.block %}">{{ request.GET.block }}</a></small>
-           {% elif 'a' in request.GET %}
-              <br class="d-md-none" />
-             <small class="text-muted-white">for address <a  class="link_white" href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
-          {% endif %}
-        </h5>
-      </div>
       <div class="card-body">
 
         <div class="d-flex flex-column flex-md-row align-items-center">

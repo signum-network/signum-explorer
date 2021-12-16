@@ -36,7 +36,7 @@
           </small>
           {% include "paginator.html" %}
         </div>
-
+        
         {% if 'asset' in request.GET %}
           {% include "assets/trades_list.html" with asset_specific=1 %}
         {% elif 'a' in request.GET %}

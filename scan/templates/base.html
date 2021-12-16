@@ -6,27 +6,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="sustainable, blockchain, crypto, minable, HDD, greencoin, singa, SIGNA">
-    <meta property="og:title" content="SignumExplorer - Smart.Secure.Sustainable.">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="SignumExplorer - Smart.Secure.Sustainable.">
+    <meta property="og:title" content="SignumExplorer - Smart.Secure. Sustainable.">
+    <meta name="twitter:title" content="SignumExplorer - Smart.Secure. Sustainable.">
     <meta property="og:image" content="https://signum.network/assets/img/seo/Signum_blue.png">
-    <meta name="twitter:description" content="{% block description %}{% endblock %}">
+    <meta property="og:description" content="{% block description %}{% endblock %}">
+    <meta name="description" content="The easiest and most trusted Signum transaction search engine and blockchain explorer.">
     <title>{{ 'SITE_TITLE'|env }} {% block title %}{% endblock %}</title>
     <link href="{% static 'favicon.png' %}" rel="icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=10">
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.min.css' %}" />
   </head>
 
   <body>
+  {% if request.path != '/' %}
     <div class="wrapper">
+      {% else %}
+        <div class="wrapper wrapper-home">
+      {% endif %}
       <header>
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white border-bottom shadow mb-3">
           <a class="mb-2" href="/"><img alt="LOGO" src="{% static 'logo.svg' %}" height="32px"></a>
-          <a class="p-3" href="/">
-            <span class="navbar-brand my-0 mr-md-auto mb-2">{{ 'SITE_TITLE'|env }}</span>
+          <a class="p-2" href="/">
+            <span class="navbar-brand my-0 mr-auto mb-2 font-weight-bold">{{ 'SITE_TITLE'|env }}</span><br/>
+            {% if 'SITE_HOSTING'|env %}
+              <span class="float-right my-lg-n3 my-n4 text-info small">{{ 'SITE_HOSTING'|env }}</span>
+            {% endif %}
           </a>
 
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsMenu" aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +110,7 @@
 
       <main role="main">
         <div class="container">
-          <div class="text-center mb-3">
+          <div class="text-center mb-5">
           </div>
           {% if submit == 'Search' %}
             <div class="alert alert-danger" role="alert">
@@ -122,7 +128,7 @@
       <div id="push"></div>
     </div>
 
-    <footer class="footer mt-auto py-3">
+    <footer class="footer mt-auto py-3 shadow-sm">
       <div class="container text-center">
         Made with ❤️ by <a href="https://github.com/signum-network" target="_blank">Signum Network</a> @ (2019-2021)
         <br>
