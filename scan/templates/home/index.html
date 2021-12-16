@@ -13,9 +13,9 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
 {% block revision %}{{ last_block.height }}{% endblock %}
 
 {% block content %}
-  <div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm bg-primary">
-      <div class="card-body">
+  <div class="card-deck mb-5 text-center">
+    <div class="card card-search mb-4 shadow-sm bg-primary">
+      <div class="card-body py-0 px-0">
         <form class="form-inline input-group" action="{% url 'search' %}">
           <input class="form-control" type="text" name="q" placeholder="Search by Account / Block / Transaction / Token / Contract" aria-label="Search">
           <div class="input-group-append">
@@ -34,7 +34,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
           <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-md">
             <div class="media align-items-center">
               <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-dollar-sign fa-fw"></i>{% coin_symbol %} price</h6>
+                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-dollar-sign fa-fw"></i> {% coin_symbol %} price</h6>
                 <span class="text-info small">
                   ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} ({{ burst_info.exchange.percent_change_24h|stringformat:"+d" }}%) @ {{ burst_info.exchange.price_btc|floatformat:-8 }} BTC
                 </span>
@@ -43,7 +43,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
             <hr class="hr-space-lg">
             <div class="media align-items-center">
               <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-chart-line fa-fw"></i>Market cap</h6>
+                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-chart-line fa-fw"></i> Market cap</h6>
                 <span class="text-info small">${{ burst_info.exchange.market_cap_usd|floatformat:0|intcomma }}</span>
               </div>
             </div>
@@ -54,7 +54,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
           <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-lg">
             <div class="media align-items-center">
               <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-cubes fa-fw"></i>Latest block</h6>
+                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-cubes fa-fw"></i> Latest block</h6>
                 {% if blocks %}
                   {%  with blocks|first as last_block %}
                     <span class="text-info small">{{ last_block.height }}</span>
@@ -67,7 +67,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
             <hr class="hr-space-lg">
             <div class="media align-items-center">
               <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-project-diagram fa-fw"></i>Network Difficulty</h6>
+                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-project-diagram fa-fw"></i> Network Difficulty</h6>
                 {% if blocks %}
                   {%  with blocks|first as last_block %}
                     <span class="text-info small">{{ last_block.base_target|net_capacity_tib|format_capacity }}
