@@ -14,12 +14,16 @@
     <title>{{ 'SITE_TITLE'|env }} {% block title %}{% endblock %}</title>
     <link href="{% static 'favicon.png' %}" rel="icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=10">
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.min.css' %}" />
   </head>
 
   <body>
+  {% if request.path != '/' %}
     <div class="wrapper">
+      {% else %}
+        <div class="wrapper wrapper-home">
+      {% endif %}
       <header>
 
         <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white border-bottom shadow mb-3">
@@ -104,7 +108,7 @@
 
       <main role="main">
         <div class="container">
-          <div class="text-center mb-3">
+          <div class="text-center mb-5">
           </div>
           {% if submit == 'Search' %}
             <div class="alert alert-danger" role="alert">
