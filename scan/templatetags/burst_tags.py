@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from math import ceil
 import sys
+import gzip
 from cache_memoize import cache_memoize
 
 from django import template
@@ -81,6 +82,13 @@ def bin2hex(value: bytes) -> str:
     if not value:
         return ""
     return value.hex().upper()
+
+@register.filter
+def gzip2hex(value: bytes) -> str:
+    if not value:
+        return ""
+    decompressed_byte_data = gzip.decompress(value)
+    return decompressed_byte_data.hex().upper()
 
 @register.filter
 def tx_message(tx: Transaction) -> str:

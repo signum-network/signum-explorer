@@ -140,7 +140,7 @@ class At(models.Model):
     c_user_stack_bytes = models.IntegerField()
     c_call_stack_bytes = models.IntegerField()
     creation_height = models.IntegerField()
-    ap_code = models.TextField()
+    ap_code = models.BinaryField()
     height = models.IntegerField()
     latest = models.IntegerField()
     ap_code_hash_id = PositiveBigIntegerField()
