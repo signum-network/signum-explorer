@@ -33,6 +33,16 @@ def get_account_name(account_id: int) -> str:
         )
     return account_name
 
+# @cache_memoize(None)
+def get_ap_code(ap_code_hash_id: int) -> bytearray:
+    ap_code = (
+        At.objects.using("java_wallet")
+        .filter(ap_code_hash_id=ap_code_hash_id, ap_code__isnull=False)
+        .values_list("ap_code", flat=True)
+        .first()
+    )
+    return ap_code
+
 def check_is_contract(account_id: int) -> bool:
     at_id = (
             At.objects.using("java_wallet")

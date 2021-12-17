@@ -2,12 +2,14 @@ from django.views.generic import ListView
 
 from java_wallet.models import At
 from scan.caching_paginator import CachingPaginator
-from scan.helpers.queries import get_account_name
+from scan.helpers.queries import get_account_name, get_ap_code
 from scan.views.base import IntSlugDetailView
 
 
 def fill_data(obj):
     obj.creator_name = get_account_name(obj.creator_id)
+    if not obj.ap_code and obj.ap_code_hash_id:
+        obj.ap_code = get_ap_code(obj.ap_code_hash_id)
 
 
 class AtListView(ListView):
