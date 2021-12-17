@@ -84,7 +84,7 @@ def bin2hex(value: bytes) -> str:
 
 @register.filter
 def tx_message(tx: Transaction) -> str:
-    if not tx.has_message:
+    if not tx.has_message or not tx.attachment_bytes:
         return ""
     return get_message(tx.attachment_bytes)
 
@@ -137,10 +137,10 @@ def tx_amount(tx: Transaction, account_id : int = None) -> float:
             if r.id == account_id:
                 return burst_amount(r.amount)
 
-    elif tx.type == TxType.BURST_MINING and tx.subtype in [TxSubtypeBurstMining.COMMITMENT_ADD, TxSubtypeBurstMining.COMMITMENT_REMOVE]:
+    elif tx.attachment_bytes and tx.type == TxType.BURST_MINING and tx.subtype in [TxSubtypeBurstMining.COMMITMENT_ADD, TxSubtypeBurstMining.COMMITMENT_REMOVE]:
         return burst_amount(int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder))
 
-    elif tx.type == TxType.COLORED_COINS:
+    elif tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
         if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
             asset_id = int.from_bytes(tx.attachment_bytes[1:9], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
