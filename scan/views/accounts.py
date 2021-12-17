@@ -5,6 +5,7 @@ from java_wallet.models import (
     Account,
     AccountAsset,
     AssetTransfer,
+    At,
     Block,
     IndirecIncoming,
     Trade,
@@ -158,6 +159,24 @@ class AddressDetailView(IntSlugDetailView):
             obj.pool_id = pool_id
             obj.pool_name = get_account_name(pool_id)
 
+        
+        # ats
+
+        ats = (
+            At.objects.using("java_wallet")
+            .filter(creator_id=obj.id)
+            .order_by("-height")[:15]
+        )
+
+        for at in ats:
+            at.creator_name = get_account_name(obj.id)
+
+        context["ats"] = ats
+        context["ats_cnt"] = (
+            At.objects.using("java_wallet").filter(creator_id=obj.id).count()
+        )
+        
+        
         # blocks
 
         mined_blocks = (
