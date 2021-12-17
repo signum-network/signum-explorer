@@ -22,11 +22,11 @@ class AtListView(ListView):
     ordering = "-height"
 
     def get_queryset(self):
-        print(self.request.GET)
+        qs = self.queryset
         if 'a' in self.request.GET:
-            return self.queryset.filter(creator_id=self.request.GET['a'])
+            qs = qs.filter(creator_id=self.request.GET['a'])
 
-        return self.queryset
+        return qs.order_by(self.ordering)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
