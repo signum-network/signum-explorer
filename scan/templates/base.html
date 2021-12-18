@@ -2,24 +2,28 @@
 {% load burst_tags %}
 <!doctype html>
 <html lang="en">
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <meta name="keywords" content="sustainable, blockchain, crypto, minable, HDD, greencoin, singa, SIGNA">
-      <meta property="og:title" content="SignumExplorer - Smart.Secure. Sustainable.">
-      <meta name="twitter:title" content="SignumExplorer - Smart.Secure. Sustainable.">
-      <meta property="og:image" content="https://signum.network/assets/img/seo/Signum_blue.png">
-      <meta property="og:description" content="{% block description %}{% endblock %}">
-      <meta name="description" content="The easiest and most trusted Signum transaction search engine and blockchain explorer.">
-      <title>{{ 'SITE_TITLE'|env }} {% block title %}{% endblock %}</title>
-      <link href="{% static 'favicon.png' %}" rel="icon">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-      <link rel="stylesheet" href="{% static 'css/style.css' %}?v=14">
-      <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.min.css' %}" />
-   </head>
-   <body>
-      {% if request.path != '/' %}
-      <div class="wrapper">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <meta name="keywords" content="sustainable, blockchain, crypto, minable, HDD, greencoin, singa, SIGNA">
+   <meta property="og:title" content="SignumExplorer - Smart.Secure. Sustainable.">
+   <meta name="twitter:title" content="SignumExplorer - Smart.Secure. Sustainable.">
+   <meta property="og:image" content="https://signum.network/assets/img/seo/Signum_blue.png">
+   <meta property="og:description" content="{% block description %}{% endblock %}">
+   <meta name="description"
+      content="The easiest and most trusted Signum transaction search engine and blockchain explorer.">
+   <title>{{ 'SITE_TITLE'|env }} {% block title %}{% endblock %}</title>
+   <link href="{% static 'favicon.png' %}" rel="icon">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+   <link rel="stylesheet" href="{% static 'css/style.css' %}?v=14">
+   <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.min.css' %}" />
+</head>
+
+<body>
+   {% if request.path != '/' %}
+   <div class="wrapper">
       {% else %}
       <div class="wrapper wrapper-home">
          {% endif %}
@@ -27,13 +31,14 @@
             <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white border-bottom shadow mb-3">
                <a class="mb-2" href="/"><img alt="LOGO" src="{% static 'logo.svg' %}" height="32px"></a>
                <a class="p-2" href="/">
-               <span class="navbar-brand my-0 mr-auto mb-2 font-weight-bold">{{ 'SITE_TITLE'|env }}</span><br/>
-               {% if 'SITE_HOSTING'|env %}
-               <span class="float-right my-lg-n3 my-n4 text-info small">{{ 'SITE_HOSTING'|env }}</span>
-               {% endif %}
+                  <span class="navbar-brand my-0 mr-auto mb-2 font-weight-bold">{{ 'SITE_TITLE'|env }}</span><br />
+                  {% if 'SITE_HOSTING'|env %}
+                  <span class="float-right my-lg-n3 my-n4 text-info small">{{ 'SITE_HOSTING'|env }}</span>
+                  {% endif %}
                </a>
-               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsMenu" aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation">
-               <span class="navbar-toggler-icon"></span>
+               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsMenu"
+                  aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
                </button>
                <div class="collapse navbar-collapse justify-content-md-center pl-4" id="navbarsMenu">
                   <ul class="navbar-nav">
@@ -58,7 +63,8 @@
                         <a class="nav-link" href="{% url 'blocks' %}">Blocks</a>
                      </li>
                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="transactions-nav" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transactions</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="transactions-nav" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Transactions</a>
                         <div class="dropdown-menu" aria-labelledby="transactions-nav">
                            <a class="dropdown-item" href="{% url 'txs' %}">Confirmed Transactions</a>
                            <a class="dropdown-item" href="{% url 'txs-pending' %}">Pending Transactions</a>
@@ -68,7 +74,8 @@
                         </div>
                      </li>
                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="peers-nav" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Network</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="peers-nav" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Network</a>
                         <div class="dropdown-menu" aria-labelledby="peers-nav">
                            <a class="dropdown-item" href="{% url 'accounts' %}">Top Accounts</a>
                            <a class="dropdown-item" href="{% url 'peers' %}">Nodes List</a>
@@ -76,23 +83,31 @@
                         </div>
                      </li>
                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="more-nav" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="more-nav" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">More</a>
                         <div class="dropdown-menu" aria-labelledby="more-nav">
                            <a class="dropdown-item" href="https://signum.network/" target="_blank">Signum Network</a>
-                           <a class="dropdown-item" href="https://www.reddit.com/r/Signum/" target="_blank">Signum Reddit</a>
-                           <a class="dropdown-item" href="https://github.com/signum-network/" target="_blank">Signum Github</a>
+                           <a class="dropdown-item" href="https://www.reddit.com/r/Signum/" target="_blank">Signum
+                              Reddit</a>
+                           <a class="dropdown-item" href="https://github.com/signum-network/" target="_blank">Signum
+                              Github</a>
                            <div class="dropdown-divider"></div>
-                           <a class="dropdown-item" href="https://discord.gg/9rH2bbCNpe" target="_blank">Discord Community</a>
-                           <a class="dropdown-item" href="https://t.me/signumnetwork" target="_blank">Telegram Community</a>
+                           <a class="dropdown-item" href="https://discord.gg/9rH2bbCNpe" target="_blank">Discord
+                              Community</a>
+                           <a class="dropdown-item" href="https://t.me/signumnetwork" target="_blank">Telegram
+                              Community</a>
                         </div>
                      </li>
                   </ul>
                </div>
                {% if request.path != '/' %}
                <form class="form-inline my-2 my-lg-0 input-group col-lg-4" action="{% url 'search' %}">
-                  <input class="form-control" type="text" name="q" placeholder="Account / Block / Transaction / Token / Contract" title="Fill to search" aria-label="Search">
+                  <input class="form-control" type="text" name="q"
+                     placeholder="Account / Block / Transaction / Token / Contract" title="Fill to search"
+                     aria-label="Search">
                   <div class="input-group-append">
-                     <button class="btn btn-outline-dark my-sm-0" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
+                     <button class="btn btn-outline-dark my-sm-0" type="submit" name="submit" value="Search"><i
+                           class="fas fa-search"></i></button>
                   </div>
                </form>
                {% else %}
@@ -126,19 +141,25 @@
                   <h1>Resources</h1>
                   <span class="line" style="width: 40px;margin-bottom: 10px;"></span>
                   <ul>
-                     <li><a class="normlink" href="https://www.signum.network/wallet.html" target="_blank">Wallets & Node</a></li>
-                     <li><a class="normlink" href="https://www.signum.network/mining.html" target="_blank">Mining</a></li>
-                     <li><a class="normlink" href="https://www.signum.network/exchanges.html" target="_blank">Exchanges</a></li>
-                     <li><a class="normlink" href="https://www.signum.network/styleguide.html" target="_blank">Styleguide</a></li>
+                     <li><a class="normlink" href="https://www.signum.network/wallet.html" target="_blank">Wallets &
+                           Node</a></li>
+                     <li><a class="normlink" href="https://www.signum.network/mining.html" target="_blank">Mining</a>
+                     </li>
+                     <li><a class="normlink" href="https://www.signum.network/exchanges.html"
+                           target="_blank">Exchanges</a></li>
+                     <li><a class="normlink" href="https://www.signum.network/styleguide.html"
+                           target="_blank">Styleguide</a></li>
                   </ul>
                </div>
                <div class="colft">
                   <h1>Development</h1>
                   <span class="line" style="width: 40px;margin-bottom: 10px;"></span>
                   <ul>
-                     <li><a class="normlink" href="https://github.com/signum-network" target="_blank">GitHub Signum</a></li>
+                     <li><a class="normlink" href="https://github.com/signum-network" target="_blank">GitHub Signum</a>
+                     </li>
                      <li><a class="normlink" href="https://github.com/btdex" target="_blank">GitHub BTDEX</a></li>
-                     <li><a class="normlink" href="https://github.com/signum-network/signum-smartj" target="_blank">GitHub SmartJ</a></li>
+                     <li><a class="normlink" href="https://github.com/signum-network/signum-smartj"
+                           target="_blank">GitHub SmartJ</a></li>
                      <li><a class="normlink" href="https://discord.gg/9rH2bbCNpe" target="_blank">Discord</a></li>
                   </ul>
                </div>
@@ -155,18 +176,24 @@
                   <span class="line" style="width: 40px;margin-bottom: 10px;"></span>
                   <ul>
                      <li><a class="normlink" href="https://sna.signum.network/" target="_blank">SNA</a></li>
-                     <li><a class="normlink" href="https://sna.signum.network/donation.html" target="_blank">Donate SNA</a></li>
+                     <li><a class="normlink" href="https://sna.signum.network/donation.html" target="_blank">Donate
+                           SNA</a></li>
                   </ul>
                </div>
                <div class="colft social">
                   <h1>Social</h1>
                   <span class="line" style="width: 40px;margin-bottom: 15px;"></span>
                   <ul>
-                     <a class="normlink" href="https://discord.gg/QHZkF4KHDS" target="_blank"><i class="fab fa-discord fa-lg"></i></a>
-                     <a class="normlink" href="https://t.me/signumnetwork" target="_blank"><i class="fab fa-telegram-plane fa-lg"></i></a>
-                     <a class="normlink" href="https://twitter.com/signum_official" target="_blank"><i class="fab fa-twitter fa-lg"></i></a>
-                     <a class="normlink" href="https://www.reddit.com/r/Signum/" target="_blank"><i class="fab fa-reddit fa-lg"></i></a>
-                     <a class="normlink" href="https://www.youtube.com/c/SignumNetwork" target="_blank"><i class="fab fa-youtube fa-lg"></i></a>
+                     <a class="normlink" href="https://discord.gg/QHZkF4KHDS" target="_blank"><i
+                           class="fab fa-discord fa-lg"></i></a>
+                     <a class="normlink" href="https://t.me/signumnetwork" target="_blank"><i
+                           class="fab fa-telegram-plane fa-lg"></i></a>
+                     <a class="normlink" href="https://twitter.com/signum_official" target="_blank"><i
+                           class="fab fa-twitter fa-lg"></i></a>
+                     <a class="normlink" href="https://www.reddit.com/r/Signum/" target="_blank"><i
+                           class="fab fa-reddit fa-lg"></i></a>
+                     <a class="normlink" href="https://www.youtube.com/c/SignumNetwork" target="_blank"><i
+                           class="fab fa-youtube fa-lg"></i></a>
                   </ul>
                </div>
                <div class="clearfix"></div>
@@ -174,49 +201,59 @@
          </div>
          <div class="container text-center sig">
             <br>
-            Made with ❤️ by <a href="https://github.com/signum-network" class="normlink" target="_blank">Signum Network</a> @ (2019-2021)
+            Made with ❤️ by <a href="https://github.com/signum-network" class="normlink" target="_blank">Signum
+               Network</a> @ (2019-2021)
             <br>
             {% if not test_net %}
             {% endif %}
          </div>
       </footer>
-      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js" integrity="sha256-9MzwK2kJKBmsJFdccXoIDDtsbWFh8bjYK/C7UjB1Ay0=" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+         crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+         crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+         crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"
+         integrity="sha256-9MzwK2kJKBmsJFdccXoIDDtsbWFh8bjYK/C7UjB1Ay0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"
+         integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
       {% if google_tracking_id %}
       <!-- Global site tag (gtag.js) - Google Analytics -->
       <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_tracking_id }}"></script>
       <script>
          window.dataLayer = window.dataLayer || [];
-         function gtag(){dataLayer.push(arguments);}
+         function gtag() { dataLayer.push(arguments); }
          gtag('js', new Date());
-         
+
          gtag('config', '{{ google_tracking_id }}');
       </script>
       {% endif %}
       <script>
          clipboard = new ClipboardJS('.copy-btn');
-         
+
          $('.copy-btn').tooltip({
-           title: 'Copy to clipboard',
+            title: 'Copy to clipboard',
          });
-         
+
          $(function () {
-           $('[data-toggle="modal"]').tooltip();
-           $('[data-title]').tooltip();
+            $('[data-toggle="modal"]').tooltip();
+            $('[data-title]').tooltip();
          });
-         
-         clipboard.on('success', function(e) {
-           $(e.trigger)
-             .attr('data-original-title', 'Copied!')
-             .tooltip('show')
-             .blur()
-             .attr('data-original-title', 'Copy to clipboard')
+
+         clipboard.on('success', function (e) {
+            $(e.trigger)
+               .attr('data-original-title', 'Copied!')
+               .tooltip('show')
+               .blur()
+               .attr('data-original-title', 'Copy to clipboard')
          });
-         
+
       </script>
       {% block scripts %}{% endblock %}
-   </body>
+</body>
+
 </html>
