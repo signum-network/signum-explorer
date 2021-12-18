@@ -51,11 +51,13 @@ class AssetListView(ListView):
             if t.name in BLOCKED_ASSETS or t.name in PHISHING_ASSETS:
                 t.name = str(t.id)[0:10]
 
-        if FEATURED_ASSETS:
-            featured_assets = Asset.objects.using("java_wallet").filter(id__in=list(map(int, FEATURED_ASSETS)))
-            context["featured_assets"] = featured_assets
-            for t in featured_assets:
-                t.account_name = get_account_name(t.account_id)
+        featured_assets = []
+        for fid in FEATURED_ASSETS:
+            asset = Asset.objects.using("java_wallet").filter(id=fid).first()
+            if asset:
+                asset.account_name = get_account_name(asset.account_id)
+                featured_assets.append(asset)
+        context["featured_assets"] = featured_assets
 
         return context
 
