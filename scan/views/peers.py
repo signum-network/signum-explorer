@@ -2,6 +2,7 @@ from django.db.models import Count
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
+from config.settings import BRS_BOOTSTRAP_PEERS
 
 from scan.models import PeerMonitor
 
@@ -55,6 +56,19 @@ class PeerMonitorListView(ListView):
     context_object_name = "peers"
     paginate_by = 25
     ordering = ("-height", "-availability", "announced_address")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        featured_peers = []
+        for peer in BRS_BOOTSTRAP_PEERS:
+            featured_peer = PeerMonitor.objects.filter(announced_address=peer).first()
+            if featured_peer:
+                featured_peers.append(featured_peer)
+        
+        context["featured_peers"] = featured_peers
+
+        return context
 
 
 class PeerMonitorDetailView(DetailView):
