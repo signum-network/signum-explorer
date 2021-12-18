@@ -86,6 +86,13 @@
                 <td>{{ at.version }}</td>
               </tr>
               <tr>
+                <th>Activation</th>
+                <td>
+                  {{ at.activation|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
+                  <span class="text-info">(${{ at.activation|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
+                </td>
+              </tr>
+                <tr>
                 <th>Code Hash ID</th>
                 <td>{{ at.ap_code_hash_id }}</td>
               </tr>
@@ -107,6 +114,13 @@
                 <td>{{ at.c_call_stack_bytes }}</td>
               </tr>
               -->
+              <tr>
+                <th>State bytes</th>
+                <td class="text-monospace">
+                  <textarea id="at_state" class="form-control" spellcheck="false" rows="2" disabled>{{ at.state|bin2hex }}</textarea>
+                  <label for="at_state"></label>
+                </td>
+              </tr>
               <tr>
                 <th>Code bytes</th>
                 <td class="text-monospace">

@@ -2,7 +2,7 @@ from django.views.generic import ListView
 
 from java_wallet.models import At
 from scan.caching_paginator import CachingPaginator
-from scan.helpers.queries import get_account_name, get_ap_code
+from scan.helpers.queries import get_account_name, get_ap_code, get_at_state
 from scan.views.base import IntSlugDetailView
 
 
@@ -49,4 +49,7 @@ class AtDetailView(IntSlugDetailView):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
         fill_at_data(obj)
+
+        obj.state, obj.activation = get_at_state(obj.id)
+
         return context

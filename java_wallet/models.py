@@ -154,7 +154,7 @@ class At(models.Model):
 class AtState(models.Model):
     db_id = models.BigAutoField(primary_key=True)
     at_id = PositiveBigIntegerField()
-    state = models.TextField()
+    state = models.BinaryField()
     prev_height = models.IntegerField()
     next_height = models.IntegerField()
     sleep_between = models.IntegerField()

@@ -11,7 +11,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, Asset, At, Block, RewardRecipAssign, Transaction
+from java_wallet.models import Account, Asset, At, AtState, Block, RewardRecipAssign, Transaction
 
 
 @cache_memoize(3600)
@@ -43,6 +43,15 @@ def get_ap_code(ap_code_hash_id: int) -> bytearray:
     )
     return ap_code
 
+def get_at_state(id: int) -> (bytearray, int):
+    return (
+        AtState.objects.using("java_wallet")
+        .filter(at_id=id, latest=True)
+        .values_list("state", "min_activate_amount")
+        .first()
+    )
+
+# @cache_memoize(None)
 def check_is_contract(account_id: int) -> bool:
     at_id = (
             At.objects.using("java_wallet")
