@@ -62,7 +62,6 @@ if DEBUG:
     THIRD_PARTY_APPS += ["debug_toolbar"]
 
 LOCAL_APPS = [
-    "api",
     "cabinet",
     "scan",
     "java_wallet",

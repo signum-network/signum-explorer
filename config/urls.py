@@ -67,7 +67,6 @@ urlpatterns = [
     path("peers-charts/", peers_charts_view, name="peers-charts"),
     path("peer/<str:address>", PeerMonitorDetailView.as_view(), name="peer-detail"),
     path("admin/", admin.site.urls),
-    path("api/", include(("api.urls", "api"), namespace="api")),
 ]
 
 if settings.DEBUG:
