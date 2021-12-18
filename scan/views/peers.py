@@ -62,7 +62,8 @@ class PeerMonitorListView(ListView):
 
         featured_peers = []
         for peer in BRS_BOOTSTRAP_PEERS:
-            featured_peer = PeerMonitor.objects.filter(announced_address=peer).first()
+            featured_peer = (PeerMonitor.objects.filter(announced_address=peer)
+                .order_by("-availability").first())
             if featured_peer:
                 featured_peers.append(featured_peer)
         
