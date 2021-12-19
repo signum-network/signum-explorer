@@ -195,6 +195,7 @@ body, html {
 @media only screen and (max-width: 500px) {
     .footerex .colft {
       width: 50%;
+      min-height: 200px;
     }
     .footerex .colft h1 {
       font-size: 14px;
@@ -211,3 +212,5 @@ body, html {
 
 svg > g:last-child > g:last-child { pointer-events: none }
 div.google-visualization-tooltip { pointer-events: none }
+
+
