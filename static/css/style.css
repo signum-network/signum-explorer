@@ -195,6 +195,7 @@ body, html {
 @media only screen and (max-width: 500px) {
     .footerex .colft {
       width: 50%;
+      min-height: 200px;
     }
     .footerex .colft h1 {
       font-size: 14px;
