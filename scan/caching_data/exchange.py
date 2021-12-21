@@ -37,17 +37,20 @@ class CachingExchangeData(CachingDataBase):
         if settings.TEST_NET:
             return self.default_data_if_empty
 
-        cg = CoinGeckoAPI()
-        response = cg.get_price(
-            ids=os.environ.get("COINGECKO_PRICE_ID"),
-            vs_currencies=["usd", "btc"],
-            include_market_cap="true",
-            include_24hr_change="true",
-        )["signum"]
+        try:
+            cg = CoinGeckoAPI()
+            response = cg.get_price(
+                ids=os.environ.get("COINGECKO_PRICE_ID"),
+                vs_currencies=["usd", "btc"],
+                include_market_cap="true",
+                include_24hr_change="true",
+            )["signum"]
 
-        return ExchangeData(
-            price_usd=response["usd"],
-            price_btc=response["btc"],
-            market_cap_usd=response["usd_market_cap"],
-            percent_change_24h=response["usd_24h_change"],
-        )
+            return ExchangeData(
+                price_usd=response["usd"],
+                price_btc=response["btc"],
+                market_cap_usd=response["usd_market_cap"],
+                percent_change_24h=response["usd_24h_change"],
+            )
+        except:
+            return self.default_data_if_empty
