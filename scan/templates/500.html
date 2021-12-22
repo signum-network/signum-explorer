@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+{% load burst_tags %}
+
+{% block description %}
+Oops! Page not found.
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="error-template">
+            <h1>
+              Oops!
+            </h1>
+            <h2>500 Processing Error</h2>
+            <div class="error-details">
+              Sorry, an error unexprected error has occured, if you can
+              <a href="https://github.com/signum-network/signum-explorer/issues" target="_blank">please report the issue</a>.
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
