@@ -165,7 +165,8 @@ def tx_amount(tx: Transaction, account_id : int = None) -> float:
                 .filter(account_id=account_id, transaction_id=tx.id)
                 .order_by("-height").first()
             )
-            return burst_amount(indirect.amount)
+            if indirect and indirect.amount:
+                return burst_amount(indirect.amount)
 
     return burst_amount(tx.amount)
 
