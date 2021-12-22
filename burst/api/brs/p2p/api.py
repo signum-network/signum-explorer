@@ -23,5 +23,8 @@ class P2PApi(BrsApiBase):
     def get_cumulative_difficulty(self) -> dict:
         return self._request(queries.GetCumulativeDifficulty())
 
+    def get_next_block_ids(self, id: str) -> dict:
+        return self._request(queries.GetNextBlockIds({"blockId": id}))["nextBlockIds"]
+
 
 # TODO: tests

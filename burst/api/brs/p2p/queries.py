@@ -61,6 +61,17 @@ class GetCumulativeDifficulty(QueryBase):
         "required": ["cumulativeDifficulty", "blockchainHeight"],
     }
 
+class GetNextBlockIds(QueryBase):
+    _request_type = "getNextBlockIds"
+    _required_params = {"blockId"}
+
+    _response_json_schema = {
+        "type": "object",
+        "properties": {
+            "nextBlockIds": {"type": "array"},
+        },
+        "required": ["nextBlockIds"],
+    }
 
 class AddPeers(QueryBase):
     _request_type = "addPeers"
@@ -68,10 +79,6 @@ class AddPeers(QueryBase):
 
 class GetMilestoneBlockIds(QueryBase):
     _request_type = "getMilestoneBlockIds"
-
-
-class GetNextBlockIds(QueryBase):
-    _request_type = "getNextBlockIds"
 
 
 class GetBlocksFromHeight(QueryBase):

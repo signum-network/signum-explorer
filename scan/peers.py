@@ -80,18 +80,18 @@ def is_good_version(version: str) -> bool:
         return False
 
 
-@lru_cache(maxsize=None)
-def get_last_cumulative_difficulty() -> dict:
-    result = (
+def get_local_difficulty() -> dict:
+    latest_blocks = (
         Block.objects.using("java_wallet")
         .order_by("-height")
-        .values("height", "cumulative_difficulty")
-        .first()
+        .values("height", "cumulative_difficulty", "id")[:3]
     )
+    result = latest_blocks[1]
 
     result["cumulative_difficulty"] = str(
         int(result["cumulative_difficulty"].hex(), 16)
     )
+    result["previous_block_id"] = latest_blocks[2]["id"]
 
     return result
 
@@ -107,7 +107,7 @@ def get_block_cumulative_difficulty(height: int) -> str:
     return str(int(cumulative_difficulty.hex(), 16))
 
 
-def explore_peer(address: str, updates: dict):
+def explore_peer(local_difficulty: dict, address: str, updates: dict):
     logger.debug("Peer: %s", address)
 
     if address in updates:
@@ -124,7 +124,12 @@ def explore_peer(address: str, updates: dict):
             peer_info["announcedAddress"] = address
 
         peer_info.update(p2p_api.get_cumulative_difficulty())
-    except BurstException:
+        peer_info["next_block_ids"] = []
+        try:
+            peer_info["next_block_ids"] = p2p_api.get_next_block_ids(local_difficulty["previous_block_id"])
+        except:
+            logger.debug("Could not get next block ids for " + p2p_api.node_url)
+    except BurstException as ex:
         logger.debug("Can't connect to peer: %s", p2p_api.node_url)
         updates[address] = None
         return
@@ -140,25 +145,26 @@ def explore_peer(address: str, updates: dict):
         "height": peer_info["blockchainHeight"],
         "cumulative_difficulty": peer_info["cumulativeDifficulty"],
         "last_online_at": timezone.now(),
+        "next_block_ids": peer_info["next_block_ids"],
     }
 
 
-def explore_node(address: str, updates: dict):
+def explore_node(local_difficulty: dict, address: str, updates: dict):
     logger.debug("Node: %s", address)
 
     try:
         peers = P2PApi(address).get_peers()
-        explore_peer(address, updates)
+        explore_peer(local_difficulty, address, updates)
     except BurstException:
         logger.debug("Can't connect to node: %s", address)
         return
 
-    if settings.TEST_NET:
+    if settings.DEBUG:
         for peer in peers:
-            explore_peer(peer, updates)
+            explore_peer(local_difficulty, peer, updates)
     else:
         with ThreadPoolExecutor(max_workers=10) as executor:
-            executor.map(lambda p: explore_peer(p, updates), peers)
+            executor.map(lambda p: explore_peer(local_difficulty, p, updates), peers)
 
 
 def get_nodes_list() -> list:
@@ -194,17 +200,14 @@ def get_nodes_list() -> list:
     return addresses_offline + addresses_other
 
 
-def get_state(update: dict, peer_obj: PeerMonitor or None) -> int:
-    _data = get_last_cumulative_difficulty()
-    if update["height"] == _data["height"]:
-# TO-DO better second comparison CD drifts too much causes false forks, maybe no second needed?
-#        if update["cumulative_difficulty"] == _data["cumulative_difficulty"]:
-#            state = PeerMonitor.State.ONLINE
-#        else:
-#            state = PeerMonitor.State.FORKED
-        state = PeerMonitor.State.ONLINE
-    elif update["height"] > _data["height"]:
-        state = PeerMonitor.State.FORKED
+def check_state(local_difficulty: dict, update: dict, peer_obj: PeerMonitor or None) -> int:
+    check_id = str(local_difficulty["id"])
+
+    if update["height"] > local_difficulty["height"]:
+        if check_id in update["next_block_ids"]:
+            state = PeerMonitor.State.ONLINE
+        else:
+            state = PeerMonitor.State.FORKED
     else:
         if peer_obj and peer_obj.height == update["height"]:
             state = PeerMonitor.State.STUCK
@@ -227,21 +230,24 @@ def get_count_nodes_online() -> int:
 def peer_cmd():
     logger.info("Start")
 
+    local_difficulty = get_local_difficulty()
+    logger.info(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
+
     addresses = get_nodes_list()
 
     # explore every peer and collect updates
     updates = {}
     if settings.TEST_NET:
         for address in addresses:
-            explore_node(address, updates)
+            explore_node(local_difficulty, address, updates)
     else:
         with ThreadPoolExecutor(max_workers=20) as executor:
-            executor.map(lambda address: explore_node(address, updates), addresses)
-
+            executor.map(lambda address: explore_node(local_difficulty, address, updates), addresses)
+    
     updates_with_data = tuple(filter(lambda x: x is not None, updates.values()))
 
     # if more than __% peers were gone offline in __min, probably network problem
-    if len(updates_with_data) < get_count_nodes_online() * 0.9:
+    if len(updates_with_data) < get_count_nodes_online() * 0.8:
         logger.warning(
             "Peers update was rejected: %d - %d", len(updates_with_data), len(addresses)
         )
@@ -260,7 +266,7 @@ def peer_cmd():
         if not peer_obj:
             logger.info("Found new peer: %s", update["announced_address"])
 
-        update["state"] = get_state(update, peer_obj)
+        update["state"] = check_state(local_difficulty, update, peer_obj)
 
         form = PeerMonitorForm(update, instance=peer_obj)
 
@@ -272,7 +278,7 @@ def peer_cmd():
     PeerMonitor.objects.update(lifetime=F("lifetime") + 1)
 
     PeerMonitor.objects.filter(
-        state__in=[PeerMonitor.State.UNREACHABLE, PeerMonitor.State.STUCK]
+        state__in=[PeerMonitor.State.UNREACHABLE, PeerMonitor.State.STUCK, PeerMonitor.State.FORKED]
     ).update(downtime=F("downtime") + 1)
 
     PeerMonitor.objects.annotate(
@@ -285,5 +291,5 @@ def peer_cmd():
         availability=100 - (F("downtime") / F("lifetime") * 100),
         modified_at=timezone.now(),
     )
-logger.info("Done")
-    
+
+    logger.info("Done")

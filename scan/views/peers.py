@@ -54,7 +54,7 @@ class PeerMonitorListView(ListView):
     queryset = PeerMonitor.objects.all()
     template_name = "peers/list.html"
     context_object_name = "peers"
-    paginate_by = 25
+    paginate_by = 200
     ordering = ("-height", "-availability", "announced_address")
 
     def get_context_data(self, **kwargs):
