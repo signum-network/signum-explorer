@@ -1,3 +1,4 @@
+import gzip
 from django.views.generic import ListView
 
 from java_wallet.models import At
@@ -10,6 +11,10 @@ def fill_at_data(obj):
     obj.creator_name = get_account_name(obj.creator_id)
     if not obj.ap_code and obj.ap_code_hash_id:
         obj.ap_code = get_ap_code(obj.ap_code_hash_id)
+
+    state, obj.activation = get_at_state(obj.id)
+    # skip the internal state, balances, etc.
+    obj.state = gzip.decompress(state)[106:]
 
 
 class AtListView(ListView):
@@ -49,7 +54,5 @@ class AtDetailView(IntSlugDetailView):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
         fill_at_data(obj)
-
-        obj.state, obj.activation = get_at_state(obj.id)
 
         return context
