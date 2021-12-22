@@ -142,7 +142,7 @@ def get_pool_id_for_account(address_id: int) -> int:
     )
 
 
-@cache_memoize(60)
+@cache_memoize(10)
 def get_unconfirmed_transactions():
     txs_pending = BrsApi(settings.SIGNUM_NODE).get_unconfirmed_transactions()
 
