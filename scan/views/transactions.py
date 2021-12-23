@@ -68,15 +68,16 @@ def tx_export_csv(request, id : int):
     )
     writer = csv.writer(response)
 
-    indirects = (
+    indirects_query = (
         IndirecIncoming.objects.using("java_wallet")
         .values_list('transaction_id', flat=True)
         .filter(account_id=id)
     )
+    txs_indirects = Transaction.objects.using("java_wallet").filter(id__in=indirects_query)
 
     txs = (
             Transaction.objects.using("java_wallet")
-            .filter(Q(sender_id=id) | Q(recipient_id=id) | Q(id__in=indirects))
+            .filter(Q(sender_id=id) | Q(recipient_id=id)).union(txs_indirects)
             .order_by("-height")
         )[:2000]
 

@@ -68,26 +68,27 @@ class AddressDetailView(IntSlugDetailView):
         obj.is_contract = check_is_contract(obj.id)
 
         # transactions
-        indirects = (
+        indirects_query = (
             IndirecIncoming.objects.using("java_wallet")
             .values_list('transaction_id', flat=True)
             .filter(account_id=obj.id)
         )
-        indirects_count = indirects.count()
+        indirects_count = indirects_query.count()
 
-        txs_cnt = (
+        txs_query = (
             Transaction.objects.using("java_wallet")
             .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-            .count() + indirects_count
         )
-        txs_filter = Q(sender_id=obj.id) | Q(recipient_id=obj.id)
+        txs_cnt = txs_query.count() + indirects_count
+
         if indirects_count > 0:
-            txs_filter |= Q(id__in=indirects)
-        txs = (
-            Transaction.objects.using("java_wallet")
-            .filter(txs_filter)
-            .order_by("-height")[:min(txs_cnt, 15)]
-        )
+            txs_indirects = (
+                Transaction.objects.using("java_wallet")
+                .filter(id__in=indirects_query)
+            )
+            txs_query = txs_query.union(txs_indirects)
+
+        txs = txs_query.order_by("-height")[:min(txs_cnt, 15)]
 
         for t in txs:
             fill_data_transaction(t, list_page=True)
