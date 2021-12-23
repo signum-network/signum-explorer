@@ -64,7 +64,7 @@ class AddressDetailView(IntSlugDetailView):
         # To also show contract names when checking as an account
         if not obj.name:
             obj.name = get_account_name(obj.id)
-        
+
         obj.is_contract = check_is_contract(obj.id)
 
         # transactions
@@ -73,15 +73,19 @@ class AddressDetailView(IntSlugDetailView):
             .values_list('transaction_id', flat=True)
             .filter(account_id=obj.id)
         )
+        indirects_count = indirects.count()
 
         txs_cnt = (
             Transaction.objects.using("java_wallet")
             .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-            .count() + indirects.count()
+            .count() + indirects_count
         )
+        txs_filter = Q(sender_id=obj.id) | Q(recipient_id=obj.id)
+        if indirects_count > 0:
+            txs_filter |= Q(id__in=indirects)
         txs = (
             Transaction.objects.using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id) | Q(id__in=indirects))
+            .filter(txs_filter)
             .order_by("-height")[:min(txs_cnt, 15)]
         )
 
@@ -159,7 +163,7 @@ class AddressDetailView(IntSlugDetailView):
             obj.pool_id = pool_id
             obj.pool_name = get_account_name(pool_id)
 
-        
+
         # ats
 
         ats = (
@@ -175,8 +179,8 @@ class AddressDetailView(IntSlugDetailView):
         context["ats_cnt"] = (
             At.objects.using("java_wallet").filter(creator_id=obj.id).count()
         )
-        
-        
+
+
         # blocks
 
         mined_blocks = (
