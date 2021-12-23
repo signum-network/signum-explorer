@@ -77,6 +77,14 @@ body, html {
     background-color: rgba(0,0,0,.00) !important;
 }
 
+.btn {
+  border-radius: 0.5rem;
+}
+
+.form-control {
+  border-radius: 0.5rem;
+}
+
 .three-line-legend {
 	width: 96px;
 	height: 70px;
@@ -202,6 +210,9 @@ body, html {
     }
     .footerex .colft ul li {
       font-size: 13px;
+    }
+    .footerex .social {
+    min-height: 75px !important;
     }
 }
 @media only screen and (max-width: 340px) {
