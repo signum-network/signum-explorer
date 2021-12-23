@@ -22,7 +22,7 @@ from scan.caching_data.exchange import CachingExchangeData
 import struct
 import os
 
-from scan.helpers.queries import get_asset_details
+from scan.helpers.queries import get_asset_details, query_asset_treasury
 
 register = template.Library()
 
@@ -106,10 +106,10 @@ def tx_is_in(tx: Transaction, account_id = None) -> bool:
         account_id = int(account_id)
         if tx.sender_id==account_id :
             return False
-        
+
         if tx.recipient_id==account_id and tx.amount > 0:
             return True
-        
+
         if tx.type == TxType.PAYMENT and tx.subtype in [TxSubtypePayment.MULTI_OUT, TxSubtypePayment.MULTI_OUT_SAME]:
             tx = tx_load_recipients(tx)
             for r in tx.recipients:
@@ -118,7 +118,7 @@ def tx_is_in(tx: Transaction, account_id = None) -> bool:
 
         if tx.type == TxType.BURST_MINING and tx.subtype == TxSubtypeBurstMining.COMMITMENT_REMOVE:
             return True
-        
+
         if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
             return True
 
@@ -216,24 +216,9 @@ def is_asset_blocked(asset) -> bool:
 def is_asset_phishing(asset) -> bool:
     return asset.name.upper() in PHISHING_ASSETS or asset.name.upper() in BLOCKED_ASSETS
 
-@cache_memoize(3600)
 @register.filter
 def is_asset_treasury(asset, account_id) -> bool:
-    full_hash = (Transaction.objects.using("java_wallet")
-        .values_list('full_hash', flat=True)
-        .filter(id=asset.asset_id).first()
-    )
-
-    add_treasury = (Transaction.objects.using("java_wallet")
-        .values_list('referenced_transaction_fullhash', flat=True)
-        .filter(sender_id=asset.account_id, type=TxType.COLORED_COINS,
-            subtype=TxSubtypeColoredCoins.ADD_TREASURY_ACCOUNT,
-            recipient_id=account_id
-        ).all()
-    )
-
-    return full_hash in add_treasury
-
+    return query_asset_treasury(asset, account_id)
 
 def group_list(lst: list or tuple, n: int):
     for i in range(0, len(lst), n):

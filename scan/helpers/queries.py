@@ -8,7 +8,7 @@ from django.db.models import Sum
 
 from cache_memoize import cache_memoize
 from burst.api.brs.v1.api import BrsApi
-from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxType
+from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
 from java_wallet.models import Account, Asset, At, AtState, Block, RewardRecipAssign, Transaction
@@ -51,7 +51,7 @@ def get_at_state(id: int) -> (bytearray, int):
         .first()
     )
 
-# @cache_memoize(None)
+@cache_memoize(None)
 def check_is_contract(account_id: int) -> bool:
     at_id = (
             At.objects.using("java_wallet")
@@ -61,6 +61,22 @@ def check_is_contract(account_id: int) -> bool:
         )
     return at_id != None
 
+@cache_memoize(3600)
+def query_asset_treasury(asset, account_id) -> bool:
+    full_hash = (Transaction.objects.using("java_wallet")
+        .values_list('full_hash', flat=True)
+        .filter(id=asset.asset_id).first()
+    )
+
+    add_treasury = (Transaction.objects.using("java_wallet")
+        .values_list('referenced_transaction_fullhash', flat=True)
+        .filter(sender_id=asset.account_id, type=TxType.COLORED_COINS,
+            subtype=TxSubtypeColoredCoins.ADD_TREASURY_ACCOUNT,
+            recipient_id=account_id
+        ).all()
+    )
+
+    return full_hash in add_treasury
 
 
 @cache_memoize(None)
