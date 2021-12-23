@@ -59,7 +59,7 @@ THIRD_PARTY_APPS = [
 ]
 
 if DEBUG:
-    THIRD_PARTY_APPS += ["debug_toolbar"]
+    THIRD_PARTY_APPS += ["debug_toolbar", "django_query_profiler"]
 
 LOCAL_APPS = [
     "cabinet",
@@ -85,6 +85,9 @@ if DEBUG:
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
     MIDDLEWARE += ["django_cprofile_middleware.middleware.ProfilerMiddleware"]
     DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
+
+    from django_query_profiler.settings import *
+    MIDDLEWARE += ["django_query_profiler.client.middleware.QueryProfilerMiddleware"]
 
 ROOT_URLCONF = "config.urls"
 
