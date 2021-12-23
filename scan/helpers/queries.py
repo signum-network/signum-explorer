@@ -11,7 +11,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, Asset, At, AtState, Block, RewardRecipAssign, Transaction
+from java_wallet.models import Account, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction
 
 
 @cache_memoize(3600)
@@ -142,6 +142,18 @@ def get_total_accounts_count():
         .exclude(id=0)
         .count()
     )
+
+@cache_memoize(300)
+def get_asset_price(asset_id : int) -> float:
+    latest_trade = assets_trades = (
+        Trade.objects.using("java_wallet")
+        .using("java_wallet")
+        .filter(asset_id=asset_id)
+        .order_by("-height").first()
+    )
+    if latest_trade:
+        return latest_trade.price
+    return 0
 
 @cache_memoize(None)
 def get_pool_id_for_block_cached(block: Block) -> int:

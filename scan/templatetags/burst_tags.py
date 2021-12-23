@@ -22,7 +22,7 @@ from scan.caching_data.exchange import CachingExchangeData
 import struct
 import os
 
-from scan.helpers.queries import get_asset_details, query_asset_treasury
+from scan.helpers.queries import get_asset_details, get_asset_price, query_asset_treasury
 
 register = template.Library()
 
@@ -195,18 +195,9 @@ def tx_asset_id(tx: Transaction) -> int:
 
     return 0
 
-@cache_memoize(300)
 @register.filter
 def asset_price(asset_id : int) -> float:
-    latest_trade = assets_trades = (
-        Trade.objects.using("java_wallet")
-        .using("java_wallet")
-        .filter(asset_id=asset_id)
-        .order_by("-height").first()
-    )
-    if latest_trade:
-        return latest_trade.price
-    return 0
+    return get_asset_price(asset_id)
 
 @register.filter
 def is_asset_blocked(asset) -> bool:
