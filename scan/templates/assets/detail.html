@@ -18,8 +18,6 @@
   <script>
 
 var container = document.getElementById('chartDiv');
-// var container = document.createElement('div');
-// document.body.appendChild(container);
 
 var width = container.clientWidth;
 var height = 240;
@@ -63,8 +61,8 @@ var chart = window.tvchart  = LightweightCharts.createChart(container, {
   },
 });
 
-var series = chart.addAreaSeries({	
-	topColor: 'rgba(19, 68, 193, 0.4)',	
+var series = chart.addAreaSeries({
+	topColor: 'rgba(19, 68, 193, 0.4)',
   bottomColor: 'rgba(0, 120, 255, 0.0)',
 	lineColor: 'rgba(19, 40, 153, 1.0)',
 	lineWidth: 3
@@ -82,33 +80,29 @@ function businessDayToString(businessDay) {
 var toolTipMargin = 10;
 var priceScaleWidth = 50;
 var toolTip = document.createElement('div');
-toolTip.className = 'three-line-legend';
+toolTip.className = 'chart-legend';
 container.appendChild(toolTip);
 toolTip.style.display = 'block';
 toolTip.style.left = 3 + 'px';
 toolTip.style.top = 3 - height + 'px';
 
-function setLastBarText() {
-	var dateStr = data[data.length - 1].time.year + ' - ' + data[data.length - 1].time.month + ' - ' + 	data[data.length - 1].time.day;
-  var price = data[data.length-1].value + " {% coin_symbol %}"
-	 toolTip.innerHTML =	'<div style="font-size: 24px; margin: 4px 0px; color: #20262E"> {{ asset.name }}</div>'+
-    '<div style="white-space:nowrap; font-size: 16px; margin: 4px 0px; color: #20262E">' + price + '</div>' +
-		'<div>' + dateStr + '</div>';
+function setToolTipData(curTime, price) {
+	var dateStr = curTime.year + '-' + curTime.month + '-' + 	curTime.day;
+  var priceStr = price + " {% coin_symbol %}"
+	 toolTip.innerHTML =	'<div style="font-size: 24px; margin: 4px 0px; color: #20262E; display:inline;"> {{ asset.name }} </div>'+
+    '<div style="white-space:nowrap; font-size: 16px; margin: 4px 0px; color: #20262E; display:inline;"> ' + priceStr + ' </div>' +
+		'<div style="display:inline;">' + dateStr + '</div>';
 }
 
-setLastBarText(); 
+setToolTipData(data[data.length - 1].time, data[data.length - 1].value);
 
 chart.subscribeCrosshairMove(function(param) {
   if ( param === undefined || param.time === undefined || param.point.x < 0 || param.point.x > width || param.point.y < 0 || param.point.y > height ) {
-	setLastBarText();   
+    setToolTipData(data[data.length - 1].time, data[data.length - 1].value);
 } else {
-	dateStr = param.time.year +' - '+ param.time.month + ' - ' + param.time.day;
-	var price = param.seriesPrices.get(series) + " {% coin_symbol %}"
-	toolTip.innerHTML =	'<div style="font-size: 24px; margin: 4px 0px; color: #20262E"> {{ asset.name }}</div>'+
-    '<div style="white-space:nowrap; font-size: 16px; margin: 4px 0px; color: #20262E">' + price + '</div>' +
-    '<div>' + dateStr + '</div>';
+  setToolTipData(param.time, param.seriesPrices.get(series));
 }
-  
+
 
 });
 
@@ -122,7 +116,7 @@ document.body.onresize = function() {
     }, 200);
 }
 
-  </script>  
+  </script>
 {% endblock %}
 
 
@@ -133,7 +127,7 @@ document.body.onresize = function() {
   </h5>
 
 <div class="card-deck mb-3">
-    <div class="card mb-4 shadow-sm">      
+    <div class="card mb-4 shadow-sm">
        {% if assets_trades_cnt > 0 %}
          <div class="mt-2" style="height: 240px;" id="chartDiv">
          </div>
@@ -191,7 +185,7 @@ document.body.onresize = function() {
             <tr>
               <th>Mintable</th>
               <td>{{ asset.mintable }}</td>
-            </tr>          
+            </tr>
             <tr>
               <th>Issuer</th>
               <td>
@@ -242,7 +236,7 @@ document.body.onresize = function() {
                 <p class="small p-1" style="margin-top: 10px">No token transfers</p>
               {% endif %}
             </div>
-            
+
             <div class="tab-pane fade" id="nav-asset-holders" role="tabpanel" aria-labelledby="nav-asset-holders-tab">
               {% if assets_holders_cnt > 0 %}
                 <div class="float-left small p-1">Largest {{ assets_holders.count }} holders</div>

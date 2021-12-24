@@ -85,9 +85,9 @@ body, html {
   border-radius: 0.5rem;
 }
 
-.three-line-legend {
-	width: 96px;
-	height: 70px;
+.chart-legend {
+	width: 240px;
+	height: 20px;
 	position: relative;
   top: 8px;
 	padding: 8px;
