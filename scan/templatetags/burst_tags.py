@@ -138,7 +138,10 @@ def tx_is_out(tx: Transaction, account_id : None) -> bool:
     return False
 
 @register.filter
-def tx_amount(tx: Transaction, account_id : int = None) -> float:
+def tx_amount(tx: Transaction, filtered_account = None) -> float:
+    account_id = filtered_account
+    if type(account_id) is str:
+        account_id = int(account_id)
     if account_id and tx.sender_id!=account_id and tx.type == TxType.PAYMENT and tx.subtype in [TxSubtypePayment.MULTI_OUT, TxSubtypePayment.MULTI_OUT_SAME]:
         tx = tx_load_recipients(tx)
         for r in tx.recipients:
