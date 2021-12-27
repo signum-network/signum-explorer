@@ -7,7 +7,7 @@
 
 {% block description %}
 {{ tx|tx_type }}
-{{ tx.amount|burst_amount|intcomma|append_symbol }}
+{{ tx|tx_amount|intcomma }} {{ tx|tx_symbol }}
 {% endblock %}
 
 {% block content %}
@@ -185,5 +185,5 @@
   </script>
   {% endif %}
   -->
-  
+
 {% endblock %}
