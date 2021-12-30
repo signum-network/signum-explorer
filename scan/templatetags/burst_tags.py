@@ -212,6 +212,8 @@ def is_asset_phishing(asset) -> bool:
 
 @register.filter
 def is_asset_treasury(asset, account_id) -> bool:
+    if not account_id:
+        return False
     return query_asset_treasury(asset, account_id)
 
 def group_list(lst: list or tuple, n: int):
