@@ -268,8 +268,7 @@ def sub(a: int or float, b: int or float) -> int or float:
 
 @register.filter
 def div(a: int or float, b: int or float) -> float:
-    return a / b
-
+    return a / b if b else 0
 
 @register.filter
 def mul(a: int or float, b: int or float) -> int or float:
