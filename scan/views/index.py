@@ -18,6 +18,8 @@ def index(request):
             return redirect('tx/' + request.GET['id'])
         if 'amp;id' in request.GET:
             return redirect('tx/' + request.GET['amp;id'])
+    if 'action' in request.GET and request.GET['action'] == 'network_status':
+        return redirect('peers-charts/')
     if 'action' in request.GET and request.GET['action'] == 'token_inspect' and 'id' in request.GET:
         return redirect('asset/' + request.GET['id'])
 
