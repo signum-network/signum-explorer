@@ -43,7 +43,7 @@
               <th>Platform</th>
               <td>{{ peer.platform }}</td>
             </tr>
-              {% if peer.reward_state != '' %}
+              {% if peer.reward_state == 'Queued' or peer.reward_state == 'Paid' or peer.reward_state == 'Duplicate' %}
             <tr>
               <th>Reward Status</th>
               <td>{{ peer.reward_state }}</td>
