@@ -43,6 +43,7 @@
               <th>Platform</th>
               <td>{{ peer.platform }}</td>
             </tr>
+              {% if peer.reward_state != 'None' %}
             <tr>
               <th>Reward Status</th>
               <td>{{ peer.reward_state }}</td>
@@ -51,6 +52,7 @@
               <th>Reward Sent</th>
               <td>{{ peer.reward_time }}</td>
             </tr>
+              {% endif %}
             <tr>
               <th>Found</th>
               <td>{{ peer.created_at }} UTC</td>
