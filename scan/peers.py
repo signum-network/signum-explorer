@@ -285,7 +285,7 @@ def peer_cmd():
         duration=ExpressionWrapper(
             Now() - F("last_online_at"), output_field=DurationField()
         )
-    ).filter(duration__gte=timedelta(days=30)).delete()
+    ).filter(duration__gte=timedelta(days=5)).delete()
 
     PeerMonitor.objects.update(
         availability=100 - (F("downtime") / F("lifetime") * 100),
