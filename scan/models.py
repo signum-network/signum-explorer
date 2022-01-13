@@ -47,3 +47,6 @@ class PeerMonitor(Model):
 
     created_at = DateTimeField(auto_now_add=True)
     modified_at = DateTimeField(auto_now=True)
+
+    reward_state = CharField(max_length=255, blank=True)
+    reward_time = DateTimeField(blank=True)

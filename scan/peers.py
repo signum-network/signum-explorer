@@ -65,7 +65,7 @@ def get_country_by_ip(ip: str) -> str:
 class PeerMonitorForm(forms.ModelForm):
     class Meta:
         model = PeerMonitor
-        fields = "__all__"
+        fields = ['announced_address', 'platform', 'application', 'version', 'height', 'cumulative_difficulty', 'country_code', 'state', 'downtime', 'lifetime', 'availability', 'last_online_at']
 
 
 def is_good_version(version: str) -> bool:

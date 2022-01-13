@@ -42,6 +42,8 @@ AUTH_USER_MODEL = "cabinet.User"
 
 # Application definition
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
