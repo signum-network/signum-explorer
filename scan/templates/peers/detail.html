@@ -50,16 +50,16 @@
             </tr>
             <tr>
               <th>Reward Sent</th>
-              <td>{{ peer.reward_time }}</td>
+              <td>{{ peer.reward_time|naturaltime }}</td>
             </tr>
               {% endif %}
             <tr>
               <th>Found</th>
-              <td>{{ peer.created_at }} UTC</td>
+              <td>{{ peer.created_at|naturaltime }} UTC</td>
             </tr>
             <tr>
               <th>Last Online</th>
-              <td>{{ peer.last_online_at }} UTC</td>
+              <td>{{ peer.last_online_at|naturaltime }} UTC</td>
             </tr>
             <tr>
               <th>Checked</th>
