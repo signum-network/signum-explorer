@@ -265,6 +265,9 @@ MIN_PEER_VERSION = os.environ.get("MIN_PEER_VERSION", "3.2.0")
 
 SIGNUM_NODE = os.environ.get("SIGNUM_NODE")
 
+BLOCK_REWARD_LIMIT_HEIGHT = 720000
+BLOCK_REWARD_LIMIT_AMOUNT = 100
+
 WALLET_URL = os.environ.get("WALLET_URL")
 
 FEATURED_ASSETS = json.loads(os.environ.get("FEATURED_ASSETS", "[]"))
