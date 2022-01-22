@@ -5,79 +5,285 @@
 {% block title %} - Nodes Distribution around the Globe{% endblock %}
 
 {% block scripts %}
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
-    google.charts.load('current', {
-      'packages':['geochart'],
-      // Note: you will need to get a mapsApiKey for your project.
-      // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
-      'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
-    });
-    google.charts.setOnLoadCallback(drawRegionsMap);
 
-    function drawRegionsMap() {
-      var data = google.visualization.arrayToDataTable([
-        ['Country', 'Peers'],
-        {% for country in countries %}['{{ country.country_code }}', {{ country.cnt }}],{% endfor %}
-      ]);
-
-      var options = {colorAxis: {colors: ['#efefef', '#337ab7']}, datalessRegionColor: '#fdfdfd',};
-
-      var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-
-      chart.draw(data, options);
-    }
-  </script>
+  <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+  <script src="https://code.highcharts.com/maps/modules/data.js"></script>
+  <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
   <script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
+var data = [
+  ['Country', 'Peers'],
+{% for country in countries %}['{{ country.country_code }}', {{ country.cnt }}],{% endfor %}
+];
 
-      var data = google.visualization.arrayToDataTable([
-        ['Version', 'Count'],
-        {% for version in versions %}['{{ version.version }}', {{ version.cnt }}],{% endfor %}
-      ]);
+var objs = data.map(function(x) {
+  return {
+    'code': x[0],
+    'z': x[1]
+  };
+});
 
-      var options = {
-        title: 'Versions (Online)'
-      };
+var chart = Highcharts.mapChart('geochart', {
+  chart: {
+    map: 'custom/world'
+  },
 
-      var chart = new google.visualization.PieChart(document.getElementById('piechart-versions'));
+          title: {
+            text: '',
+            align: 'left'
+        },
 
-      chart.draw(data, options);
+      legend: {
+        enabled: false
+    },
+
+       credits: {
+        enabled: false
+    },
+
+  mapNavigation: {
+    enabled: true,
+    buttonOptions: {
+      verticalAlign: 'bottom'
     }
+  },
+
+  series: [{
+    color: '#E0E0E0',
+    enableMouseTracking: false,
+    showInLegend: false
+  }, {
+    name: 'Nodes',
+    type: 'mapbubble',
+    joinBy: ['iso-a2', 'code'],
+    data: objs,
+    minSize: 4,
+    maxSize: '12%',
+  }]
+
+});
+
   </script>
 
   <script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
+ Highcharts.chart('piechart-versions', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+        marginLeft: 0
 
-      var data = google.visualization.arrayToDataTable([
-        ['Version', 'Count'],
-        {% for state in states %}['{{ state.state }}', {{ state.cnt }}],{% endfor %}
-      ]);
+    },
 
-      var options = {
-        title: 'All known peers (last 5 days)'
-      };
+        legend: {
+        align: 'left',
+        verticalAlign: 'top',
+        layout: 'vertical',
+        x: 0,
+        y: 40
+    },
 
-      var chart = new google.visualization.PieChart(document.getElementById('piechart-states'));
+    title: {
+        text: 'Versions (Online)',
+        align: 'left'
+    },
 
-      chart.draw(data, options);
+    credits: {
+        enabled: false
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
+    },
+
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true
+        }
+    },
+
+    series: [{
+        name: 'Version',
+        colorByPoint: true,
+        animation: {
+	 enabled: true,
+	 duration: 300,
+	 easing: 'linear'
+        },
+        data: [{% for version in versions %}['{{ version.version }}', {{ version.cnt }}],{% endfor %}]
+    }]
+});
+
+  </script>
+
+
+  <script type="text/javascript">
+
+Highcharts.chart('piechart-states', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+        marginLeft: 0
+    },
+
+        legend: {
+        align: 'left',
+        verticalAlign: 'top',
+        layout: 'vertical',
+        x: 0,
+        y: 40
+    },
+
+    title: {
+        text: 'All known nodes (last 5 days)',
+        align: 'left'
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
+    },
+
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true
+        }
+    },
+
+    series: [{
+        name: 'State',
+        colorByPoint: true,
+        animation: {
+	 enabled: true,
+	 duration: 300,
+	 easing: 'linear'
+        },
+        data: [{% for state in states %}['{{ state.state }}', {{ state.cnt }}],{% endfor %}]
+    }]
+});
+  </script>
+
+    <script type="text/javascript">
+var gaugeOptions = {
+    chart: {
+        type: 'solidgauge'
+    },
+
+    title: {
+        text: '<div style="text-align:center">' +
+                '<span>Online Now</span><br/>' +
+                '<span style="font-size:12px;opacity:0.4">checked {{ last_check.modified_at|naturaltime }}</span>' +
+                '</div>',
+        align: 'left'
+    },
+
+    pane: {
+        center: ['50%', '85%'],
+        size: '140%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+        }
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        lineWidth: 0,
+        tickWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 2,
+        title: {
+            y: -70
+        },
+        labels: {
+            y: 16
+        }
+    },
+
+    plotOptions: {
+        solidgauge: {
+            dataLabels: {
+                y: 5,
+                borderWidth: 0,
+                useHTML: true
+            }
+        }
     }
+};
+
+var chartSpeed = Highcharts.chart('container-nodes', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 400,
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Nodes',
+        data: [{{ online_now }}],
+        dataLabels: {
+            format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">{y}</span><br/>' +
+                '<span style="font-size:12px;opacity:0.4"> Nodes</span>' +
+                '</div>'
+        },
+        tooltip: {
+            valueSuffix: 'nodes'
+        }
+    }]
+
+}));
+
   </script>
 
-  <!--
-  <script>
-    setTimeout(function(){
-       document.location.reload();
-    }, 30000);
-  </script>
-  -->
 {% endblock %}
 
 {% block content %}
@@ -87,14 +293,24 @@
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
-        <p>Online now: {{ online_now }} <span class="small">(checked {{ last_check.modified_at|naturaltime }})</span></p>
-
-        <div id="regions_div"></div>
-
-        <div id="piechart-versions"></div>
-
-        <div id="piechart-states"></div>
-
+          <div id="geochart" style="height: 500px; max-width: 1300px; margin: 0 auto"></div>
+        <div class="row mx-gutters-md-1 pt-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="media align-items-center">
+             <div id="piechart-versions" style="height: 200px; width: 400px; min-width: 357px; margin: 0 auto"></div>
+          </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="media align-items-center">
+             <div id="container-nodes" style="height: 200px; width: 400px; min-width: 357px; margin: 0 auto"></div>
+            </div>
+           </div>
+          <div class="col-md-6 col-lg-4 mx-auto">
+            <div class="media align-items-center">
+             <div id="piechart-states" style="height: 200px; width: 400px; min-width: 357px; margin: 0 auto"></div>
+           </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
