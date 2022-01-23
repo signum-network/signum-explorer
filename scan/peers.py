@@ -122,8 +122,8 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
             return
         if not "announcedAddress" in peer_info:
             peer_info["announcedAddress"] = address
-        
-        peer_info["announcedAddress"].replace(":8123","")
+
+        peer_info["announcedAddress"] = peer_info["announcedAddress"].replace(":8123","")
         peer_info.update(p2p_api.get_cumulative_difficulty())
         peer_info["next_block_ids"] = []
         try:
@@ -229,7 +229,7 @@ def get_count_nodes_online() -> int:
 @lock_decorator(key="peer_monitor", expire=60, auto_renewal=True)
 @transaction.atomic
 def peer_cmd():
-    logger.info("Start")
+    logger.info("Start the scan")
 
     local_difficulty = get_local_difficulty()
     logger.info(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
