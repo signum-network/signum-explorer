@@ -89,7 +89,7 @@ toolTip.style.top = 3 - height + 'px';
 function setToolTipData(curTime, price) {
 	var dateStr = curTime.year + '-' + curTime.month + '-' + 	curTime.day;
   var priceStr = price + " {% coin_symbol %}"
-	 toolTip.innerHTML =	'<div style="font-size: 24px; margin: 4px 0px; color: #20262E; display:inline;"> {{ asset.name }} </div>'+
+	 toolTip.innerHTML =	'<div style="font-size: 24px; margin: 4px 0px; color: #20262E; display:inline;">{% if asset|is_asset_blocked %} Name Blocked {% else %} {{ asset.name }} {% endif %} </div>'+
     '<div style="white-space:nowrap; font-size: 16px; margin: 4px 0px; color: #20262E; display:inline;"> ' + priceStr + ' </div>' +
 		'<div style="display:inline;">' + dateStr + '</div>';
 }
