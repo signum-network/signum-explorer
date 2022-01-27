@@ -6,13 +6,14 @@
 
 {% block content %}
 
-  <h5 class="p-2">Pending Transactions</h5>
+<h5 class="p-2">Pending Transactions</h5>
 
-  {% if not test_net %}
-  {% endif %}
+{% if not test_net %}
+{% endif %}
 
-  <div class="card-deck mb-3">
-    <div class="card mb-4 shadow-sm">
+<div class="card-deck mb-3">
+  <div class="card mb-4 shadow-sm">
+    <div id="update_pending">
       <div class="card-body">
         <div class="d-flex flex-column flex-md-row">
           <small class="mb-2 mr-md-auto text-muted">
@@ -23,5 +24,12 @@
       </div>
     </div>
   </div>
+</div>
+
+<script>
+  setInterval(function () {
+    $('#update_pending').load(location.href + ' #update_pending');
+  }, 10000); //update every X ms.
+</script>
 
 {% endblock %}
