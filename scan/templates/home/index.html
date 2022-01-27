@@ -4,87 +4,95 @@
 {% load burst_tags %}
 
 {% block description %}
-Latest block: {% if blocks %}{%  with blocks|first as last_block %}{{ last_block.height }}{% endwith %}{% endif %}
-Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
-{{ last_block.base_target|net_capacity_tib|format_capacity }} + {{ last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %}/TiB
+Latest block: {% if blocks %}{% with blocks|first as last_block %}{{ last_block.height }}{% endwith %}{% endif %}
+Network Difficulty: {% if blocks %}{% with blocks|first as last_block %}
+{{ last_block.base_target|net_capacity_tib|format_capacity }} + {{
+last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %}/TiB
 {% endwith %}{% endif %}
 {% endblock %}
 
 {% block revision %}{{ last_block.height }}{% endblock %}
 
 {% block content %}
-  <div class="card-deck mb-5 text-center">
-    <div class="card card-search mb-4 shadow-sm bg-primary">
-      <div class="card-body py-0 px-0">
-        <form class="form-inline input-group" action="{% url 'search' %}">
-          <input class="form-control" type="text" name="q" placeholder="Search by Account / Block / Transaction / Token / Contract" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="submit" name="submit" value="Search"><i class="fas fa-search"></i></button>
-          </div>
-        </form>
-      </div>
+<div class="card-deck mb-5 text-center">
+  <div class="card card-search mb-4 shadow-sm bg-primary">
+    <div class="card-body py-0 px-0">
+      <form class="form-inline input-group" action="{% url 'search' %}">
+        <input class="form-control" type="text" name="q"
+          placeholder="Search by Account / Block / Transaction / Token / Contract" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit" name="submit" value="Search"><i
+              class="fas fa-search"></i></button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
-  <div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm">
-      <div class="card-body">
-        <div class="row mx-gutters-md-1">
-          {% if not test_net %}
-          <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-md">
-            <div class="media align-items-center">
-              <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-dollar-sign fa-fw"></i> {% coin_symbol %} price</h6>
-                <span class="text-info small">
-                  ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} ({{ burst_info.exchange.percent_change_24h|stringformat:"+d" }}%) @ {{ burst_info.exchange.price_btc|floatformat:-8 }} BTC
-                </span>
-              </div>
+<div class="card-deck mb-3 text-center">
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <div class="row mx-gutters-md-1">
+        {% if not test_net %}
+        <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-md">
+          <div class="media align-items-center">
+            <div class="text-left">
+              <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-dollar-sign fa-fw"></i> {% coin_symbol %}
+                price</h6>
+              <span class="text-info small">
+                ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} ({{
+                burst_info.exchange.percent_change_24h|stringformat:"+d" }}%) @ {{
+                burst_info.exchange.price_btc|floatformat:-8 }} BTC
+              </span>
             </div>
-            <hr class="hr-space-lg">
-            <div class="media align-items-center">
-              <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-chart-line fa-fw"></i> Market cap</h6>
-                <span class="text-info small">${{ burst_info.exchange.market_cap_usd|floatformat:0|intcomma }}</span>
-              </div>
-            </div>
-            <hr class="hr-space-lg d-block d-md-none">
           </div>
-          {% endif %}
-
-          <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-lg">
-            <div class="media align-items-center">
-              <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-cubes fa-fw"></i> Latest block</h6>
-                {% if blocks %}
-                  {%  with blocks|first as last_block %}
-                    <span class="text-info small">{{ last_block.height }}</span>
-                  {% endwith %}
-                {% else %}
-                  -
-                {% endif %}
-              </div>
+          <hr class="hr-space-lg">
+          <div class="media align-items-center">
+            <div class="text-left">
+              <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-chart-line fa-fw"></i> Market cap</h6>
+              <span class="text-info small">${{ burst_info.exchange.market_cap_usd|floatformat:0|intcomma }}</span>
             </div>
-            <hr class="hr-space-lg">
-            <div class="media align-items-center">
-              <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-project-diagram fa-fw"></i> Network Difficulty</h6>
-                {% if blocks %}
-                  {%  with blocks|first as last_block %}
-                    <span class="text-info small">{{ last_block.base_target|net_capacity_tib|format_capacity }}
-                      + {{ last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %}/TiB
-                    </span>
-                  {% endwith %}
-                {% else %}
-                  -
-                {% endif %}
-              </div>
+          </div>
+          <hr class="hr-space-lg d-block d-md-none">
+        </div>
+        {% endif %}
+
+        <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-lg">
+          <div class="media align-items-center">
+            <div class="text-left">
+              <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-cubes fa-fw"></i> Latest block</h6>
+              {% if blocks %}
+              {% with blocks|first as last_block %}
+              <span class="text-info small">{{ last_block.height }}</span>
+              {% endwith %}
+              {% else %}
+              -
+              {% endif %}
+            </div>
+          </div>
+          <hr class="hr-space-lg">
+          <div class="media align-items-center">
+            <div class="text-left">
+              <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-project-diagram fa-fw"></i> Network
+                Difficulty</h6>
+              {% if blocks %}
+              {% with blocks|first as last_block %}
+              <span class="text-info small">{{ last_block.base_target|net_capacity_tib|format_capacity }}
+                + {{ last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %}/TiB
+              </span>
+              {% endwith %}
+              {% else %}
+              -
+              {% endif %}
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
+<div id="update_Latest">
   <div class="card-deck mb-3 text-center">
     <div class="card mb-4">
       <div class="card-header">
@@ -117,16 +125,17 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
       </div>
       <div class="card-body">
         {% include "txs_pending/txs_pendings.html" %}
-        <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'txs-pending' %}">View all pending transactions</a>
+        <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'txs-pending' %}">View all pending
+          transactions</a>
       </div>
     </div>
   </div>
+</div>
 
-  <!--
-  <script>
-    setTimeout(function(){
-       document.location.reload();
-    }, 10000);
-  </script>
-  -->
+<script>
+  setInterval(function () {
+    $('#update_Latest').load(location.href + ' #update_Latest');
+  }, 60000); //update every X seconds
+</script>
+
 {% endblock %}
