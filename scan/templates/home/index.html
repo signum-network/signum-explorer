@@ -90,7 +90,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
     </div>
   </div>
 
-<div id="update_Latest">
+<div id="update_latest">
   <div class="card-deck mb-3 text-center">
     <div class="card mb-4">
       <div class="card-header">
@@ -181,8 +181,8 @@ options: {
 
 <script>
   setInterval(function () {
-    $('#update_Latest').load(location.href + ' #update_Latest');
-  }, 60000); //update every X seconds
+    $('#update_latest').load(location.href + ' #update_latest');
+  }, 60000); //update every X ms.
 </script>
 
 {% endblock %}
