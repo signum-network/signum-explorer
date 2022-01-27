@@ -87,6 +87,13 @@ last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %
             </div>
           </div>
         </div>
+        <!--
+        <div class="col-md-0 col-lg-4 pt-4 pt-lg-0 mx-auto">
+          <div class="media align-items-center mt-n2" Style="max-height: 120px;">
+            <canvas style="max-height: 135px; width: 100vw; display: block;" id="myChart"></canvas>
+          </div>
+        </div>
+      -->
       </div>
     </div>
   </div>
@@ -123,7 +130,7 @@ last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %
       <div class="card-header">
         <h5 class="card-header-title">Pending Transactions</h5>
       </div>
-      <div class="card-body">
+      <div class="card-body" z>
         {% include "txs_pending/txs_pendings.html" %}
         <a class="btn btn-xs btn-block btn-outline-primary" href="{% url 'txs-pending' %}">View all pending
           transactions</a>
@@ -131,6 +138,59 @@ last_block.base_target|net_commitment|floatformat:2|intcomma }} {% coin_symbol %
     </div>
   </div>
 </div>
+
+<!--
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+  var ctxL = document.getElementById("myChart").getContext('2d');
+  var myChart = new Chart(ctxL, {
+    type: 'line',
+    data: {
+      labels: ["24 hours ago", "23 hours ago", "22 hours ago", "21 hours ago", "20 hours ago", "19 hours ago", "18 hours ago", "17 hours ago", "16 hours ago", "15 hours ago", "14 hours ago", "13 hours ago", "12 hours ago", "11 hours ago", "10 hours ago", "9 hours ago", "8 hours ago", "7 hours ago", "6 hours ago", "5 hours ago", "4 hours ago", "3 hours ago", "2 hours ago", "1 hour ago"],
+      datasets: [
+        {
+          label: "STP",
+          data: [28000, 48000, 40000, 190000, 60000, 270000, 90000, 48000, 40000, 19000, 86000, 270000, 90000, 48000, 40000, 190000, 86000, 2700, 90000, 48000, 40000, 19000, 86000, 27000],
+          pointRadius: 2,
+          pointHoverRadius: 4,
+          tension: 0.4,
+          backgroundColor: ['#007bff'],
+          borderColor: ['#007bff'],
+          borderWidth: 1,
+          borderRadius: 3,
+        },
+        {
+          label: "TP",
+          data: [28, 48, 40, 19, 60, 27, 90, 48, 40, 19, 86, 27, 90, 48, 40, 19, 86, 27, 90, 48, 40, 19, 86, 27],
+          pointRadius: 2,
+          pointHoverRadius: 4,
+          tension: 0.4,
+          fill: true,
+          backgroundColor: [
+            '#22366B59',
+          ],
+          borderColor: [
+            '#22366B',
+          ],
+          borderWidth: 1,
+          borderRadius: 3,
+        }
+      ]
+    },
+    options: {
+      scales: { y: { type: 'logarithmic', }, X: { ticks: { display: false }, } },
+      animation: { duration: 5000, },
+      hover: { mode: 'index', intersect: false },
+      plugins: {
+        legend: false,
+        responsive: true,
+        tooltip: { mode: 'index', intersect: false },
+        title: { display: true, text: 'TRANSACTIONS PER-HOUR', font: { family: "'Montserrat', sans-serif", weight: 500, } },
+      }
+    }
+  });
+</script>
+-->
 
 <script>
   setInterval(function () {
