@@ -124,6 +124,7 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
             peer_info["announcedAddress"] = address
 
         peer_info["announcedAddress"] = peer_info["announcedAddress"].replace(":8123","")
+        peer_info["announcedAddress"] = peer_info["announcedAddress"].replace(":7123","")
         peer_info.update(p2p_api.get_cumulative_difficulty())
         peer_info["next_block_ids"] = []
         try:
