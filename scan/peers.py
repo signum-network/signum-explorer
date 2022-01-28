@@ -123,8 +123,8 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
         if not "announcedAddress" in peer_info:
             peer_info["announcedAddress"] = address
 
-        peer_info["announcedAddress"] = peer_info["announcedAddress"].replace(":8123","")
-        peer_info["announcedAddress"] = peer_info["announcedAddress"].replace(":7123","")
+        default_port = ":" + str(settings.DEFAULT_P2P_PORT)
+        peer_info["announcedAddress"] = peer_info["announcedAddress"].replace(default_port,"")
         peer_info.update(p2p_api.get_cumulative_difficulty())
         peer_info["next_block_ids"] = []
         try:
