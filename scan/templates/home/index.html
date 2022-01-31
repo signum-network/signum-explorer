@@ -183,7 +183,7 @@ options: {
 <script>
   var nanobar = new Nanobar();
   setInterval(function () {
-    nanobar.go(50);
+    nanobar.go(65);
     $('#update_latest').load(location.href + ' #update_latest');
     $(document).ajaxComplete(function () {
       nanobar.go(100); //progress 100 after ajax update complete

@@ -30,7 +30,7 @@
 <script>
   var nanobar = new Nanobar();
   setInterval(function () {
-    nanobar.go(50);
+    nanobar.go(65);
     $('#update_pending').load(location.href + ' #update_pending');
     $(document).ajaxComplete(function () {
       nanobar.go(100); //progress 100 after ajax update complete
