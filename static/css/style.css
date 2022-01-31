@@ -112,6 +112,11 @@ body, html {
   height:4px;
   z-index:9999;
 }
+.nanobar .bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
 /* STYLES SPECIFIC TO FOOTER  */
 .footerex {
