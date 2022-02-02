@@ -179,9 +179,15 @@ options: {
 });
 </script>-->
 
+<script src="https://cdn.jsdelivr.net/npm/nanobar@0.4.2/nanobar.min.js"></script>
 <script>
+  var nanobar = new Nanobar();
   setInterval(function () {
+    nanobar.go(65);
     $('#update_latest').load(location.href + ' #update_latest');
+    $(document).ajaxComplete(function () {
+      nanobar.go(100); //progress 100 after ajax update complete
+    });
   }, 60000); //update every X ms.
 </script>
 
