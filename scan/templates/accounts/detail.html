@@ -103,7 +103,7 @@
               <th>Creation Block</th>
               <td><a href="{% url 'block-detail' address.creation_height %}">{{ address.creation_height }}</a></td>
             </tr>
-            {% if not address.is_contract %}
+            {% if not address.is_contract and address.pool_id %}
             <tr>
               <th>Pool</th>
               <td>
