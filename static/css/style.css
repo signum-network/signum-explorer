@@ -99,6 +99,13 @@ body, html {
 	pointer-events: none;
 }
 
+.back-to-top {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  display: none;
+}
+
 /* STYLES SPECIFIC TO LOADING BARS */
 .bar{
   width:0;
