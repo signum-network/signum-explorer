@@ -144,7 +144,7 @@ def asset_offset(height : int) -> int:
         start_block = int(env_start_block)
 
     offset = 1
-    if height < start_block:
+    if height > 0 and height < start_block:
         offset = 0
 
     return offset
