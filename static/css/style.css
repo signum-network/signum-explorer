@@ -207,12 +207,20 @@ body, html {
   clear: both;
 }
 @media only screen and (min-width: 1280px) {
+  .navbar {
+  background: rgba(255,255,255,0.9) !important;
+  backdrop-filter: blur(10px) saturate(125%);
+  }
   .containft {
     width: 1200px;
     margin: 0 auto;
   }
 }
 @media only screen and (max-width: 1139px) {
+  .navbar {
+  background: rgba(255,255,255,0.9) !important;
+  backdrop-filter: blur(10px) saturate(125%);
+  }
   .containft .social {
     width: 1000px;
     display: block;
@@ -222,6 +230,9 @@ body, html {
   }
 }
 @media only screen and (max-width: 950px) {
+  .navbar {
+  background: rgba(255,255,255,1.0) !important;
+  }
   .footerex .colft {
     width: 33%;
   }
@@ -233,6 +244,9 @@ body, html {
   }
 }
 @media only screen and (max-width: 500px) {
+    .navbar {
+    background: rgba(255,255,255,1.0) !important;
+    }
     .footerex .colft {
       width: 50%;
       min-height: 200px;
@@ -248,7 +262,10 @@ body, html {
     }
 }
 @media only screen and (max-width: 340px) {
-  .footerex .colft {
+    .navbar {
+    background: rgba(255,255,255,1.0) !important;
+    }
+    .footerex .colft {
     width: 100%;
   }
 }
