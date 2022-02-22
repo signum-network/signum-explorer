@@ -18,6 +18,11 @@ body, html {
   font-family: 'Montserrat', sans-serif;
 }
 
+.navbar {
+  background: rgba(255,255,255,0.9) !important;
+  backdrop-filter: blur(10px) saturate(125%);
+}
+
 .wrapper {
   height: auto !important;
   height: 100%;
