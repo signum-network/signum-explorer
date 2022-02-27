@@ -31,7 +31,7 @@
             <span>{{ block|block_reward_with_fee_burnt|rounding:5|intcomma }}</span><br>
           {% else %}
             <span>{{ block|block_reward_with_fee|rounding:5|intcomma }}</span><br>
-          [% endif %}
+          {% endif %}
           <span class="text-success"> {% coin_symbol %} </span>
         </td>
       </tr>
