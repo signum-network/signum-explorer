@@ -210,8 +210,8 @@ class Block(models.Model):
     ats = models.TextField(blank=True, null=True)
     version = os.environ.get('BRS_P2P_VERSION')
     if version.startswith('3.4'):
-        total_fee_cash_back = models.IntegerField()
-        total_fee_burnt= models.IntegerField()
+        total_fee_cash_back = PositiveBigIntegerField()
+        total_fee_burnt= PositiveBigIntegerField()
     
     class Meta:
         managed = True
