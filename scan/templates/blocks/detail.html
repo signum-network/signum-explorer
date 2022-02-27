@@ -85,14 +85,22 @@
               <th>Block Reward</th>
               <td>{{ blk|block_reward_with_fee|intcomma|append_symbol }}</td>
             </tr>
-            <tr>
-              <th>Fees</th>
-              <td>{{ blk.total_fee|burst_amount|intcomma|append_symbol }}</td>
-            </tr>
+             <tr>
+               <th>Fees Total</th>
+               <td>{{ blk.total_fee|burst_amount|intcomma|append_symbol }}</td>
+             </tr>
             {% if blk.total_fee_burnt %}
+               <tr>
+                <th>Fees to miner</th>
+                <td>{{ (blk.total_fee -blk.total_fee_burnt -blk.total_fee_cash_back)|burst_amount|intcomma|append_symbol }}</td>
+              </tr>
               <tr>
-                <th>Fees burnt</th>
+                <th>Fees got burnt</th>
                 <td>{{ blk.total_fee_burnt|burst_amount|intcomma|append_symbol }}</td>
+              </tr>
+              <tr>
+                <th>Fees as casback</th>
+                <td>{{ blk.total_fee_cash_back|burst_amount|intcomma|append_symbol }}</td>
               </tr>
             {% endif %}
             <tr class="collapse show_more_info">
