@@ -208,7 +208,10 @@ class Block(models.Model):
     generator_id = PositiveBigIntegerField()
     nonce = PositiveBigIntegerField()
     ats = models.TextField(blank=True, null=True)
-
+    if version.startswith('3.4'):
+        total_fee_cash_back = models.IntegerField()
+        totla_fee_bunt= models.IntegerField()
+    
     class Meta:
         managed = True
         db_table = 'block'
@@ -413,7 +416,9 @@ class Transaction(models.Model):
     ec_block_id = PositiveBigIntegerField(blank=True, null=True)
     has_encrypttoself_message = models.IntegerField()
     recipients = None
-
+    if version.startswith('3.4'):
+        cash_back_id= PositiveBigIntegerField(blank=True, null=True)
+     
     class Meta:
         managed = True
         db_table = 'transaction'
