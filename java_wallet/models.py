@@ -211,7 +211,7 @@ class Block(models.Model):
     version = os.environ.get('BRS_P2P_VERSION')
     if version.startswith('3.4'):
         total_fee_cash_back = models.IntegerField()
-        totla_fee_bunt= models.IntegerField()
+        totla_fee_burnt= models.IntegerField()
     
     class Meta:
         managed = True
