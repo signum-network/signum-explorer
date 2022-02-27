@@ -212,6 +212,7 @@ class Block(models.Model):
     if version.startswith('3.4'):
         total_fee_cash_back = PositiveBigIntegerField()
         total_fee_burnt= PositiveBigIntegerField()
+        total_fee_netto = total_fee - total_fee_burnt - total_fee_cash_back
     
     class Meta:
         managed = True
