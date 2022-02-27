@@ -81,21 +81,24 @@
               <th>Generation time</th>
               <td>{% block_generation_time blk %}</td>
             </tr>
+            {% if blk.total_fee_burnt %}
             <tr>
+              <th>Block Reward</th>
+              <td>{{ blk|block_reward_with_fee_burnt|intcomma|append_symbol }}</td>
+            </tr>
+            {% else %}
+              <tr>
               <th>Block Reward</th>
               <td>{{ blk|block_reward_with_fee|intcomma|append_symbol }}</td>
             </tr>
-             <tr>
-               <th>Total fees</th>
-               <td>{{ blk.total_fee|burst_amount|intcomma|append_symbol }}</td>
-             </tr>
+            {% endif %}
             {% if blk.total_fee_burnt %}
                <tr>
-                <th>Miner</th>
-                <td>{{ blk|block_fee_netto|burst_amount|intcomma|append_symbol }}</td>
+                <th>Miner Fees</th>
+                <td>{{ blk|block_fee_miner|burst_amount|intcomma|append_symbol }}</td>
               </tr>
               <tr>
-                <th>Burnt</th>
+                <th>Burnt Fees</th>
                 <td>{{ blk.total_fee_burnt|burst_amount|intcomma|append_symbol }}</td>
               </tr>
               <tr>
