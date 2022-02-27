@@ -36,6 +36,15 @@ def block_reward(block: Block) -> int:
 def block_reward_with_fee(block: Block) -> float:
     return calc_block_reward(block.height) + block.total_fee / 10 ** 8
 
+@register.filter
+def block_reward_with_fee_burnt(block: Block) -> float:
+    return calc_block_reward(block.height) + (block.total_fee - block.total_fee_burnt) / 10 ** 8
+
+@register.filter
+def block_fee_miner(block: Block) -> float:
+    return block.total_fee -block.total_fee_cash_back - block.total_fee_burnt
+
+
 @cache_memoize(3600)
 @register.filter
 def asset_circulating(asset_id: int) -> int:

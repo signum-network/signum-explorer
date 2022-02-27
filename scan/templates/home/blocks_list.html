@@ -27,7 +27,11 @@
         </td>
         
         <td class="text-nowrap d-none d-sm-table-cell" title="Block reward">
-          <span>{{ block|block_reward_with_fee|rounding:5|intcomma }}</span><br>
+          {% if block.total_fee_burnt %}
+            <span>{{ block|block_reward_with_fee_burnt|rounding:5|intcomma }}</span><br>
+          {% else %}
+            <span>{{ block|block_reward_with_fee|rounding:5|intcomma }}</span><br>
+          {% endif %}
           <span class="text-success"> {% coin_symbol %} </span>
         </td>
       </tr>
