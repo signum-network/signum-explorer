@@ -16,7 +16,7 @@
   <title>{{ 'SITE_TITLE'|env }} {% block title %}{% endblock %}</title>
   <link href="{% static 'favicon.png' %}" rel="icon">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=11">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=14">
   <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.min.css' %}" />
 </head>
 
@@ -27,7 +27,7 @@
     <div class="wrapper wrapper-home">
       {% endif %}
       <header>
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white border-bottom shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top border-bottom shadow mb-3">
           <div class="container" style="max-width: 1400px !important;">
           <a class="mb-2" href="/"><img alt="LOGO" src="{% static 'logo.svg' %}" height="32px"></a>
           <a class="p-2" href="/">
@@ -232,9 +232,27 @@
           .blur()
           .attr('data-original-title', 'Copy to clipboard')
       });
-
+    </script>
+    <script>
+      $(document).ready(function () {
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > 50) {
+            $('#back-to-top').fadeIn();
+          } else {
+            $('#back-to-top').fadeOut();
+          }
+        });
+        // scroll body to 0px on click
+        $('#back-to-top').click(function () {
+          $('body,html').animate({
+            scrollTop: 0
+          }, 400);
+          return false;
+        });
+      });
     </script>
     {% block scripts %}{% endblock %}
+<a id="back-to-top" href="#" class="border btn btn-light back-to-top" role="button"><i class="fas fa-chevron-up"></i></a>
 </body>
 
 </html>
