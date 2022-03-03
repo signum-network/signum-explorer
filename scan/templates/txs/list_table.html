@@ -81,11 +81,11 @@
         </td>
         <td class="text-nowrap">
           <span>{{ tx|tx_quantity:filtered_account|rounding:5|intcomma }}</span><br>
-          <span class="text-success"> {{ tx|tx_symbol }} </span>
+          <span class="text-success"> {{ tx|tx_symbol_distribution }} </span>
         </td>
         <td class="text-nowrap d-none d-sm-table-cell">
-          <span>{{ tx.fee|burst_amount|rounding:5|intcomma }}</span><br>
-          <span class="text-success"> {% coin_symbol %} </span>
+          <span></span><br>
+          <span></span>
         </td>
       </tr>
       {% endif %}
