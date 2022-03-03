@@ -417,8 +417,8 @@ class Transaction(models.Model):
     ec_block_id = PositiveBigIntegerField(blank=True, null=True)
     has_encrypttoself_message = models.IntegerField()
     recipients = None
-    version = os.environ.get('BRS_P2P_VERSION')
-    if version.startswith('3.4'):
+    versionBRS = os.environ.get('BRS_P2P_VERSION')
+    if versionBRS.startswith('3.4'):
         cash_back_id= PositiveBigIntegerField(blank=True, null=True)
      
     class Meta:
