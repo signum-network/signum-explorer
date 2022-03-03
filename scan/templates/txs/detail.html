@@ -95,7 +95,7 @@
               <th>Fee</th>
               <td>{{ tx.fee|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ tx.fee|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
             </tr>
-             {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
+             {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:tx.sender_id > 0 %}
               <tr>
                 <th>Distributed Token </th>
                 <td>{{ tx|tx_symbol_distribution}} </td>
