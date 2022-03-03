@@ -62,8 +62,8 @@
       </tr>
       {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
         <td></td>
-        <td></td>
-        <td </td>
+        <td class="d-none d-sm-table-cell"></td>
+        <td class="text-nowrap d-none d-sm-table-cell"></td>
         <td>
            <span> {{ tx|tx_type }}</span>
             <br>
