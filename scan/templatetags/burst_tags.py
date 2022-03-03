@@ -48,11 +48,7 @@ def block_fee_miner(block: Block) -> float:
 @cache_memoize(3600)
 @register.filter
 def asset_circulating(asset_id: int) -> int:
-    version = os.environ.get('BRS_P2P_VERSION')
     asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
-
-    if version.startswith('3.3'):
-        return int(asset_details["quantityCirculatingQNT"])
     return int(asset_details["quantityQNT"])
 
 @register.filter
