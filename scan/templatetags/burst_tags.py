@@ -198,15 +198,20 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
     account_id = filtered_account
     if account_id and type(account_id) is str:
         account_id = int(account_id)
-    if tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and account_id:
+    if account_id and tx.sender_id=account_id and tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
+        asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
+        name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+        asset_amount = int.from_bytes(tx.attachment_bytes[offset+24:offset+32], byteorder=sys.byteorder)
+        return div_decimals(asset_amount, decimals)
+    elif tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and account_id:
         indirect = (IndirecIncoming.objects.using("java_wallet")
                 .filter(account_id=account_id, transaction_id=tx.id)
                 .order_by("-height").first()
         )
         if indirect and indirect.quantity:
             return indirect.quantity
-
-    return 0.0
+    else:
+        return 0.0
 
 
 @register.filter
