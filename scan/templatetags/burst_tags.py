@@ -196,6 +196,7 @@ def tx_amount(tx: Transaction, filtered_account = None) -> float:
 @register.filter
 def tx_quantity(tx: Transaction, filtered_account = None) -> float:
     account_id = filtered_account
+    offset = asset_offset(tx.height)
     if account_id and type(account_id) is str:
         account_id = int(account_id)
     if account_id and tx.sender_id==account_id and tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
