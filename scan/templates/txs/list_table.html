@@ -53,7 +53,7 @@
           <span class="text-success"> {% coin_symbol %} </span>
         </td>
       </tr>
-      {% if tx.type == 2 and tx.subtype == 8 tx|tx_quantity:filtered_account  > 0 %}
+      {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
         <td></td>
         <td></td>
         <td </td>
