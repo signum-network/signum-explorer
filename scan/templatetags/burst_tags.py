@@ -200,12 +200,12 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
     if account_id and type(account_id) is str:
         account_id = int(account_id)
     if account_id and tx.sender_id==account_id and tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
-        asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
+        asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
         name, decimals, total_quantity, mintable = get_asset_details(asset_id)
         quantity = int.from_bytes(tx.attachment_bytes[offset+24:offset+32], byteorder=sys.byteorder)
         return div_decimals(quantity, decimals)
     elif tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and account_id:
-        asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
+        asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
         name, decimals, total_quantity, mintable = get_asset_details(asset_id)
         indirect = (IndirecIncoming.objects.using("java_wallet")
                 .filter(account_id=account_id, transaction_id=tx.id)
@@ -237,7 +237,7 @@ def tx_symbol_distribution(tx: Transaction) -> str:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         offset = asset_offset(tx.height)
         if tx.subtype  == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
-            asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
+            asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
             name = name.upper()
             if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
@@ -246,7 +246,19 @@ def tx_symbol_distribution(tx: Transaction) -> str:
 
     return ''
 
+@register.filter
+def tx_asset_holder(tx: Transaction) -> str:
+    if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
+        offset = asset_offset(tx.height)
+        if tx.subtype  == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
+            asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
+            name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+            name = name.upper()
+            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+                return str(asset_id)[0:10]
+            return name
 
+    return ''
 
 
 @register.filter
