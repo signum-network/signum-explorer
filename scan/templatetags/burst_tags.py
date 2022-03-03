@@ -49,7 +49,7 @@ def block_fee_miner(block: Block) -> float:
 @register.filter
 def asset_circulating(asset_id: int) -> int:
     asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
-    return int(asset_details["quantityQNT"])
+    return int(asset_details["quantityCirculatingQNT"])
 
 @register.filter
 def burst_amount(value: int) -> float:
