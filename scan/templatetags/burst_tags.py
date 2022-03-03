@@ -194,6 +194,23 @@ def tx_amount(tx: Transaction, filtered_account = None) -> float:
     return burst_amount(tx.amount)
 
 @register.filter
+def tx_quantity(tx: Transaction, filtered_account = None) -> float:
+    account_id = filtered_account
+    if account_id and type(account_id) is str:
+        account_id = int(account_id)
+
+    if tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and account_id:
+        indirect = (IndirecIncoming.objects.using("java_wallet")
+                .filter(account_id=account_id, transaction_id=tx.id)
+                .order_by("-height").first()
+            )
+            if indirect and indirect.quantity:
+                return burst_amount(indirect.quantity)
+
+    return burst_amount(0)
+
+
+@register.filter
 def tx_symbol(tx: Transaction) -> str:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         offset = asset_offset(tx.height)
