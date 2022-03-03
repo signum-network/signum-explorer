@@ -53,11 +53,11 @@
           <span class="text-success"> {% coin_symbol %} </span>
         </td>
       </tr>
-      {% if tx.type == 2 and tx.subtype == 8 and  tx|tx_quantity > 0.0  %}
+      {% if tx.type == 2 and tx.subtype == 8  %}
         <td><a href="{% url 'tx-detail' tx.id %}">{{ tx.id|truncatechars:10 }}</a></td>
         <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' tx.height %}">{{ tx.height }}</a></td>
         <td class="text-nowrap d-none d-sm-table-cell">{{ tx.block_timestamp|naturaltime }}</td>
-        <td>{{ tx|tx_type }}</td>
+        <td>{{ tx|tx_quantity  }}</td>
         <td class="text-nowrap d-none d-sm-table-cell">
           {% include "account_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
         </td>
