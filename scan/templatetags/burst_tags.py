@@ -204,9 +204,9 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
                 .order_by("-height").first()
         )
         if indirect and indirect.quantity:
-            return burst_amount(indirect.quantity)
+            return indirect.quantity
 
-    return burst_amount(0)
+    return 0.0
 
 
 @register.filter
