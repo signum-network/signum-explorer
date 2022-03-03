@@ -126,6 +126,9 @@ def tx_is_in(tx: Transaction, account_id = None) -> bool:
 
         if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
             return True
+        
+        if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
+            return True
 
     return False
 
