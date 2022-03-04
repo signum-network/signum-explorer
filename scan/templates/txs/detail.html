@@ -104,7 +104,6 @@
                 <th>Quantity</th>
                 <td>{{ tx|tx_quantity:tx.sender_id|rounding:5|intcomma }} </td>
               </tr>
-              <div>{% include "txs/list_table.html" with filtered_transaction=tx.id %}</div>
             {% endif %}
             <tr class="collapse show_more_info">
               <th style="min-width: 160px;">Version</th>
@@ -192,6 +191,9 @@
         <a data-toggle="collapse" data-target=".show_more_info" href="#">Toggle details</a>
 
       </div>
+       {% if tx.type == 2 and tx.subtype == 8 %}
+       <div>{% include "txs/list_table.html" with filtered_transaction=tx.id %}</div>
+       {% endif %}
     </div>
   </div>
 
