@@ -104,6 +104,7 @@
                 <th>Quantity</th>
                 <td>{{ tx|tx_quantity:tx.sender_id|rounding:5|intcomma }} </td>
               </tr>
+              {% include "txs/list_table.html" with filtered_transaction=tx.id %}
             {% endif %}
             <tr class="collapse show_more_info">
               <th style="min-width: 160px;">Version</th>
