@@ -46,7 +46,11 @@
             </tr>
             <tr>
               <th>Type</th>
-              <td>{{ tx|tx_type }}</td>
+              <td>{{ tx|tx_type }}
+              {% if tx.type == 2 and tx.subtype == 8 %}
+                <span> for Token </span> <span class="text-success"> {{ tx|tx_asset_holder}}</span>
+              {% endif %}
+              </td>
             </tr>
             {% if tx.type == 2 and tx|tx_asset_id != 0 %}
             <tr>
@@ -71,7 +75,11 @@
             <tr>
               <th>To</th>
               <td>
-                {% include "recipient_link.html" with tx=tx|tx_load_recipients oneline=True %}
+                {% if tx.recipient_id or tx.multiout %}
+                  {% include "recipient_link.html" with tx=tx|tx_load_recipients oneline=True %}
+               {% else %}
+                  {{ tx|tx_type }}
+                {% endif %}
               </td>
             </tr>
             <tr>
@@ -87,6 +95,16 @@
               <th>Fee</th>
               <td>{{ tx.fee|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ tx.fee|burst_amount|in_usd|rounding:4|intcomma }})</span></td>
             </tr>
+             {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:tx.sender_id > 0 %}
+              <tr>
+                <th>Distributed Token </th>
+                <td>{{ tx|tx_symbol_distribution}} </td>
+              </tr>
+               <tr>
+                <th>Quantity</th>
+                <td>{{ tx|tx_quantity:tx.sender_id|rounding:5|intcomma }} </td>
+              </tr>
+            {% endif %}
             <tr class="collapse show_more_info">
               <th style="min-width: 160px;">Version</th>
               <td>{{ tx.version }}</td>
@@ -171,7 +189,6 @@
           </table>
         </div>
         <a data-toggle="collapse" data-target=".show_more_info" href="#">Toggle details</a>
-
       </div>
     </div>
   </div>
