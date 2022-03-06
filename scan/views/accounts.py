@@ -24,7 +24,7 @@ from scan.helpers.queries import (
 from scan.views.assets import fill_data_asset_trade, fill_data_asset_transfer
 from scan.views.base import IntSlugDetailView
 from scan.views.transactions import fill_data_transaction
-
+from scan.templatetags.burst_tags import cashback_amount
 
 class AccountsListView(ListView):
     model = Account
@@ -103,10 +103,15 @@ class AddressDetailView(IntSlugDetailView):
         
         cbs_cnt = cash_query.count()
         cbs = cash_query.order_by("-height")[:min(cbs_cnt, 15)]
+        total_cashback = 0 
+        for cb in cash_query:
+            total_cashback += cashback_amount(cb.fee)
         
+        context["total_cashback"]=total_cashback
         context["cbs"] = cbs
         context["cbs_cnt"] = cbs_cnt
         
+
         # assets
 
         assets_cnt = (

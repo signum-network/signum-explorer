@@ -27,7 +27,7 @@ class PositiveBigIntegerField(BigIntegerField):
         value = super().get_prep_value(value)
         if value <= BigIntegerField.MAX_BIGINT:
             return value
-        return c_long(value).value
+        return c_ulonglong(value).value
 
     @staticmethod
     def from_db_value(value, expression, connection):

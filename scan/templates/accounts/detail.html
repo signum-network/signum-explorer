@@ -87,6 +87,15 @@
                 <span class="text-info">(${{ address.balance|sub:address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
               </td>
             </tr>
+            {% if cbs_cnt > 0 %}
+            <tr>
+              <th>Total Cashback</th>
+              <td>
+                {{ total_cashback|intcomma|floatformat:5|append_symbol }}<br class="d-md-none" />
+                <span class="text-info">(${{ total_cashback|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
+              </td>
+            </tr>
+            {% endif %}
             {% if not address.is_contract %}
             <tr>
               <th>Public Key</th>
