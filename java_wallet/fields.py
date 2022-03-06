@@ -33,7 +33,7 @@ class PositiveBigIntegerField(BigIntegerField):
     def from_db_value(value, expression, connection):
         if value is None or value >= 0:
             return value
-        return c_ulong(value).value
+        return c_ulonglong(value).value
 
 
 class TimestampField(DateTimeField):
