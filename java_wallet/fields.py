@@ -27,13 +27,13 @@ class PositiveBigIntegerField(BigIntegerField):
         value = super().get_prep_value(value)
         if value <= BigIntegerField.MAX_BIGINT:
             return value
-        return c_ulonglong(value).value
+        return c_ulong(value).value
 
     @staticmethod
     def from_db_value(value, expression, connection):
         if value is None or value >= 0:
             return value
-        return c_ulonglong(value).value
+        return c_ulong(value).value
 
 
 class TimestampField(DateTimeField):
