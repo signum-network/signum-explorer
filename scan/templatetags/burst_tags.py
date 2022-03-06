@@ -56,6 +56,10 @@ def burst_amount(value: int) -> float:
     return round(value / 100000000.0, 8)
 
 @register.filter
+def cashback_amount(value: int) -> float:
+    return round(value / 400000000.0, 8)
+
+@register.filter
 def append_symbol(value: float) -> str:
     return value + " " + os.environ.get("COIN_SYMBOL")
 

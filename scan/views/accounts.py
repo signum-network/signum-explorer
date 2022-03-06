@@ -95,7 +95,18 @@ class AddressDetailView(IntSlugDetailView):
 
         context["txs"] = txs
         context["txs_cnt"] = txs_cnt
-
+        
+        #cashback
+        cash_query = (
+            Transaction.objects.using("java_wallet")
+            .filter(Q(cash_back_id=obj.id)))
+        
+        cbs_cnt = cash_query.count()
+        cbs = cash_query.order_by("-height")[:min(cbs_cnt, 15)]
+        
+        context["cbs"] = cbs
+        context["cbs_cnt"] = cbs_cnt
+        
         # assets
 
         assets_cnt = (
@@ -110,10 +121,7 @@ class AddressDetailView(IntSlugDetailView):
         )
 
         for asset in assets:
-            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(
-                asset.asset_id
-            )
-
+            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(asset.asset_id)
         context["assets"] = assets
         context["assets_cnt"] = assets_cnt
 

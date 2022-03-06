@@ -44,12 +44,12 @@ def get_ap_code(ap_code_hash_id: int) -> bytearray:
     return ap_code
 
 def get_at_state(id: int) -> (bytearray, int):
-    return (
+    return (        
         AtState.objects.using("java_wallet")
         .filter(at_id=id, latest=True)
         .values_list("state", "min_activate_amount")
         .first()
-    )
+        )
 
 @cache_memoize(None)
 def check_is_contract(account_id: int) -> bool:
@@ -81,24 +81,12 @@ def query_asset_treasury(asset, account_id) -> bool:
 
 @cache_memoize(None)
 def get_asset_details(asset_id: int) -> (str, int, int, bool):
-    version = os.environ.get('BRS_P2P_VERSION')
-
-    if version.startswith('3.3'):
-        asset_details = (
-            Asset.objects.using("java_wallet")
-            .filter(id=asset_id)
-            .values_list("name", "decimals", "quantity", "mintable")
-            .first()
+    asset_details = (
+        Asset.objects.using("java_wallet")
+        .filter(id=asset_id)
+        .values_list("name", "decimals", "quantity", "mintable")
+        .first()
         )
-    else:
-        asset_details = (
-            Asset.objects.using("java_wallet")
-            .filter(id=asset_id)
-            .values_list("name", "decimals", "quantity")
-            .first()
-        )
-        asset_details += (False,)
-
     return asset_details
 
 
