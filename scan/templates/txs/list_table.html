@@ -23,12 +23,14 @@
         <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' tx.height %}">{{ tx.height }}</a></td>
         <td class="text-nowrap d-none d-sm-table-cell">{{ tx.block_timestamp|naturaltime }}</td>
         <td>
-          <span> {{ tx|tx_type }}</span>
-           {% if tx.type == 2 and tx.subtype == 8 %}
+          {% if tx.type == 2 and tx.subtype == 8 %}
+            <span><a href="{% url 'distribution' %}?a={{ tx.id }}">{{ tx|tx_type }}</a></span>
             <br>
             <span>for Token </span>
             <span class="text-success">  {{ tx|tx_asset_holder}}</span>
-           {% endif %}
+          {% else %}
+            <span> {{ tx|tx_type }}</span>
+          {% endif %}
         </td>
         <td class="text-nowrap d-none d-sm-table-cell">
           {% include "account_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
@@ -61,6 +63,7 @@
         </td>
       </tr>
       {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
+      <tr>
         <td></td>
         <td class="d-none d-sm-table-cell"></td>
         <td class="text-nowrap d-none d-sm-table-cell"></td>

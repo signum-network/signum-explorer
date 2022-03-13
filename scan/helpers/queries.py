@@ -1,7 +1,9 @@
 import time
 import os
 
+from ctypes import c_ulonglong, c_longlong
 from datetime import datetime
+from MySQLdb import Timestamp
 from django.conf import settings
 
 from django.db.models import Sum
@@ -11,7 +13,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction
+from java_wallet.models import Account, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirecIncoming
 
 
 @cache_memoize(3600)
@@ -32,6 +34,27 @@ def get_account_name(account_id: int) -> str:
             .first()
         )
     return account_name
+
+@cache_memoize(3600)
+def get_details_by_tx(transaction_id:int) -> ( int, int,int):
+    # Value = Sender, Reciepent,Timestamp
+    transactions_data = (
+        Transaction.objects.using("java_wallet")
+        .filter(id =transaction_id )
+        .values_list("recipient_id","sender_id","timestamp")
+        .first()
+    )
+    return transactions_data
+
+@cache_memoize(3600)
+def get_single_tx_class(transaction_id:int):
+    # Value = Sender, Reciepent,Timestamp
+    transactions_data = (
+        Transaction.objects.using("java_wallet")
+        .filter(id =transaction_id )
+        .first()
+    )
+    return transactions_data
 
 # @cache_memoize(None)
 def get_ap_code(ap_code_hash_id: int) -> bytearray:
@@ -88,7 +111,6 @@ def get_asset_details(asset_id: int) -> (str, int, int, bool):
         .first()
         )
     return asset_details
-
 
 @cache_memoize(None)
 def get_txs_count_in_block(block_id: int) -> int:

@@ -16,9 +16,7 @@ from scan.views.filters.assets import AssetTransferFilter, TradeFilter
 
 
 def fill_data_asset_transfer(transfer):
-    transfer.name, transfer.decimals, transfer.total_quantity, mintable = get_asset_details(
-        transfer.asset_id
-    )
+    transfer.name, transfer.decimals, transfer.total_quantity, mintable = get_asset_details(transfer.asset_id)
     transfer.sender_name = get_account_name(transfer.sender_id)
     transfer.recipient_name = get_account_name(transfer.recipient_id)
 
@@ -171,7 +169,6 @@ class AssetDetailView(IntSlugDetailView):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
         obj.account_name = get_account_name(obj.account_id)
-
         name, decimals, total_quantity, mintable = get_asset_details(obj.id)
 
         # assets transfer

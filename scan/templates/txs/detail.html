@@ -79,6 +79,10 @@
                   {% include "recipient_link.html" with tx=tx|tx_load_recipients oneline=True %}
                {% else %}
                   {{ tx|tx_type }}
+                  {% if tx.type == 2 and tx.subtype == 8 %}
+                  <br>
+                  <span><a href="{% url 'distribution' %}?a={{ tx.id }}">Click for more details</a> </span>
+                  {% endif %}
                 {% endif %}
               </td>
             </tr>

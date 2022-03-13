@@ -1,0 +1,75 @@
+{% load humanize %}
+{% load burst_tags %}
+
+<div class="table-responsive">
+  <table class="table table-hover small table-sm">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col" class="d-none d-sm-table-cell">Block</th>
+      <th scope="col" class="d-none d-sm-table-cell">Timestamp</th>
+      <th scope="col">Type</th>
+      <th scope="col" class="d-none d-sm-table-cell">From</th>
+      <th scope="col"></th>
+      <th scope="col" class="d-none d-sm-table-cell">To</th>
+      <th scope="col">Value</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for dist in distribution %}
+        <tr>
+          <td><a href="{% url 'tx-detail' dist.transaction_id %}">{{ dist.transaction_id|truncatechars:10 }}</a></td>
+          <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' dist.height %}">{{ dist.height }}</a></td>
+          <td class="text-nowrap d-none d-sm-table-cell">{{ dist.timestamp|naturaltime }}</td>
+          <td>
+            <span>{{ dist.tx|tx_type }}</span>
+            <br>
+            <span>for Token </span>
+            <span class="text-success">  {{ dist.tx|tx_asset_holder}}</span>
+          </td>
+          <td class="text-nowrap d-none d-sm-table-cell">
+          {% include "account_link.html" with account_id=dist.sender_id account_name=dist.sender_name %}
+          </td>
+          <td>
+          <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(222, 249, 210)!important; color: rgb(35, 118, 64); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">
+            IN</span>
+          </td>
+          <td class="text-nowrap d-none d-sm-table-cell">
+          {% include "account_link.html" with account_id=dist.account_id account_name=dist.reciever_name %}
+          </td>
+          <td class="text-nowrap">
+              <span>{{ dist.amount|burst_amount|rounding:5|intcomma }}</span><br>
+              <span class="text-success"> {{ dist.tx|tx_symbol }} </span>
+          </td>
+        </tr>
+          {%  if dist.quantity > 0 %}
+          <tr>
+            <td></td>
+            <td class="d-none d-sm-table-cell"></td>
+            <td class="text-nowrap d-none d-sm-table-cell"></td>
+            <td>
+              <span>{{ dist.tx|tx_type }}</span>
+              <br>
+              <span>for Token </span>
+              <span class="text-success">  {{ dist.tx|tx_asset_holder}}</span>
+            </td>
+            <td class="text-nowrap d-none d-sm-table-cell">
+              {% include "account_link.html" with account_id=dist.sender_id account_name=dist.sender_name %}
+            </td>
+            <td>
+            <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(222, 249, 210)!important; color: rgb(35, 118, 64); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">
+              IN</span>
+            </td>
+            <td class="text-nowrap d-none d-sm-table-cell">
+            {% include "account_link.html" with account_id=dist.account_id account_name=dist.reciever_name %}
+            </td>
+            <td class="text-nowrap">
+              <span>{{ dist.tx|tx_quantity:dist.account_id|rounding:5|intcomma }}</span><br>
+              <span class="text-success"> {{ dist.tx|tx_symbol_distribution}} </span>
+            </td>
+          </tr>
+          {% endif %}
+        {% endfor %}
+    </tbody>
+  </table>
+</div>

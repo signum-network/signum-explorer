@@ -42,9 +42,11 @@ from scan.views.pending_transactions import pending_transactions
 from scan.views.search import search_view
 from scan.views.transactions import TxDetailView, TxListView, tx_export_csv
 from scan.views.cashbacks import CBListView
+from scan.views.distribution import DistributionListView
 
 urlpatterns = [
     path("", index, name="index"),
+    path("distribution/", DistributionListView.as_view(), name="distribution"),
     path("cbs/", CBListView.as_view(), name="cbs"),
     path("blocks/", BlockListView.as_view(), name="blocks"),
     path("block/<str:height>", BlockDetailView.as_view(), name="block-detail"),
