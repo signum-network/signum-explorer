@@ -88,8 +88,13 @@
             </tr>
             <tr>
               <th>Value</th>
-              <td>{{ tx|tx_amount|intcomma }} {{ tx|tx_symbol }}
-                <!-- do not show usd value of token transfers, they are in the token units -->
+              <td>
+                {% if tx.type == 2 and tx.subtype == 3 or tx.subtype == 2 %}
+                  {{ tx|tx_quantity:filtered_account|rounding:5|intcomma }}
+                {% else %}
+                  {{ tx|tx_amount|intcomma }} 
+                {% endif %}
+                {{ tx|tx_symbol }}
                 {% if tx.type != 2 %}
                 <span class="text-info">(${{ tx|tx_amount|in_usd|rounding:4|intcomma }})</span>
                 {% endif %}

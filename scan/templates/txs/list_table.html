@@ -53,10 +53,15 @@
             {{ tx|tx_type }}
           {% endif %}
         </td>
-        <td class="text-nowrap">
-          <span>{{ tx|tx_amount:filtered_account|rounding:5|intcomma }}</span><br>
-          <span class="text-success"> {{ tx|tx_symbol }} </span>
-        </td>
+          <td class="text-nowrap">
+            {% if tx.type == 2 and tx.subtype == 3 or tx.subtype == 2 %}
+              <span>{{ tx|tx_quantity:filtered_account|rounding:5|intcomma }}</span><br>
+              <span class="text-success"> {{ tx|tx_symbol }} </span>
+            {%else %}        
+              <span>{{ tx|tx_amount:filtered_account|rounding:5|intcomma }}</span><br>
+              <span class="text-success"> {{ tx|tx_symbol }} </span>
+            {% endif %}
+          </td>
         <td class="text-nowrap d-none d-sm-table-cell">
           <span>{{ tx.fee|burst_amount|rounding:5|intcomma }}</span><br>
           <span class="text-success"> {% coin_symbol %} </span>
