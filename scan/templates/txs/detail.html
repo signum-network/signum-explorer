@@ -90,7 +90,7 @@
               <th>Value</th>
               <td>
                 {% if tx.type == 2 and tx.subtype == 3 or tx.subtype == 2 %}
-                  {{ tx|tx_quantity:filtered_account|rounding:5|intcomma }}
+                  {{ tx|tx_quantity|rounding:5|intcomma }}
                 {% else %}
                   {{ tx|tx_amount|intcomma }} 
                 {% endif %}
