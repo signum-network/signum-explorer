@@ -220,7 +220,7 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
         )
         if indirect and indirect.quantity:
             return div_decimals(indirect.quantity,decimals)
-    elif tx.subtype == TxSubtypeColoredCoins.BID_ORDER_PLACEMENT or tx.subtype == TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT:
+    elif tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
         asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
         name, decimals, total_quantity, mintable = get_asset_details(asset_id)
         quantity = int.from_bytes(tx.attachment_bytes[offset+8:offset+16], byteorder=sys.byteorder)
