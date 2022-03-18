@@ -57,7 +57,7 @@ def get_country_by_ip(ip: str) -> str:
         response = requests.get(f"http://ip-api.com/json/{ip}")
         response.raise_for_status()
         json_response = response.json()
-        return json_response["geoplugin_countryCode"] or "??"
+        return json_response["countryCode"] or "??"
     except (RequestException, ValueError, KeyError):
         return "??"
 
