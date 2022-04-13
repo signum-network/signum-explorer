@@ -151,7 +151,7 @@
             </tr>
             {% if tx.height != 0 %}
             {% if tx.has_message %}
-            <tr class="collapse show_more_info">
+            <tr>
               <th>Message</th>
               <td class="text-monospace">
                 <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message }}</textarea>
