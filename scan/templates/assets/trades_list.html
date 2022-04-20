@@ -52,7 +52,7 @@
           {% if asset.decimals == 0 %}
             {{ asset.quantity|intcomma }}
           {% else %}
-            {{ asset.quantity|div_decimals:asset.decimals|intcomma }}
+            {{ asset.quantity|div_decimals:asset.decimals|floatformat:asset.decimals||intcomma }}
           {% endif %}
         </td>
         <td class="text-nowrap">{{ asset.price|mul_decimals:asset.decimals|burst_amount|intcomma }}
