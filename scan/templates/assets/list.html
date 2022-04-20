@@ -91,7 +91,7 @@
                   {% if asset.decimals == 0 %}
                     {{ asset.id|asset_circulating|intcomma }}
                   {% else %}
-                    {{ asset.id|asset_circulating|div_decimals:asset.decimals|floatformat:0|intcomma }}
+                    {{ asset.id|asset_circulating|div_decimals:asset.decimals|floatformat:asset.decimals|intcomma }}
                   {% endif %}
                 </td>
                 <td class="text-nowrap">
