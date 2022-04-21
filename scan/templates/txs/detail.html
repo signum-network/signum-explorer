@@ -77,7 +77,9 @@
               <td>
                 {% if tx.recipient_id or tx.multiout %}
                   {% include "recipient_link.html" with tx=tx|tx_load_recipients oneline=True %}
-               {% else %}
+                {% elif  tx.recipient_id == Null and tx.subtype == 1 %}
+                  Burning Address
+                {% else %}
                   {{ tx|tx_type }}
                   {% if tx.type == 2 and tx.subtype == 8 %}
                   <br>
