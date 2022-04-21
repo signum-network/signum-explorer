@@ -233,7 +233,7 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
 def tx_symbol(tx: Transaction) -> str:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         offset = asset_offset(tx.height)
-        if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,
+        if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,TxSubtypeColoredCoins.ASSET_MINT,
             TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]):
             asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
