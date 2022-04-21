@@ -100,6 +100,11 @@
                 {% if tx.type != 2 %}
                 <span class="text-info">(${{ tx|tx_amount|in_usd|rounding:4|intcomma }})</span>
                 {% endif %}
+                {% if tx.type == 2 and tx.subtype == 1 and tx.amount > 0 %}
+                <br> 
+                <span>{{ tx.amount|burst_amount|rounding:5|intcomma }}</span>
+                 <span class="text-success"> {% coin_symbol %} </span>
+              {% endif %}
               </td>
             </tr>
             <tr>
