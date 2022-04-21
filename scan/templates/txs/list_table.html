@@ -54,7 +54,7 @@
           {% endif %}
         </td>
           <td class="text-nowrap">
-            {% if tx.type == 2 and tx.subtype == 3 or tx.subtype == 2 %}
+            {% if tx.type == 2 and tx.subtype == 3 or tx.subtype == 2 or tx.subtype == 6 %}
               <span>{{ tx|tx_quantity:filtered_account|rounding:5|intcomma }}</span><br>
               <span class="text-success"> {{ tx|tx_symbol }} </span>
             {%else %}        

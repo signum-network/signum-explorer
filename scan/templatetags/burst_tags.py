@@ -260,7 +260,13 @@ def tx_symbol_distribution(tx: Transaction) -> str:
             if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
-
+        elif tx.subtype == TxSubtypeColoredCoins.ASSET_MINT:
+            asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
+            name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+            name = name.upper()
+            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+                return str(asset_id)[0:10]
+            return name
     return ''
 
 @register.filter
