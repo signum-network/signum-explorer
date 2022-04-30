@@ -61,6 +61,7 @@ def get_country_by_ip(ip: str) -> str:
         logger.info("Geo lookup, found peer from: %s", georesponse)
         return json_response["country_code"] or "??"
     except (RequestException, ValueError, KeyError):
+        logger.warning("Geo lookup ERROR!")
         return "??"
 
 
