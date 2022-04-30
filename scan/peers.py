@@ -54,11 +54,11 @@ def get_ip_by_domain(peer: str) -> str or None:
 @cache_memoize(60 * 60 * 24 * 7)
 def get_country_by_ip(ip: str) -> str:
     try:
-        response = requests.get(f"https://ipwhois.app/json/{ip}")
+        response = requests.get(f"https://ipwho.is/{ip}")
         response.raise_for_status()
         json_response = response.json()
-        georesponse = json_response["completed_requests"] or "??"
-        logger.info("Geo Requests of 10k: %s", georesponse)
+        georesponse = json_response["continent"] or "??"
+        logger.info("Found node from: %s", georesponse)
         return json_response["country_code"] or "??"
     except (RequestException, ValueError, KeyError):
         return "??"
