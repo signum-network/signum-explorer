@@ -58,7 +58,7 @@ def get_country_by_ip(ip: str) -> str:
         response.raise_for_status()
         json_response = response.json()
         georesponse = json_response["continent"] or "??"
-        logger.info("Found node from: %s", georesponse)
+        logger.info("Geo lookup, found peer from: %s", georesponse)
         return json_response["country_code"] or "??"
     except (RequestException, ValueError, KeyError):
         return "??"
