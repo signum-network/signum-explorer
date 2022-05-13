@@ -41,11 +41,11 @@
               <th scope="col" class="d-none d-sm-table-cell">Timestamp</th>
               <th scope="col" class="d-none d-sm-table-cell">Txn</th>
               <th scope="col">Sent</th>
-              <th scope="col" class="d-none d-sm-table-cell">Reward</th>
-              <th scope="col" class="d-none d-sm-table-cell">Burned</th>
+              <th scope="col" >Reward</th>
+              <th scope="col" >Burned</th>
               <th scope="col" class="d-none d-sm-table-cell">Size</th>
               <th scope="col" class="d-none d-sm-table-cell">Miner</th>
-              <th scope="col">Pool</th>
+              <th scope="col" class="d-none d-sm-table-cell">Pool</th>
             </tr>
             </thead>
             <tbody>
@@ -64,7 +64,7 @@
                   <span>{{ block.total_amount|burst_amount|rounding:5|intcomma }}</span><br>
                   <span class="text-success"> {% coin_symbol %} </span>
                 </td>
-                <td class="text-nowrap d-none d-sm-table-cell">
+                <td class="text-nowrap ">
                   {% if block.total_fee_burnt %}
                     <span> {{ block|block_reward_with_fee_burnt|rounding:5|intcomma }} </span><br>
                   {% else %}
@@ -72,7 +72,7 @@
                   {% endif %}
                   <span class="text-success"> {% coin_symbol %} </span>
                 </td>
-                <td class="text-nowrap d-none d-sm-table-cell">
+                <td class="text-nowrap ">
                   <span>🔥 {{ block.total_fee_burnt|burst_amount|rounding:5|intcomma }} </span><br>
                   <span class="text-success"> {% coin_symbol %} </span>
                 </td>
@@ -80,7 +80,7 @@
                 <td class="text-nowrap d-none d-sm-table-cell">
                   {% include "account_link.html" with account_id=block.generator_id account_name=block.generator_name filtered_account=request.GET.m %}
                 </td>
-                <td class="text-nowrap">
+                <td class="text-nowrap d-none d-sm-table-cell">
                   {% if block.pool_id and block.pool_id != block.generator_id %}
                     {% include "account_link.html" with account_id=block.pool_id account_name=block.pool_name %}
                   {% else %}
