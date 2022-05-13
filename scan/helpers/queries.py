@@ -36,6 +36,16 @@ def get_account_name(account_id: int) -> str:
     return account_name
 
 @cache_memoize(3600)
+def get_account_balance(account_id: int) -> str:
+    account_balance = (
+        Account.objects.using("java_wallet")
+        .filter(id=account_id, latest=True)
+        .values_list("balance", flat=True)
+        .first()
+    )
+    return account_balance
+
+@cache_memoize(3600)
 def get_details_by_tx(transaction_id:int) -> ( int, int,int):
     # Value = Sender, Reciepent,Timestamp
     transactions_data = (

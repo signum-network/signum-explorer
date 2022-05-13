@@ -22,7 +22,7 @@ from scan.caching_data.exchange import CachingExchangeData
 import struct
 import os
 
-from scan.helpers.queries import get_asset_details, get_asset_price, query_asset_treasury
+from scan.helpers.queries import get_asset_details, get_asset_price, query_asset_treasury, get_account_balance
 
 register = template.Library()
 
@@ -289,6 +289,10 @@ def tx_asset_id(tx: Transaction) -> int:
             return asset_id
 
     return 0
+
+@register.filter
+def account_balance(account_id : int) -> float:
+    return get_account_balance(account_id)
 
 @register.filter
 def asset_price(asset_id : int) -> float:
