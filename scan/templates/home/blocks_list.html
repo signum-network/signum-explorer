@@ -26,7 +26,8 @@
           <span> Miner {% include "account_link.html" with account_id=block.generator_id account_name=block.generator_name %}</span>
 
         </td>
-        <td class="text-nowrap d-none d-sm-table-cell align-top" title="Block reward">
+        <td class="text-nowrap align-top" title="Block reward">
+          <span>Reward</span><br>
           {% if block.total_fee_burnt %}
             <span>{{ block|block_reward_with_fee_burnt|rounding:5|intcomma }}</span><br>
           {% else %}
@@ -34,7 +35,8 @@
           {% endif %}
           <span class="text-success"> {% coin_symbol %} </span>
         </td>
-        <td class="text-nowrap d-none d-sm-table-cell align-top" title="Block burned">
+        <td class="text-nowrap align-top" title="Block burned">
+            <span>Burned</span><br>
             <span> 🔥 {{ block.total_fee_burnt|burst_amount|rounding:5|intcomma }}</span><br>
             <span class="text-success"> {% coin_symbol %} </span>
         </td>
