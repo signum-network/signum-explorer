@@ -6,7 +6,12 @@
     <tbody>
     {% for tx in txs %}
       <tr>
-        <td class="text-nowrap">
+        <td  class="text-nowrap align-top">
+          <span class="btn btn-outline-primary">
+            <span class="btn-icon__inner text-dark">TX</span>
+          </span>
+        </td>
+        <td class="text-nowrap align-top">
           <a href="{% url 'tx-detail' tx.id %}">{{ tx.id|truncatechars:10 }}</a><br>
           <span class="small">{{ tx.block_timestamp|naturaltime }}</span>
         </td>
@@ -20,7 +25,7 @@
             {{ tx|tx_type }}
           {% endif %}
         </td>
-        <td class="text-nowrap d-none d-sm-table-cell" title="Amount">
+        <td class="text-nowrap d-none d-sm-table-cell align-top" title="Amount">
           <span>{{ tx|tx_amount|rounding:5|intcomma }}</span><br>
           <span class="text-success"> {{ tx|tx_symbol }} </span>
         </td>

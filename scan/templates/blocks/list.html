@@ -42,6 +42,7 @@
               <th scope="col" class="d-none d-sm-table-cell">Txn</th>
               <th scope="col">Sent</th>
               <th scope="col" class="d-none d-sm-table-cell">Reward</th>
+              <th scope="col" class="d-none d-sm-table-cell">Burned</th>
               <th scope="col" class="d-none d-sm-table-cell">Size</th>
               <th scope="col" class="d-none d-sm-table-cell">Miner</th>
               <th scope="col">Pool</th>
@@ -69,6 +70,10 @@
                   {% else %}
                     <span> {{ block|block_reward_with_fee|rounding:5|intcomma }} </span><br>
                   {% endif %}
+                  <span class="text-success"> {% coin_symbol %} </span>
+                </td>
+                <td class="text-nowrap d-none d-sm-table-cell">
+                  <span> {{ block.total_fee_burnt|burst_amount|rounding:5|intcomma }} </span><br>
                   <span class="text-success"> {% coin_symbol %} </span>
                 </td>
                 <td class="d-none d-sm-table-cell">{{ block.payload_length|filesizeformat }}</td>

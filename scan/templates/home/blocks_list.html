@@ -6,33 +6,37 @@
     <tbody>
     {% for block in blocks %}
       <tr>
-        <td class="text-nowrap">
+        <td  class="text-nowrap align-top">
+          <span class="btn btn-outline-success">
+            <span class="btn-icon__inner text-dark">BK</span>
+          </span>
+        </td>
+        <td class="text-nowrap align-top">
           <a href="{% url 'block-detail' block.height %}">{{ block.height }}</a><br>
           <span class="small">{{ block.timestamp|naturaltime }}</span>
         </td>
-        <td class="text-nowrap">
-          Miner {% include "account_link.html" with account_id=block.generator_id account_name=block.generator_name %}<br>
-          Pool {% if block.pool_id and block.pool_id != block.generator_id %}
-            {% include "account_link.html" with account_id=block.pool_id account_name=block.pool_name %}
-          {% else %}
-            <span class="text-info">Solo Miner</span>
-          {% endif %}
-        </td>
         <td class="d-none d-sm-table-cell">
+          <span>BaseTarget: {{block.base_target}}</span><br>
           {% if block.txs_cnt > 0 %}
             <a href="{% url 'txs' %}?block={{ block.height }}">{{ block.txs_cnt|intcomma }} txns</a>
           {% else %}
             0 txns
           {% endif %}
+          <span>in {% block_generation_time block %} </span><br>
+          <span> Miner {% include "account_link.html" with account_id=block.generator_id account_name=block.generator_name %}</span>
+
         </td>
-        
-        <td class="text-nowrap d-none d-sm-table-cell" title="Block reward">
+        <td class="text-nowrap d-none d-sm-table-cell align-top" title="Block reward">
           {% if block.total_fee_burnt %}
             <span>{{ block|block_reward_with_fee_burnt|rounding:5|intcomma }}</span><br>
           {% else %}
             <span>{{ block|block_reward_with_fee|rounding:5|intcomma }}</span><br>
           {% endif %}
           <span class="text-success"> {% coin_symbol %} </span>
+        </td>
+        <td class="text-nowrap d-none d-sm-table-cell align-top" title="Block burned">
+            <span> 🔥 {{ block.total_fee_burnt|burst_amount|rounding:5|intcomma }}</span><br>
+            <span class="text-success"> {% coin_symbol %} </span>
         </td>
       </tr>
     {% endfor %}
