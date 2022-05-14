@@ -3,6 +3,7 @@ from django.views.generic import ListView
 
 from java_wallet.models import (
     Account,
+    AccountBalance,
     AccountAsset,
     AssetTransfer,
     At,
@@ -29,15 +30,13 @@ from scan.templatetags.burst_tags import cashback_amount
 class AccountsListView(ListView):
     model = Account
     queryset = (
-        Account.objects.using("java_wallet").filter(latest=True,balance__gte=10000000000000)
-            .exclude(id=0).all()
+        AccountBalance.objects.using("java_wallet").filter(latest=True,balance__gte=10000000000000).exclude(id=0).all()
     )
     template_name = "accounts/list.html"
     context_object_name = "accounts"
     paginator_class = CachingPaginator
     paginate_by = 25
     ordering = "-balance"
-
     def get_queryset(self):
         qs = super().get_queryset()
         return qs[:1000]

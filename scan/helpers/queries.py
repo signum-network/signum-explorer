@@ -13,7 +13,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirecIncoming
+from java_wallet.models import Account, AccountBalance, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirecIncoming
 
 
 @cache_memoize(3600)
@@ -35,12 +35,22 @@ def get_account_name(account_id: int) -> str:
         )
     return account_name
 
-@cache_memoize(3600)
+@cache_memoize(200)
 def get_account_balance(account_id: int) -> str:
     account_balance = (
-        Account.objects.using("java_wallet")
+        AccountBalance.objects.using("java_wallet")
         .filter(id=account_id, latest=True)
         .values_list("balance", flat=True)
+        .first()
+    )
+    return account_balance
+
+@cache_memoize(200)
+def get_account_unconfirmed_balance(account_id: int) -> str:
+    account_balance = (
+        AccountBalance.objects.using("java_wallet")
+        .filter(id=account_id, latest=True)
+        .values_list("unconfirmed_balance", flat=True)
         .first()
     )
     return account_balance
@@ -148,7 +158,7 @@ def get_pool_id_for_block_db(block: Block) -> int:
 @cache_memoize(3600 * 24)
 def get_total_circulating():
     return (
-        Account.objects.using("java_wallet")
+        AccountBalance.objects.using("java_wallet")
         .filter(latest=True)
         .exclude(id=0)
         .aggregate(Sum("balance"))["balance__sum"]

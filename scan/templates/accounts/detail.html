@@ -69,22 +69,22 @@
             <tr>
               <th>Total Balance</th>
               <td>
-                {{ address.balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
-                <span class="text-info">(${{ address.balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
+                {{ address.id|account_balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
+                <span class="text-info">(${{  address.id|account_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
               </td>
             </tr>
             <tr>
               <th>Free Balance</th>
               <td>
-                {{ address.unconfirmed_balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
-                <span class="text-info">(${{ address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
+                {{address.id|account_unconfirmed_balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
+                <span class="text-info">(${{ address.id|account_unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
               </td>
             </tr>
             <tr>
               <th>Locked Balance</th>
               <td>
-                {{ address.balance|sub:address.unconfirmed_balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
-                <span class="text-info">(${{ address.balance|sub:address.unconfirmed_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
+                {{address.id|account_locked_balance|burst_amount|intcomma|append_symbol }}<br class="d-md-none" />
+                <span class="text-info">(${{ address.id|account_locked_balance|burst_amount|in_usd|floatformat:2|intcomma }} @ ${{ burst_info.exchange.price_usd|rounding:4|intcomma }} per {% coin_symbol %})</span>
               </td>
             </tr>
             {% if cbs_cnt > 0 %}
