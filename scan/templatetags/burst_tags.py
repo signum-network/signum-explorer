@@ -45,7 +45,7 @@ def block_fee_miner(block: Block) -> float:
     return block.total_fee -block.total_fee_cash_back - block.total_fee_burnt
 
 
-@cache_memoize(3600)
+@cache_memoize(240)
 @register.filter
 def asset_circulating(asset_id: int) -> int:
     asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
