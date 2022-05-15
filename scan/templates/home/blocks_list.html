@@ -23,7 +23,7 @@
           {% endif %}
           <span>in {% block_generation_time block %} </span><br>
           <span> Miner {% include "account_link.html" with account_id=block.generator_id account_name=block.generator_name %}</span><br>
-          <span>Total Send: {{block.total_amount|burst_amount|rounding:5|intcomma }}</span>
+          <span>Total Sent: {{block.total_amount|burst_amount|rounding:5|intcomma }}</span>
         </td>
         <td class="text-nowrap align-top" title="Block reward">
           <span>Reward</span><br>
