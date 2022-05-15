@@ -222,6 +222,15 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
         )
         if indirect and indirect.quantity:
             return div_decimals(indirect.quantity,decimals)
+    elif tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and not account_id:
+        # Only checking if a token gets distributed for the sender (no filter_account)
+        # needs ony quantity
+        asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
+        if not asset_id:
+            return 0
+        else:
+            quantity = int.from_bytes(tx.attachment_bytes[offset+24:offset+32], byteorder=sys.byteorder)
+            return div_decimals(quantity,decimals)
     elif tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
         asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
         name, decimals, total_quantity, mintable = get_asset_details(asset_id)
