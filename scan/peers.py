@@ -239,7 +239,8 @@ def peer_cmd():
     logger.info(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
 
     addresses = get_nodes_list()
-
+    logger.info("The list of peers:")
+    logger.info(addresses)
     # explore every peer and collect updates
     updates = {}
     if settings.TEST_NET:
