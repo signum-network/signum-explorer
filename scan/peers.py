@@ -243,6 +243,8 @@ def peer_cmd():
     logger.info(addresses)
     # explore every peer and collect updates
     updates = {}
+    logger.info("env:")
+    logger.info(settings.TEST_NET)
     if settings.TEST_NET:
         for address in addresses:
             explore_node(local_difficulty, address, updates)
