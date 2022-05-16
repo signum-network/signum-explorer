@@ -251,6 +251,7 @@ def peer_cmd():
             explore_node(local_difficulty, address, updates)
     else:
         print('others')
+        explore_node(local_difficulty, address, updates)
         with ThreadPoolExecutor(max_workers=20) as executor:
             print('in the executor')
             executor.map(lambda address: explore_node(local_difficulty, address, updates), addresses)
