@@ -246,12 +246,10 @@ def peer_cmd():
     logger.info("env:")
     logger.info(settings.TEST_NET)
     if settings.TEST_NET:
-        print('testnet')
         for address in addresses:
+            print(address)
             explore_node(local_difficulty, address, updates)
     else:
-        print('others')
-        explore_node(local_difficulty, address, updates)
         with ThreadPoolExecutor(max_workers=20) as executor:
             print('in the executor')
             executor.map(lambda address: explore_node(local_difficulty, address, updates), addresses)
