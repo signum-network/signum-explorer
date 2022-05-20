@@ -243,15 +243,11 @@ def peer_cmd():
     logger.info(addresses)
     # explore every peer and collect updates
     updates = {}
-    logger.info("env:")
-    logger.info(settings.TEST_NET)
     if settings.TEST_NET:
         for address in addresses:
-            print(address)
             explore_node(local_difficulty, address, updates)
     else:
         with ThreadPoolExecutor(max_workers=20) as executor:
-            print('in the executor')
             executor.map(lambda address: explore_node(local_difficulty, address, updates), addresses)
     logger.info(updates)  
     updates_with_data = tuple(filter(lambda x: x is not None, updates.values()))
