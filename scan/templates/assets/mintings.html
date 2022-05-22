@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+{% load burst_tags %}
+
+{% block content %}
+<h5 class="p-2">Token Mints 
+    {% if 'asset' in request.GET %}
+      <br class="d-md-none" />
+      <small class="text-muted">for token ID #<a href="{% url 'asset-detail' request.GET.asset %}">{{ request.GET.asset }}</a></small>
+    {% endif %}
+  </h5>

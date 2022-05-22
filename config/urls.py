@@ -20,10 +20,12 @@ from django.urls import include, path
 from scan.views.accounts import AccountsListView, AddressDetailView
 from scan.views.assets import (
     AssetDetailView,
+    AssetMintingDetailView,
     AssetHoldersListView,
     AssetListView,
     AssetTradesListView,
     AssetTransfersListView,
+    
 )
 from scan.views.ats import AtDetailView, AtListView
 from scan.views.blocks import BlockDetailView, BlockListView
@@ -59,6 +61,7 @@ urlpatterns = [
     path("asset/trades", AssetTradesListView.as_view(), name="asset-trades"),
     path("asset/transfers", AssetTransfersListView.as_view(), name="asset-transfers"),
     path("asset/holders", AssetHoldersListView.as_view(), name="asset-holders"),
+    path("asset/holders", AssetMintingDetailView.as_view(), name="asset-mintings"),
     path("assets/", AssetListView.as_view(), name="assets"),
     path("asset/<str:id>", AssetDetailView.as_view(), name="asset-detail"),
     path("mps/purchases", MarketPlacePurchasesListView.as_view(), name="mps-purchases"),
