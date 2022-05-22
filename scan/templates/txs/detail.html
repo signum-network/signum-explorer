@@ -101,6 +101,11 @@
             <tr>
               <th>Value</th>
               <td>
+                {% if tx.type == 2 and tx.subtype == 1 and tx.amount > 0 %}
+                  <br> 
+                  <span>{{ tx.amount|burst_amount|rounding:5|intcomma }}</span>
+                  <span class="text-success"> {% coin_symbol %} </span><br>
+                {% endif %}
                 {% if tx.type == 2 and tx.subtype == 3 or tx.subtype == 2 or tx.subtype == 6 %}
                   {{ tx|tx_quantity|rounding:5|intcomma }}
                 {% else %}
@@ -110,11 +115,6 @@
                 {% if tx.type != 2 %}
                   <span class="text-info">(${{ tx|tx_amount|in_usd|rounding:4|intcomma }})</span>
                 {% endif %}
-                {% if tx.type == 2 and tx.subtype == 1 and tx.amount > 0 %}
-                  <br> 
-                  <span>{{ tx.amount|burst_amount|rounding:5|intcomma }}</span>
-                  <span class="text-success"> {% coin_symbol %} </span>
-              {% endif %}
               
               {% if tx.type == 2 and tx.subtype == 9 %}
               <span>{{ tx|tx_quantity_multi:1|rounding:5|intcomma }}</span>

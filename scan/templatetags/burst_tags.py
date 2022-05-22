@@ -187,10 +187,7 @@ def tx_amount(tx: Transaction, filtered_account = None) -> float:
     elif tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
         offset = asset_offset(tx.height)
         if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
-            asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
-            name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-            quantity = int.from_bytes(tx.attachment_bytes[offset+8:offset+16], byteorder=sys.byteorder)
-            return div_decimals(quantity, decimals)
+            return burst_amount(tx.amount)
 
         elif tx.subtype in [TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]:
             quantity = int.from_bytes(tx.attachment_bytes[offset+8:offset+16], byteorder=sys.byteorder)
