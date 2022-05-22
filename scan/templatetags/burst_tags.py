@@ -201,8 +201,8 @@ def tx_amount(tx: Transaction, filtered_account = None) -> float:
             )
             if indirect and indirect.amount:
                 return burst_amount(indirect.amount)
-    else:
-        return burst_amount(tx.amount)
+
+    return burst_amount(tx.amount)
 
 @register.filter
 def tx_quantity(tx: Transaction, filtered_account = None) -> float:
