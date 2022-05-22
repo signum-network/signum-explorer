@@ -275,10 +275,10 @@ class AssetDetailView(IntSlugDetailView):
 
         return context
 
-class AssetMintingDetailView(IntSlugDetailView):
+class AssetMintingDetailView(ListView):
     model = Asset
     queryset = Asset.objects.using("java_wallet").all()
-    template_name = "assets/detail.html"
+    template_name = "assets/mintings.html"
     context_object_name = "asset"
     slug_field = "id"
     slug_url_kwarg = "id"
@@ -286,7 +286,6 @@ class AssetMintingDetailView(IntSlugDetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
-        obj.account_name = get_account_name(obj.account_id)
         name, decimals, total_quantity, mintable = get_asset_details(obj.id)
 
         # assets transfer
