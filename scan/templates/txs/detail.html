@@ -96,15 +96,32 @@
                 {% else %}
                   {{ tx|tx_amount|intcomma }} 
                 {% endif %}
-                {{ tx|tx_symbol }}
+                {{ tx|tx_symbol }} <br>
                 {% if tx.type != 2 %}
-                <span class="text-info">(${{ tx|tx_amount|in_usd|rounding:4|intcomma }})</span>
+                  <span class="text-info">(${{ tx|tx_amount|in_usd|rounding:4|intcomma }})</span>
                 {% endif %}
                 {% if tx.type == 2 and tx.subtype == 1 and tx.amount > 0 %}
-                <br> 
-                <span>{{ tx.amount|burst_amount|rounding:5|intcomma }}</span>
-                 <span class="text-success"> {% coin_symbol %} </span>
+                  <br> 
+                  <span>{{ tx.amount|burst_amount|rounding:5|intcomma }}</span>
+                  <span class="text-success"> {% coin_symbol %} </span>
               {% endif %}
+              
+              {% if tx.type == 2 and tx.subtype == 9 %}
+              <span>{{ tx|tx_quantity_multi:1|rounding:5|intcomma }}</span>
+              <span class="text-success"> {{ tx|tx_symbol_multi:1 }} </span><br>
+              <span>{{ tx|tx_quantity_multi:2|rounding:5|intcomma }}</span>
+              <span class="text-success"> {{ tx|tx_symbol_multi:2 }} </span><br>
+                {% if tx|tx_asset_multi_size > 2 %}
+                  <span>{{ tx|tx_quantity_multi:3|rounding:5|intcomma }}</span>
+                  <span class="text-success"> {{ tx|tx_symbol_multi:3 }} </span><br>
+                {% endif %}
+                {% if tx|tx_asset_multi_size == 4 %}
+                  <span>{{ tx|tx_quantity_multi:4|rounding:5|intcomma }}</span>
+                  <span class="text-success"> {{ tx|tx_symbol_multi:4 }} </span><br>
+                {% endif %}
+              {% endif %}
+
+
               </td>
             </tr>
             <tr>
