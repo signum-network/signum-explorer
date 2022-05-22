@@ -61,7 +61,7 @@
             {% if tx.type == 2 and tx.subtype == 3 or tx.subtype == 2 or tx.subtype == 6 %}
               <span>{{ tx|tx_quantity:filtered_account|rounding:5|intcomma }}</span><br>
               <span class="text-success"> {{ tx|tx_symbol }} </span>
-            {%elif tx.amount > 0 and  tx.type != 2 %}        
+            {%elif tx.amount > 0 and  tx.type == 2 and tx.subtype == 8  %}        
               <span>{{ tx|tx_amount:filtered_account|rounding:5|intcomma }}</span><br>
               <span class="text-success"> {{ tx|tx_symbol }} </span><br>
             {% endif %}
