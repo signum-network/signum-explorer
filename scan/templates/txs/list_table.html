@@ -88,54 +88,17 @@
                 <span class="text-success"> {{ tx|tx_symbol_multi:4 }} </span><br>
               {% endif %}
             {% endif %}
+            {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
+              <span>{{ tx|tx_quantity:filtered_account|rounding:5|intcomma }}</span><br>
+              <span class="text-success"> {{ tx|tx_symbol_distribution}} </span><br>
+            {% endif %}
           </td>
         <td class="text-nowrap d-none d-sm-table-cell">
           <span>{{ tx.fee|burst_amount|rounding:5|intcomma }}</span><br>
           <span class="text-success"> {% coin_symbol %} </span>
         </td>
       </tr>
-      {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
-      <tr>
-        <td></td>
-        <td class="d-none d-sm-table-cell"></td>
-        <td class="text-nowrap d-none d-sm-table-cell"></td>
-        <td>
-           <span> {{ tx|tx_type }}</span>
-            <br>
-            <span>for Token </span>
-            <span class="text-success"> {{ tx|tx_asset_holder}}</span>
-        </td>
-        <td class="text-nowrap d-none d-sm-table-cell">
-          {% include "account_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
-        </td>
-        <td>
-          {% if filtered_account %}
-            {% if tx|tx_is_out:filtered_account %}
-              <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(255, 214, 214)!important; color: rgb(140, 45, 80); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">
-                OUT</span>
-            {% elif tx|tx_is_in:filtered_account %}
-              <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(222, 249, 210)!important; color: rgb(35, 118, 64); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">
-                IN</span>
-            {% endif %}
-          {% endif %}
-        </td>
-        <td class="text-nowrap d-none d-sm-table-cell">
-          {% if tx.recipient_id or tx.multiout %}
-            {% include "recipient_link.html" with account_id=tx.recipient_id account_name=tx.recipient_name %}
-          {% else %}
-            {{ tx|tx_type }}
-          {% endif %}
-        </td>
-        <td class="text-nowrap">
-          <span>{{ tx|tx_quantity:filtered_account|rounding:5|intcomma }}</span><br>
-          <span class="text-success"> {{ tx|tx_symbol_distribution}} </span>
-        </td>
-        <td class="text-nowrap d-none d-sm-table-cell">
-          <span></span><br>
-          <span></span>
-        </td>
-      </tr>
-      {% endif %}
+     
     {% endfor %}
     </tbody>
   </table>
