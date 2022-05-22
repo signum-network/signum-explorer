@@ -132,6 +132,9 @@ def tx_is_in(tx: Transaction, account_id = None) -> bool:
 
         if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
             return True
+
+        if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER_MULTI:
+            return True
         
         if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
             return True
@@ -147,6 +150,8 @@ def tx_is_out(tx: Transaction, account_id : None) -> bool:
         elif tx.type == TxType.BURST_MINING and tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD:
             return True
         if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
+            return True
+        if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER_MULTI:
             return True
 
     return False
@@ -241,6 +246,33 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
     return 0.0
 
 @register.filter
+def tx_quantity_multi(tx: Transaction, asset_number = 0) -> float:
+    asset_offset=[2,18,34,50]
+    qunatity_offset= [10,26,42,58]
+    asset_id_offset = asset_offset[asset_number-1]
+    asset_quantity_offset =qunatity_offset[asset_number-1]
+    asset_id_offset2 =   asset_id_offset + 8
+    asset_quantity_offset2 = asset_quantity_offset + 8
+    if tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
+        asset_id = int.from_bytes(tx.attachment_bytes[asset_id_offset:asset_id_offset2], byteorder=sys.byteorder)
+        name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+        quantity = int.from_bytes(tx.attachment_bytes[asset_quantity_offset:asset_quantity_offset2], byteorder=sys.byteorder)
+        return div_decimals(quantity, decimals)
+    else:
+        return 0.0
+
+@register.filter
+def tx_asset_multi_size(tx: Transaction) -> float:
+    offset = asset_offset(tx.height)
+    if tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
+        asset_size= (int.from_bytes(tx.attachment_bytes[offset:offset+1], byteorder=sys.byteorder))
+        return asset_size
+    else:
+        return 0.0
+
+
+
+@register.filter
 def tx_symbol(tx: Transaction) -> str:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         offset = asset_offset(tx.height)
@@ -254,6 +286,19 @@ def tx_symbol(tx: Transaction) -> str:
             return name
 
     return coin_symbol()
+
+@register.filter
+def tx_symbol_multi(tx: Transaction,asset_number = 1) -> str:
+    asset_offset=[2,18,34,50]
+    asset_id_offset = asset_offset[asset_number-1]
+    asset_id_offset2 =   asset_id_offset + 8
+    if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
+        asset_id = int.from_bytes(tx.attachment_bytes[asset_id_offset:asset_id_offset2], byteorder=sys.byteorder)
+        name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+        name = name.upper()
+        if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            return str(asset_id)[0:10]
+        return name
 
 @register.filter
 def tx_symbol_distribution(tx: Transaction) -> str:

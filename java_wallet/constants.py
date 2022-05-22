@@ -44,6 +44,7 @@ TX_TYPES = {
     (TxType.COLORED_COINS, TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS): _(
         "Distribute to Holders"
     ),
+    (TxType.COLORED_COINS, TxSubtypeColoredCoins.ASSET_TRANSFER_MULTI): _("Token Multi Transfer"),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.LISTING): _("Marketplace Listing"),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.DELISTING): _("Marketplace Removal"),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.PRICE_CHANGE): _(
