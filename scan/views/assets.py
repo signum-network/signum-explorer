@@ -283,11 +283,13 @@ class AssetMintingDetailView(ListView):
     slug_field = "id"
     slug_url_kwarg = "id"
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj = context[self.context_object_name]
+        focus =  Asset.objects.using("java_wallet").filter(id=self.request.GET['asset'])
+        for asset_focus in focus:
+            obj=asset_focus
         name, decimals, total_quantity, mintable = get_asset_details(obj.id)
-
         # assets transfer
 
         assets_transfers = (
