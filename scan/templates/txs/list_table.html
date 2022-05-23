@@ -49,7 +49,9 @@
         <td class="text-nowrap d-none d-sm-table-cell">
           {% if tx.recipient_id or tx.multiout %}
             {% include "recipient_link.html" with account_id=tx.recipient_id account_name=tx.recipient_name %}
-          {% elif  tx.recipient_id == Null and tx.type == 0 %}
+          {% elif  tx.recipient_id == Null and tx.type == 0  %}
+             Burning Address
+          {% elif  tx.recipient_id == Null and tx.type == 2 and tx.subtype == 1 or tx.subtype == 9 %}
              Burning Address
           {% elif  tx.recipient_id == Null and tx.type == 20 %}
             {% include "recipient_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
