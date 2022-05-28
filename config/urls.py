@@ -21,6 +21,7 @@ from scan.views.accounts import AccountsListView, AddressDetailView
 from scan.views.assets import (
     AssetDetailView,
     AssetMintingDetailView,
+    AssetDistributionDetailView,
     AssetHoldersListView,
     AssetListView,
     AssetTradesListView,
@@ -62,6 +63,7 @@ urlpatterns = [
     path("asset/transfers", AssetTransfersListView.as_view(), name="asset-transfers"),
     path("asset/holders", AssetHoldersListView.as_view(), name="asset-holders"),
     path("asset/mintings", AssetMintingDetailView.as_view(), name="asset-mintings"),
+    path("asset/distributions", AssetDistributionDetailView.as_view(), name="asset-distributions"),
     path("assets/", AssetListView.as_view(), name="assets"),
     path("asset/<str:id>", AssetDetailView.as_view(), name="asset-detail"),
     path("mps/purchases", MarketPlacePurchasesListView.as_view(), name="mps-purchases"),

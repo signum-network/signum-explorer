@@ -26,6 +26,10 @@ def fill_data_asset_trade(trade):
     trade.buyer_name = get_account_name(trade.buyer_id)
     trade.seller_name = get_account_name(trade.seller_id)
 
+def fill_data_asset_distribution(distrib):
+    distrib.sender_name = get_account_name(distrib.sender_id)
+
+
 
 class AssetListView(ListView):
     model = Asset
@@ -218,7 +222,25 @@ class AssetDetailView(IntSlugDetailView):
         context["assets_minting_cnt"] = assets_minting_cnt
         context["assets_minting_tx"] = asset_minting_tx
 
+        # asset distributions
+        assets_distribution_cnt = 0
+        assets_distribution_tx =[]
+        distribution_tx  = (
+            Transaction.objects.using("java_wallet")
+            .filter(type=2,subtype =8).order_by("-height")
+        )
 
+        for distrib_tx in distribution_tx:
+            fill_data_asset_distribution(distrib_tx)
+            
+        for distrib in distribution_tx:
+            asset_id = int.from_bytes(distrib.attachment_bytes[1:9], byteorder=sys.byteorder)
+            if asset_id == obj.id:
+                assets_distribution_cnt += 1
+                assets_distribution_tx.append(distrib)
+
+        context["assets_distribution_cnt"] = assets_distribution_cnt
+        context["assets_distribution_tx"] = assets_distribution_tx[:15]
 
         # asset holders
         assets_holders_cnt = (
@@ -282,6 +304,10 @@ class AssetMintingDetailView(ListView):
     context_object_name = "asset"
     slug_field = "id"
     slug_url_kwarg = "id"
+    paginator_class = CachingPaginator
+    paginate_by = 25
+    ordering = "-height"
+    filter_set = None
 
 
     def get_context_data(self, **kwargs):
@@ -338,6 +364,46 @@ class AssetMintingDetailView(ListView):
                 asset_minting_tx.append(mints)
         context["assets_minting_cnt"] = assets_minting_cnt
         context["assets_minting_tx"] = asset_minting_tx
+
+        return context
+
+class AssetDistributionDetailView(ListView):
+    model = Asset
+    queryset = Asset.objects.using("java_wallet").all()
+    template_name = "assets/distributions.html"
+    context_object_name = "asset"
+    paginator_class = CachingPaginator
+    paginate_by = 25
+    ordering = "-height"
+    filter_set = None
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        focus =  Asset.objects.using("java_wallet").filter(id=self.request.GET['asset'])
+        for asset_focus in focus:
+            obj=asset_focus
+        name, decimals, total_quantity, mintable = get_asset_details(obj.id)
+
+        # asset distributions
+        assets_distribution_cnt = 0
+        assets_distribution_tx =[]
+        distribution_tx  = (
+            Transaction.objects.using("java_wallet")
+            .filter(type=2,subtype=8).order_by("-height")
+        )
+
+        for distrib_tx in distribution_tx:
+            fill_data_asset_distribution(distrib_tx)
+
+        for distrib in distribution_tx:
+            asset_id = int.from_bytes(distrib.attachment_bytes[1:9], byteorder=sys.byteorder)
+            if asset_id == obj.id:
+                assets_distribution_cnt += 1
+                assets_distribution_tx.append(distrib)
+
+        context["assets_distribution_cnt"] = assets_distribution_cnt
+        context["assets_distribution_tx"] = assets_distribution_tx
 
         return context
 
