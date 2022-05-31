@@ -239,7 +239,8 @@ def peer_cmd():
     logger.info(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
 
     addresses = get_nodes_list()
-
+    logger.info("The list of peers:")
+    logger.info(addresses)
     # explore every peer and collect updates
     updates = {}
     if settings.TEST_NET:
@@ -248,9 +249,10 @@ def peer_cmd():
     else:
         with ThreadPoolExecutor(max_workers=20) as executor:
             executor.map(lambda address: explore_node(local_difficulty, address, updates), addresses)
-    
+    logger.info(updates)  
     updates_with_data = tuple(filter(lambda x: x is not None, updates.values()))
-
+    logger.info("The update_with_data:")
+    logger.info(updates_with_data)   
     # if more than __% peers were gone offline in __min, probably network problem
     if len(updates_with_data) < get_count_nodes_online() * 0.8:
         logger.warning(

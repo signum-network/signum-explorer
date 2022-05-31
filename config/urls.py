@@ -20,10 +20,13 @@ from django.urls import include, path
 from scan.views.accounts import AccountsListView, AddressDetailView
 from scan.views.assets import (
     AssetDetailView,
+    AssetMintingDetailView,
+    AssetDistributionDetailView,
     AssetHoldersListView,
     AssetListView,
     AssetTradesListView,
     AssetTransfersListView,
+    
 )
 from scan.views.ats import AtDetailView, AtListView
 from scan.views.blocks import BlockDetailView, BlockListView
@@ -41,9 +44,13 @@ from scan.views.peers import (
 from scan.views.pending_transactions import pending_transactions
 from scan.views.search import search_view
 from scan.views.transactions import TxDetailView, TxListView, tx_export_csv
+from scan.views.cashbacks import CBListView
+from scan.views.distribution import DistributionListView
 
 urlpatterns = [
     path("", index, name="index"),
+    path("distribution/", DistributionListView.as_view(), name="distribution"),
+    path("cbs/", CBListView.as_view(), name="cbs"),
     path("blocks/", BlockListView.as_view(), name="blocks"),
     path("block/<str:height>", BlockDetailView.as_view(), name="block-detail"),
     path("txsPending/", pending_transactions, name="txs-pending"),
@@ -55,6 +62,8 @@ urlpatterns = [
     path("asset/trades", AssetTradesListView.as_view(), name="asset-trades"),
     path("asset/transfers", AssetTransfersListView.as_view(), name="asset-transfers"),
     path("asset/holders", AssetHoldersListView.as_view(), name="asset-holders"),
+    path("asset/mintings", AssetMintingDetailView.as_view(), name="asset-mintings"),
+    path("asset/distributions", AssetDistributionDetailView.as_view(), name="asset-distributions"),
     path("assets/", AssetListView.as_view(), name="assets"),
     path("asset/<str:id>", AssetDetailView.as_view(), name="asset-detail"),
     path("mps/purchases", MarketPlacePurchasesListView.as_view(), name="mps-purchases"),

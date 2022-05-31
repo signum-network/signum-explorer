@@ -1,0 +1,31 @@
+{% load humanize %}
+{% load burst_tags %}
+
+<div class="table-responsive">
+  <table class="table table-hover small table-sm">
+    <thead>
+    <tr>
+      <th class="d-none d-sm-table-cell" scope="col">Since Block</th>
+      <th scope="col">Trasnaction ID</th>      
+      <th scope="col">Timestamp</th>   
+      <th scope="col">Minter</th>
+      <th scope="col">Quantity</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for asset in assets_minting_tx %}
+      <tr>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'tx-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
+        <td class="text-nowrap"><a href="{% url 'tx-detail' asset.id %}">{{ asset.timestamp|naturaltime }}</a></td>
+        <td class="text-nowrap">
+          {% include "account_link.html" with account_id=asset.sender_id  %}
+        </td>
+        <td>
+            {{ asset|tx_quantity|intcomma}}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

@@ -1,7 +1,9 @@
 import time
 import os
 
+from ctypes import c_ulonglong, c_longlong
 from datetime import datetime
+from MySQLdb import Timestamp
 from django.conf import settings
 
 from django.db.models import Sum
@@ -11,7 +13,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction
+from java_wallet.models import Account, AccountBalance, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirecIncoming
 
 
 @cache_memoize(3600)
@@ -33,6 +35,47 @@ def get_account_name(account_id: int) -> str:
         )
     return account_name
 
+@cache_memoize(200)
+def get_account_balance(account_id: int) -> str:
+    account_balance = (
+        AccountBalance.objects.using("java_wallet")
+        .filter(id=account_id, latest=True)
+        .values_list("balance", flat=True)
+        .first()
+    )
+    return account_balance
+
+@cache_memoize(200)
+def get_account_unconfirmed_balance(account_id: int) -> str:
+    account_balance = (
+        AccountBalance.objects.using("java_wallet")
+        .filter(id=account_id, latest=True)
+        .values_list("unconfirmed_balance", flat=True)
+        .first()
+    )
+    return account_balance
+
+@cache_memoize(3600)
+def get_details_by_tx(transaction_id:int) -> ( int, int,int):
+    # Value = Sender, Reciepent,Timestamp
+    transactions_data = (
+        Transaction.objects.using("java_wallet")
+        .filter(id =transaction_id )
+        .values_list("recipient_id","sender_id","timestamp")
+        .first()
+    )
+    return transactions_data
+
+@cache_memoize(3600)
+def get_single_tx_class(transaction_id:int):
+    # Value = Sender, Reciepent,Timestamp
+    transactions_data = (
+        Transaction.objects.using("java_wallet")
+        .filter(id =transaction_id )
+        .first()
+    )
+    return transactions_data
+
 # @cache_memoize(None)
 def get_ap_code(ap_code_hash_id: int) -> bytearray:
     ap_code = (
@@ -44,12 +87,12 @@ def get_ap_code(ap_code_hash_id: int) -> bytearray:
     return ap_code
 
 def get_at_state(id: int) -> (bytearray, int):
-    return (
+    return (        
         AtState.objects.using("java_wallet")
         .filter(at_id=id, latest=True)
         .values_list("state", "min_activate_amount")
         .first()
-    )
+        )
 
 @cache_memoize(None)
 def check_is_contract(account_id: int) -> bool:
@@ -81,26 +124,13 @@ def query_asset_treasury(asset, account_id) -> bool:
 
 @cache_memoize(None)
 def get_asset_details(asset_id: int) -> (str, int, int, bool):
-    version = os.environ.get('BRS_P2P_VERSION')
-
-    if version.startswith('3.3'):
-        asset_details = (
-            Asset.objects.using("java_wallet")
-            .filter(id=asset_id)
-            .values_list("name", "decimals", "quantity", "mintable")
-            .first()
+    asset_details = (
+        Asset.objects.using("java_wallet")
+        .filter(id=asset_id)
+        .values_list("name", "decimals", "quantity", "mintable")
+        .first()
         )
-    else:
-        asset_details = (
-            Asset.objects.using("java_wallet")
-            .filter(id=asset_id)
-            .values_list("name", "decimals", "quantity")
-            .first()
-        )
-        asset_details += (False,)
-
     return asset_details
-
 
 @cache_memoize(None)
 def get_txs_count_in_block(block_id: int) -> int:
@@ -125,16 +155,16 @@ def get_pool_id_for_block_db(block: Block) -> int:
         .first()
     )
 
-@cache_memoize(3600 * 24)
+@cache_memoize(240)
 def get_total_circulating():
     return (
-        Account.objects.using("java_wallet")
+        AccountBalance.objects.using("java_wallet")
         .filter(latest=True)
         .exclude(id=0)
         .aggregate(Sum("balance"))["balance__sum"]
     )
 
-@cache_memoize(3600 * 24)
+@cache_memoize(3600)
 def get_total_accounts_count():
     return (
         Account.objects.using("java_wallet")

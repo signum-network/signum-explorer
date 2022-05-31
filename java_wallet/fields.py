@@ -1,5 +1,5 @@
 import logging
-from ctypes import c_long, c_ulong
+from ctypes import c_ulonglong, c_longlong
 from datetime import datetime
 
 from django.db.models import BigIntegerField, DateTimeField
@@ -27,13 +27,13 @@ class PositiveBigIntegerField(BigIntegerField):
         value = super().get_prep_value(value)
         if value <= BigIntegerField.MAX_BIGINT:
             return value
-        return c_long(value).value
+        return c_longlong(value).value
 
     @staticmethod
     def from_db_value(value, expression, connection):
         if value is None or value >= 0:
             return value
-        return c_ulong(value).value
+        return c_ulonglong(value).value
 
 
 class TimestampField(DateTimeField):

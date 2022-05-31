@@ -1,0 +1,74 @@
+{% load humanize %}
+{% load burst_tags %}
+
+<div class="table-responsive">
+  <table class="table table-hover small table-sm">
+    <thead>
+    <tr>
+      {% if not asset_specific %}
+        <th scope="col">Ticker</th>
+        <th scope="col" class="d-none d-sm-table-cell">Token ID</th>
+      {% endif %}
+      <th scope="col" class="d-none d-sm-table-cell">Block</th>
+      <th scope="col" class="d-none d-sm-table-cell">Transaction ID</th>
+      <th scope="col">Timestamp</th>
+      <th scope="col" class="d-none d-sm-table-cell">From</th>
+      <th scope="col"></th>
+      <th scope="col" class="d-none d-sm-table-cell">To</th>
+      <th scope="col">Coin</th>
+      <th scope="col">Token</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for asset in assets_distribution_tx %}
+        <tr>
+          {% if not asset_specific %}
+            <td class="text-nowrap text-uppercase">
+              <a href="{% url 'asset-detail' asset.asset_id %}">
+                {% if asset|is_asset_phishing %}
+                  {{ asset.asset_id|truncatechars:10 }}
+                {% else %}
+                  {{ asset.name }}
+                {% endif %}
+              </a>
+            </td>
+            <td class="d-none d-sm-table-cell">
+              <a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a>
+            </td>
+          {% endif %}
+          <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
+          <td class="d-none d-sm-table-cell"><a href="{% url 'tx-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
+          <td class="text-nowrap"><a href="{% url 'tx-detail' asset.id %}">{{ asset.timestamp|naturaltime }}</a></td>
+          <td class="text-nowrap d-none d-sm-table-cell">
+            {% include "account_link.html" with account_id=asset.sender_id account_name=asset.sender_name %}
+          </td>
+          <td>
+            {% if filtered_account|slugify == asset.sender_id|slugify %}
+              <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(255, 214, 214)!important; color: rgb(140, 45, 80); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">OUT</span>
+            {% elif filtered_account|slugify == asset.recipient_id|slugify %}
+              <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(222, 249, 210)!important; color: rgb(35, 118, 64); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">IN</span>
+            {% endif %}
+          </td>
+          <td class="text-nowrap d-none d-sm-table-cell">
+            <span><a href="{% url 'distribution' %}?a={{ asset.id }}">{{ asset|tx_type }}</a></span>
+            <br>
+            <span>for Token </span>
+            <span class="text-success">  {{ asset|tx_asset_holder}}</span>
+          </td>
+          <td>
+            {%if asset.amount > 0 %}        
+              <span>{{ asset|tx_amount|rounding:5|intcomma }}</span><br>
+              <span class="text-success"> {% coin_symbol %} </span><br>
+             {% endif %}  
+          </td>
+          <td>
+             {%if asset|tx_quantity:asset.sender_id  > 0 %}
+             <span>{{ asset|tx_quantity:asset.sender_id|rounding:5|intcomma }}</span><br>
+             <span class="text-success"> {{ asset|tx_symbol_distribution}} </span><br>
+             {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+{% load burst_tags %}
+
+{% block content %}
+<h5 class="p-2">Token Mints 
+    {% if 'asset' in request.GET %}
+      <br class="d-md-none" />
+      <small class="text-muted">for token ID #<a href="{% url 'asset-detail' request.GET.asset %}">{{ request.GET.asset }}</a></small>
+    {% endif %}
+  </h5>
+  <div class="card-deck mb-3">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+
+        <div class="d-flex flex-column flex-md-row align-items-center">
+          <small class="my-0 mr-md-auto text-muted">
+            {% if 'a' not in request.GET and assets_minting_cnt > paginator.count %}
+              More than > {{ assets_minting_cnt|intcomma }} minting transaction found<br>
+              <small>(Showing the lastest 10k records)</small>
+            {% else %}
+              A total of
+              {% if assets_minting_tx %}
+                {{ assets_minting_cnt |intcomma }}
+              {% else %}
+                0
+              {% endif %}
+              mintings found
+            {% endif %}
+          </small>
+          {% include "paginator.html" %}
+        </div>
+
+        {% include "assets/mintings_list.html" with asset_specific=1 %}
+
+        {% include "paginator.html" %}
+
+      </div>
+    </div>
+  </div>
+  {% endblock %}

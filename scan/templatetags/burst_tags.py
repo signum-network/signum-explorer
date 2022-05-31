@@ -22,7 +22,7 @@ from scan.caching_data.exchange import CachingExchangeData
 import struct
 import os
 
-from scan.helpers.queries import get_asset_details, get_asset_price, query_asset_treasury
+from scan.helpers.queries import get_asset_details, get_asset_price, query_asset_treasury, get_account_balance,get_account_unconfirmed_balance,get_total_circulating
 
 register = template.Library()
 
@@ -45,7 +45,7 @@ def block_fee_miner(block: Block) -> float:
     return block.total_fee -block.total_fee_cash_back - block.total_fee_burnt
 
 
-@cache_memoize(3600)
+@cache_memoize(240)
 @register.filter
 def asset_circulating(asset_id: int) -> int:
     asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
@@ -53,7 +53,13 @@ def asset_circulating(asset_id: int) -> int:
 
 @register.filter
 def burst_amount(value: int) -> float:
+    if not value:
+        value = int(0)
     return round(value / 100000000.0, 8)
+
+@register.filter
+def cashback_amount(value: int) -> float:
+    return round(value / 400000000.0, 8)
 
 @register.filter
 def append_symbol(value: float) -> str:
@@ -126,6 +132,9 @@ def tx_is_in(tx: Transaction, account_id = None) -> bool:
 
         if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
             return True
+
+        if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER_MULTI:
+            return True
         
         if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
             return True
@@ -141,6 +150,8 @@ def tx_is_out(tx: Transaction, account_id : None) -> bool:
         elif tx.type == TxType.BURST_MINING and tx.subtype == TxSubtypeBurstMining.COMMITMENT_ADD:
             return True
         if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
+            return True
+        if tx.type == TxType.COLORED_COINS and tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER_MULTI:
             return True
 
     return False
@@ -176,10 +187,7 @@ def tx_amount(tx: Transaction, filtered_account = None) -> float:
     elif tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
         offset = asset_offset(tx.height)
         if tx.subtype == TxSubtypeColoredCoins.ASSET_TRANSFER:
-            asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
-            name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-            quantity = int.from_bytes(tx.attachment_bytes[offset+8:offset+16], byteorder=sys.byteorder)
-            return div_decimals(quantity, decimals)
+            return burst_amount(tx.amount)
 
         elif tx.subtype in [TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]:
             quantity = int.from_bytes(tx.attachment_bytes[offset+8:offset+16], byteorder=sys.byteorder)
@@ -216,15 +224,56 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
         )
         if indirect and indirect.quantity:
             return div_decimals(indirect.quantity,decimals)
+    elif tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and not account_id:
+        # Only checking if a token gets distributed for the sender (no filter_account)
+        # needs ony quantity
+        asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
+        if not asset_id:
+            return 0
+        else:
+            quantity = int.from_bytes(tx.attachment_bytes[offset+24:offset+32], byteorder=sys.byteorder)
+            return div_decimals(quantity,decimals)
+    elif tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
+        asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
+        name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+        quantity = int.from_bytes(tx.attachment_bytes[offset+8:offset+16], byteorder=sys.byteorder)
+        return div_decimals(quantity, decimals)
     else:
         return 0.0
     return 0.0
 
 @register.filter
+def tx_quantity_multi(tx: Transaction, asset_number = 0) -> float:
+    asset_offset=[2,18,34,50]
+    qunatity_offset= [10,26,42,58]
+    asset_id_offset = asset_offset[asset_number-1]
+    asset_quantity_offset =qunatity_offset[asset_number-1]
+    asset_id_offset2 =   asset_id_offset + 8
+    asset_quantity_offset2 = asset_quantity_offset + 8
+    if tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
+        asset_id = int.from_bytes(tx.attachment_bytes[asset_id_offset:asset_id_offset2], byteorder=sys.byteorder)
+        name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+        quantity = int.from_bytes(tx.attachment_bytes[asset_quantity_offset:asset_quantity_offset2], byteorder=sys.byteorder)
+        return div_decimals(quantity, decimals)
+    else:
+        return 0.0
+
+@register.filter
+def tx_asset_multi_size(tx: Transaction) -> float:
+    offset = asset_offset(tx.height)
+    if tx.attachment_bytes and tx.type == TxType.COLORED_COINS:
+        asset_size= (int.from_bytes(tx.attachment_bytes[offset:offset+1], byteorder=sys.byteorder))
+        return asset_size
+    else:
+        return 0.0
+
+
+
+@register.filter
 def tx_symbol(tx: Transaction) -> str:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         offset = asset_offset(tx.height)
-        if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,
+        if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,TxSubtypeColoredCoins.ASSET_MINT,
             TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]):
             asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
@@ -234,6 +283,19 @@ def tx_symbol(tx: Transaction) -> str:
             return name
 
     return coin_symbol()
+
+@register.filter
+def tx_symbol_multi(tx: Transaction,asset_number = 1) -> str:
+    asset_offset=[2,18,34,50]
+    asset_id_offset = asset_offset[asset_number-1]
+    asset_id_offset2 =   asset_id_offset + 8
+    if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
+        asset_id = int.from_bytes(tx.attachment_bytes[asset_id_offset:asset_id_offset2], byteorder=sys.byteorder)
+        name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+        name = name.upper()
+        if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            return str(asset_id)[0:10]
+        return name
 
 @register.filter
 def tx_symbol_distribution(tx: Transaction) -> str:
@@ -246,7 +308,13 @@ def tx_symbol_distribution(tx: Transaction) -> str:
             if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
-
+        elif tx.subtype == TxSubtypeColoredCoins.ASSET_MINT:
+            asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
+            name, decimals, total_quantity, mintable = get_asset_details(asset_id)
+            name = name.upper()
+            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+                return str(asset_id)[0:10]
+            return name
     return ''
 
 @register.filter
@@ -274,6 +342,23 @@ def tx_asset_id(tx: Transaction) -> int:
             return asset_id
 
     return 0
+
+@register.filter
+def total_circulating(account_id : int) -> float:
+    return get_total_circulating()
+
+@register.filter
+def account_balance(account_id : int) -> float:
+    return get_account_balance(account_id)
+
+@register.filter
+def account_unconfirmed_balance(account_id : int) -> float:
+    return get_account_unconfirmed_balance(account_id)
+
+@register.filter
+def account_locked_balance(account_id : int) -> float:
+    return get_account_balance(account_id) - get_account_unconfirmed_balance(account_id)
+
 
 @register.filter
 def asset_price(asset_id : int) -> float:

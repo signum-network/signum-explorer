@@ -3,6 +3,7 @@ from django.views.generic import ListView
 
 from java_wallet.models import (
     Account,
+    AccountBalance,
     AccountAsset,
     AssetTransfer,
     At,
@@ -24,20 +25,18 @@ from scan.helpers.queries import (
 from scan.views.assets import fill_data_asset_trade, fill_data_asset_transfer
 from scan.views.base import IntSlugDetailView
 from scan.views.transactions import fill_data_transaction
-
+from scan.templatetags.burst_tags import cashback_amount
 
 class AccountsListView(ListView):
     model = Account
     queryset = (
-        Account.objects.using("java_wallet").filter(latest=True,balance__gte=10000000000000)
-            .exclude(id=0).all()
+        AccountBalance.objects.using("java_wallet").filter(latest=True,balance__gte=10000000000000).exclude(id=0).all()
     )
     template_name = "accounts/list.html"
     context_object_name = "accounts"
     paginator_class = CachingPaginator
     paginate_by = 25
     ordering = "-balance"
-
     def get_queryset(self):
         qs = super().get_queryset()
         return qs[:1000]
@@ -95,6 +94,22 @@ class AddressDetailView(IntSlugDetailView):
 
         context["txs"] = txs
         context["txs_cnt"] = txs_cnt
+        
+        #cashback
+        cash_query = (
+            Transaction.objects.using("java_wallet")
+            .filter(Q(cash_back_id=obj.id)))
+        
+        cbs_cnt = cash_query.count()
+        cbs = cash_query.order_by("-height")[:min(cbs_cnt, 15)]
+        total_cashback = 0 
+        for cb in cash_query:
+            total_cashback += cashback_amount(cb.fee)
+        
+        context["total_cashback"]=total_cashback
+        context["cbs"] = cbs
+        context["cbs_cnt"] = cbs_cnt
+        
 
         # assets
 
@@ -110,10 +125,7 @@ class AddressDetailView(IntSlugDetailView):
         )
 
         for asset in assets:
-            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(
-                asset.asset_id
-            )
-
+            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(asset.asset_id)
         context["assets"] = assets
         context["assets_cnt"] = assets_cnt
 
