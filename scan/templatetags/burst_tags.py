@@ -22,7 +22,7 @@ from scan.caching_data.exchange import CachingExchangeData
 import struct
 import os
 
-from scan.helpers.queries import get_asset_details, get_asset_price, query_asset_treasury, get_account_balance,get_account_unconfirmed_balance,get_total_circulating
+from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price, query_asset_treasury, get_account_balance,get_account_unconfirmed_balance,get_total_circulating
 
 register = template.Library()
 
@@ -359,6 +359,9 @@ def account_unconfirmed_balance(account_id : int) -> float:
 def account_locked_balance(account_id : int) -> float:
     return get_account_balance(account_id) - get_account_unconfirmed_balance(account_id)
 
+@register.filter
+def account_name_string(account_id : int) -> float:
+    return get_account_name(account_id)
 
 @register.filter
 def asset_price(asset_id : int) -> float:

@@ -87,8 +87,12 @@
               <td>
                 {% if tx.recipient_id or tx.multiout %}
                   {% include "recipient_link.html" with tx=tx|tx_load_recipients oneline=True %}
-                {% elif  tx.recipient_id == Null and tx.subtype == 1 %}
+                {% elif  tx.recipient_id == Null and tx.type == 0  %}
                   Burning Address
+                {% elif  tx.recipient_id == Null and tx.type == 2 and tx.subtype == 1 or tx.subtype == 9 %}
+                  Burning Address
+                {% elif  tx.recipient_id == Null and tx.type == 20 %}
+                 {% include "recipient_link.html" with account_id=tx.sender_id account_name=tx.sender_name oneline=True %}
                 {% else %}
                   {{ tx|tx_type }}
                   {% if tx.type == 2 and tx.subtype == 8 %}
