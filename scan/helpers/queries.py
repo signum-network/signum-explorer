@@ -35,7 +35,7 @@ def get_account_name(account_id: int) -> str:
         )
     return account_name
 
-@cache_memoize(200)
+@cache_memoize(240)
 def get_account_balance(account_id: int) -> str:
     account_balance = (
         AccountBalance.objects.using("java_wallet")
@@ -43,7 +43,10 @@ def get_account_balance(account_id: int) -> str:
         .values_list("balance", flat=True)
         .first()
     )
-    return account_balance
+    if account_balance:
+        return account_balance
+    else :
+        return 0
 
 @cache_memoize(200)
 def get_account_unconfirmed_balance(account_id: int) -> str:
@@ -53,7 +56,10 @@ def get_account_unconfirmed_balance(account_id: int) -> str:
         .values_list("unconfirmed_balance", flat=True)
         .first()
     )
-    return account_balance
+    if account_balance:
+        return account_balance
+    else:
+        return 0
 
 @cache_memoize(3600)
 def get_details_by_tx(transaction_id:int) -> ( int, int,int):
@@ -161,8 +167,8 @@ def get_total_circulating():
         AccountBalance.objects.using("java_wallet")
         .filter(latest=True)
         .exclude(id=0)
-        .aggregate(Sum("balance"))["balance__sum"]
-    )
+        .aggregate(Sum("balance"))["balance__sum"] 
+    )  
 
 @cache_memoize(3600)
 def get_total_accounts_count():
