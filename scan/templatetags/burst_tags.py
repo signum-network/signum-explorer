@@ -345,7 +345,7 @@ def tx_asset_id(tx: Transaction) -> int:
 
 @register.filter
 def total_circulating(account_id : int) -> float:
-    return get_total_circulating()
+    return get_total_circulating()  
 
 @register.filter
 def account_balance(account_id : int) -> float:

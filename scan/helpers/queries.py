@@ -35,7 +35,7 @@ def get_account_name(account_id: int) -> str:
         )
     return account_name
 
-@cache_memoize(200)
+@cache_memoize(240)
 def get_account_balance(account_id: int) -> str:
     account_balance = (
         AccountBalance.objects.using("java_wallet")
@@ -155,7 +155,7 @@ def get_pool_id_for_block_db(block: Block) -> int:
         .first()
     )
 
-@cache_memoize(240)
+@cache_memoize(None)
 def get_total_circulating():
     return (
         AccountBalance.objects.using("java_wallet")
