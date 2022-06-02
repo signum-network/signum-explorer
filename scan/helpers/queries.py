@@ -43,7 +43,10 @@ def get_account_balance(account_id: int) -> str:
         .values_list("balance", flat=True)
         .first()
     )
-    return account_balance
+    if account_balance:
+        return account_balance
+    else :
+        return 0
 
 @cache_memoize(200)
 def get_account_unconfirmed_balance(account_id: int) -> str:
@@ -53,7 +56,10 @@ def get_account_unconfirmed_balance(account_id: int) -> str:
         .values_list("unconfirmed_balance", flat=True)
         .first()
     )
-    return account_balance
+    if account_balance:
+        return account_balance
+    else:
+        return 0
 
 @cache_memoize(3600)
 def get_details_by_tx(transaction_id:int) -> ( int, int,int):
