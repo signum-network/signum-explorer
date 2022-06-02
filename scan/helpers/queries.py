@@ -35,7 +35,7 @@ def get_account_name(account_id: int) -> str:
         )
     return account_name
 
-@cache_memoize(200)
+@cache_memoize(240)
 def get_account_balance(account_id: int) -> str:
     account_balance = (
         AccountBalance.objects.using("java_wallet")
@@ -161,8 +161,8 @@ def get_total_circulating():
         AccountBalance.objects.using("java_wallet")
         .filter(latest=True)
         .exclude(id=0)
-        .aggregate(Sum("balance"))["balance__sum"]
-    )
+        .aggregate(Sum("balance"))["balance__sum"] 
+    )  
 
 @cache_memoize(3600)
 def get_total_accounts_count():
