@@ -155,14 +155,14 @@ def get_pool_id_for_block_db(block: Block) -> int:
         .first()
     )
 
-@cache_memoize(200)
+@cache_memoize(240)
 def get_total_circulating():
     return (
         AccountBalance.objects.using("java_wallet")
         .filter(latest=True)
         .exclude(id=0)
-        .aggregate(Sum("balance"))["balance__sum"]
-    )
+        .aggregate(Sum("balance"))["balance__sum"] 
+    )  
 
 @cache_memoize(3600)
 def get_total_accounts_count():
