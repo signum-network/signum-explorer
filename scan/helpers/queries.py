@@ -155,7 +155,7 @@ def get_pool_id_for_block_db(block: Block) -> int:
         .first()
     )
 
-@cache_memoize(None)
+@cache_memoize(200)
 def get_total_circulating():
     return (
         AccountBalance.objects.using("java_wallet")
