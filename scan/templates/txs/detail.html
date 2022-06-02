@@ -110,7 +110,9 @@
                   <span>{{ tx.amount|burst_amount|rounding:5|intcomma }}</span>
                   <span class="text-success"> {% coin_symbol %} </span><br>
                 {% endif %}
-                {% if tx.type == 2 and tx.subtype == 3 or tx.subtype == 1 or tx.subtype == 2 or tx.subtype == 6 %}
+                {% if tx.type == 20 or tx.type == 22 %}        
+                  {{ tx|tx_amount|rounding:5|intcomma }} 
+                {% elif tx.type == 2 and tx.subtype == 3 or tx.subtype == 1 or tx.subtype == 2 or tx.subtype == 6 %}
                   {{ tx|tx_quantity|rounding:5|intcomma }}
                 {% else %}
                   {{ tx|tx_amount|intcomma }} 
