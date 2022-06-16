@@ -174,7 +174,7 @@ document.body.onresize = function() {
                 {% if asset.decimals == 0 %}
                   {{ asset.id|asset_circulating|intcomma }}
                 {% else %}
-                  {{ asset.id|asset_circulating|div_decimals:asset.decimals|floatformat:0|intcomma }}
+                  {{ asset.id|asset_circulating|div_decimals:asset.decimals|floatformat:asset.decimals|intcomma }}
                 {% endif %}
               </td>
             </tr>
@@ -204,6 +204,8 @@ document.body.onresize = function() {
               <a class="nav-item nav-link active" id="nav-asset-trades-tab" data-toggle="tab" href="#nav-asset-trades" role="tab" aria-controls="nav-asset-trades" aria-selected="false">{{ assets_trades_cnt|intcomma }} Token trades</a>
               <a class="nav-item nav-link" id="nav-asset-transfer-tab" data-toggle="tab" href="#nav-asset-transfer" role="tab" aria-controls="nav-asset-transfer" aria-selected="false">{{ assets_transfers_cnt|intcomma }} Token transfers</a>
               <a class="nav-item nav-link" id="nav-asset-holders-tab" data-toggle="tab" href="#nav-asset-holders" role="tab" aria-controls="nav-asset-holders" aria-selected="false">{{ assets_holders_cnt|intcomma }} Token Holders</a>
+              <a class="nav-item nav-link" id="nav-asset-minting-tab" data-toggle="tab" href="#nav-asset-minting" role="tab" aria-controls="nav-asset-minting" aria-selected="false">{{ assets_minting_cnt|intcomma }} Token Minting</a>
+              <a class="nav-item nav-link" id="nav-asset-distribution-tab" data-toggle="tab" href="#nav-asset-distribution" role="tab" aria-controls="nav-asset-distribution" aria-selected="false">{{ assets_distribution_cnt|intcomma }} Distributions</a>
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
@@ -252,6 +254,34 @@ document.body.onresize = function() {
               {% endif %}
             </div>
 
+            <div class="tab-pane fade" id="nav-asset-minting" role="tabpanel" aria-labelledby="nav-asset-minting-tab">
+              {% if assets_minting_cnt > 0 %}
+              <div class="float-left small p-1">Latest {{ assets_minting_tx.count }} mintings</div>
+              <div class="float-right  small p-1">
+                <a href="{% url 'asset-mintings' %}?asset={{ asset.id }}">View all mintings</a>
+              </div>
+              {% include "assets/mintings_list.html" with asset_specific=1 %}
+              <div class="float-right  small p-1">
+                <a href="{% url 'asset-mintings' %}?asset={{ asset.id }}">View all mintigs</a>
+              </div>
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No token minting</p>
+              {% endif %}
+            </div>
+            <div class="tab-pane fade" id="nav-asset-distribution" role="tabpanel" aria-labelledby="nav-asset-distribution-tab">
+              {% if assets_distribution_cnt > 0 %}
+              <div class="float-left small p-1">Latest {{ assets_distribution_tx.count }} distributions</div>
+              <div class="float-right  small p-1">
+                <a href="{% url 'asset-distributions' %}?asset={{ asset.id }}">View all distributions</a>
+              </div>
+              {% include "assets/distribution_list.html" with asset_specific=1 %}
+              <div class="float-right  small p-1">
+                <a href="{% url 'asset-distributions' %}?asset={{ asset.id }}">View all distributions</a>
+              </div>
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No distributions for holders</p>
+              {% endif %}
+            </div>
 
           </div>
 

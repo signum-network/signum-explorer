@@ -1,0 +1,59 @@
+{% load humanize %}
+{% load burst_tags %}
+
+<div class="table-responsive">
+  <table class="table table-hover small table-sm">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col" class="d-none d-sm-table-cell">Block</th>
+        <th scope="col" class="d-none d-sm-table-cell">Timestamp</th>
+        <th scope="col">Type</th>
+        <th scope="col" class="d-none d-sm-table-cell">From</th>
+         <th scope="col" class="d-none d-sm-table-cell">To</th>
+        <th scope="col" class="d-none d-sm-table-cell">Fee</th>
+        <th scope="col"></th>
+        <th scope="col">Cashback</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for tx in cbs %}
+        <tr>
+          <td><a href="{% url 'tx-detail' tx.id %}">{{ tx.id|truncatechars:10 }}</a></td>
+          <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' tx.height %}">{{ tx.height }}</a></td>
+          <td class="text-nowrap d-none d-sm-table-cell">{{ tx.block_timestamp|naturaltime }}</td>
+          <td>
+            <span> {{ tx|tx_type }}</span>
+             {% if tx.type == 2 and tx.subtype == 8 %}
+              <br>
+              <span>for Token </span>
+              <span class="text-success">  {{ tx|tx_asset_holder}}</span>
+             {% endif %}
+          </td>
+          <td class="text-nowrap d-none d-sm-table-cell">
+            {% include "account_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
+          </td>
+          <td class="text-nowrap d-none d-sm-table-cell">
+            {% if tx.recipient_id or tx.multiout %}
+              {% include "recipient_link.html" with account_id=tx.recipient_id account_name=tx.recipient_name %}
+            {% else %}
+              {{ tx|tx_type }}
+            {% endif %}
+          </td>
+          <td class="text-nowrap d-none d-sm-table-cell">
+            <span>{{ tx.fee|burst_amount|rounding:5|intcomma }}</span><br>
+            <span class="text-success"> {% coin_symbol %} </span>
+          </td>
+          <td>
+            <span class="text-center font-weight-bold rounded-pill" style="background-color: rgb(222, 249, 210)!important; color: rgb(35, 118, 64); line-height: 1.6; font-size: .61rem; width: 100%!important; display: inline-block; padding: .2rem .5rem;">
+              IN</span>
+          </td>
+          <td class="text-nowrap">
+            <span>{{ tx.fee|cashback_amount|rounding:8|intcomma }}</span><br>
+            <span class="text-success"> {% coin_symbol %} </span>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>

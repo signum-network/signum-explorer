@@ -7,7 +7,9 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 import os
 from django.db import models
+from requests import delete
 from .fields import PositiveBigIntegerField, TimestampField
+
 
 
 class Account(models.Model):
@@ -16,19 +18,27 @@ class Account(models.Model):
     creation_height = models.IntegerField()
     public_key = models.CharField(max_length=32, blank=True, null=True)
     key_height = models.IntegerField(blank=True, null=True)
-    balance = PositiveBigIntegerField()
-    unconfirmed_balance = PositiveBigIntegerField()
-    forged_balance = PositiveBigIntegerField()
     name = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     height = models.IntegerField()
     latest = models.IntegerField()
-
     class Meta:
         managed = True
         db_table = 'account'
         unique_together = (('id', 'height'),)
 
+class AccountBalance(models.Model):
+    db_id = models.BigAutoField(primary_key=True)
+    id = PositiveBigIntegerField()
+    balance = PositiveBigIntegerField()
+    unconfirmed_balance = PositiveBigIntegerField()
+    forged_balance = PositiveBigIntegerField()
+    height = models.IntegerField()
+    latest = models.IntegerField()
+    class Meta:
+        managed = True
+        db_table = 'account_balance'
+        unique_together = (('id', 'height'),)
 
 class AccountAsset(models.Model):
     db_id = models.BigAutoField(primary_key=True)

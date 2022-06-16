@@ -43,7 +43,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
             <hr class="hr-space-lg">
             <div class="media align-items-center">
               <div class="text-left">
-                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-chart-line fa-fw"></i> Market cap</h6>
+                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-chart-line fa-fw"></i> Market cap </h6>
                 <span class="text-info small">${{ burst_info.exchange.market_cap_usd|floatformat:0|intcomma }}</span>
               </div>
             </div>
@@ -79,6 +79,24 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
                 {% endif %}
               </div>
             </div>
+            <hr class="hr-space-lg d-block d-md-none">
+          </div>
+          
+          <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-lg">
+            <div class="media align-items-center">
+              <div class="text-left">
+                <h6 class="text-uppercase text-secondary mb-0"><i class="fa fa-coins"></i> Total Supply</h6>
+                <span class="text-info small"> {{ 0 | total_circulating|burst_amount|intcomma }}</span>
+              </div>
+            </div>
+            <hr class="hr-space-lg">
+            <div class="media align-items-center">
+              <div class="text-left">
+                <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-fire"></i> Total Burned</h6>
+                 <span class="text-info small">{{ 0 | account_balance|burst_amount|intcomma  }} </span>
+              </div>
+            </div>
+            <hr class="hr-space-lg d-block d-md-none">
           </div>
           <div class="col-md-0 col-lg-4 pt-4 pt-lg-0 mx-auto">
             <div class="media align-items-center mt-n2" Style="max-height: 120px;">

@@ -54,11 +54,14 @@ def get_ip_by_domain(peer: str) -> str or None:
 @cache_memoize(60 * 60 * 24 * 7)
 def get_country_by_ip(ip: str) -> str:
     try:
-        response = requests.get(f"http://www.geoplugin.net/json.gp?ip={ip}")
+        response = requests.get(f"https://ipwho.is/{ip}")
         response.raise_for_status()
         json_response = response.json()
-        return json_response["geoplugin_countryCode"] or "??"
+        georesponse = json_response["continent"] or "??"
+        logger.info("Geo lookup, found peer from: %s", georesponse)
+        return json_response["country_code"] or "??"
     except (RequestException, ValueError, KeyError):
+        logger.warning("Geo lookup ERROR!")
         return "??"
 
 
@@ -236,7 +239,8 @@ def peer_cmd():
     logger.info(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
 
     addresses = get_nodes_list()
-
+    logger.info("The list of peers:")
+    logger.info(addresses)
     # explore every peer and collect updates
     updates = {}
     if settings.TEST_NET:
@@ -245,9 +249,7 @@ def peer_cmd():
     else:
         with ThreadPoolExecutor(max_workers=20) as executor:
             executor.map(lambda address: explore_node(local_difficulty, address, updates), addresses)
-    
     updates_with_data = tuple(filter(lambda x: x is not None, updates.values()))
-
     # if more than __% peers were gone offline in __min, probably network problem
     if len(updates_with_data) < get_count_nodes_online() * 0.8:
         logger.warning(

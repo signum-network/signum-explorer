@@ -41,10 +41,10 @@
                   {% rank_row forloop.counter %}
                 </td>
                 <td class="text-nowrap">
-                  {% include "account_link.html" with account_id=account.id account_name=account.name %}
+                  {% include "account_link.html" with account_id=account.id account_name=account.id|account_name_string %}
                 </td>
-                <td>{{ account.balance|percent:balance__sum|rounding:2|intcomma }} %</td>
-                <td class="text-nowrap">{{ account.balance|burst_amount|rounding:5|intcomma|append_symbol }} </td>
+                <td>{{ account.id|account_balance|percent:balance__sum|rounding:2|intcomma }} %</td>
+                <td class="text-nowrap">{{ account.id|account_balance|burst_amount|rounding:5|intcomma|append_symbol }} </td>
               </tr>
             {% endfor %}
             </tbody>
