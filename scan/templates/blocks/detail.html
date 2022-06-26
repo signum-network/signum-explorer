@@ -92,15 +92,19 @@
               <td>{{ blk|block_reward_with_fee|intcomma|append_symbol }}</td>
             </tr>
             {% endif %}
-            {% if blk.total_fee_burnt %}
+            {% if blk|block_fee_miner %}
                <tr>
                 <th>Miner Fees</th>
                 <td>{{ blk|block_fee_miner|burst_amount|intcomma|append_symbol }}</td>
               </tr>
+            {% endif %}
+            {% if blk.total_fee_burnt %}
               <tr>
                 <th>Burnt Fees</th>
                 <td>{{ blk.total_fee_burnt|burst_amount|intcomma|append_symbol }}</td>
               </tr>
+            {% endif %}
+            {% if blk.total_fee_cash_back %}            
               <tr>
                 <th>Cashback</th>
                 <td>{{ blk.total_fee_cash_back|burst_amount|intcomma|append_symbol }}</td>
