@@ -96,15 +96,20 @@ class AddressDetailView(IntSlugDetailView):
         context["txs_cnt"] = txs_cnt
         
         #cashback
-        cash_query = (
-            Transaction.objects.using("java_wallet")
-            .filter(Q(cash_back_id=obj.id)))
-        
-        cbs_cnt = cash_query.count()
-        cbs = cash_query.order_by("-height")[:min(cbs_cnt, 15)]
-        total_cashback = 0 
-        for cb in cash_query:
-            total_cashback += cashback_amount(cb.fee)
+        if obj.id == 0:
+            cbs =0
+            cbs_cnt = 0
+            total_cashback = 0 
+        else:
+            cash_query = (
+                Transaction.objects.using("java_wallet")
+                .filter(Q(cash_back_id=obj.id)))
+            
+            cbs_cnt = cash_query.count()
+            cbs = cash_query.order_by("-height")[:min(cbs_cnt, 15)]
+            total_cashback = 0 
+            for cb in cash_query:
+                total_cashback += cashback_amount(cb.fee)
         
         context["total_cashback"]=total_cashback
         context["cbs"] = cbs
