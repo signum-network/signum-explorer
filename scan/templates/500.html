@@ -16,9 +16,11 @@ Oops! Page not found.
               Oops!
             </h1>
             <h2>500 Processing Error</h2>
-            <div class="error-details">
-              Sorry, an unexprected error has occured, please help us to improve by
-              <a href="https://github.com/signum-network/signum-explorer/issues/new?title=Processing Error&body=Error while processing, URL: [please fill with the URL giving the error]." target="_blank">reporting this issue</a>.
+            <div class="error-details" id="reportlink">
+              <script>
+          		document.getElementById("reportlink").innerHTML = 
+	          	"Sorry, an unexprected error has occured, please help us to improve by <a href='https://github.com/signum-network/signum-explorer/issues/new?title=Processing Error&body=Error while processing, URL: " + window.location.href + "target='_blank'>reporting this issue</a>.";
+	            </script>
             </div>
           </div>
       </div>
