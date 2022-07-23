@@ -9,15 +9,15 @@ import os
 
 @dataclass
 class ExchangeData:
-    price_usd: float = 0
-    price_btc: float = 0
-    market_cap_usd: float = 0
+    price_usd: float = os.environ.get("COINGECKO_PRICE_USD"),
+    price_btc: float = os.environ.get("COINGECKO_PRICE_BTC"),
+    market_cap_usd: float = os.environ.get("COINGECKO_MKT_USD"),
     percent_change_24h: float = 0
 
 
 class CachingExchangeData(CachingDataBase):
     _cache_key = "exchange_data"
-    _cache_expiring = 3600
+    _cache_expiring = 600
     live_if_empty = True
     default_data_if_empty = ExchangeData()
 
