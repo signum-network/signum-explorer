@@ -522,7 +522,4 @@ def smooth_timedelta(timedelta_obj):
 
 @register.simple_tag()
 def multiply(qty, unit_price, direction, *args, **kwargs):
-    print(qty)
-    print(unit_price)
-    print(direction)
     return float(qty) * float(unit_price) * float(direction)
