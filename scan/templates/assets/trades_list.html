@@ -61,11 +61,11 @@
         </td>
         <td class="text-nowrap">
           {% if address.id == asset.seller_id  %}
-            {% multiply asset.price|mul_decimals:asset.decimals|burst_amount|intcomma  asset.quantity|div_decimals:asset.decimals 1 %}
+            {% multiply asset.price|mul_decimals:asset.decimals|burst_amount|intcomma  asset.quantity|div_decimals:asset.decimals asset.decimals 1 %}
           {% elif address.id == asset.buyer_id%} 
-            {% multiply asset.price|mul_decimals:asset.decimals|burst_amount|intcomma  asset.quantity|div_decimals:asset.decimals -1 %}
+            {% multiply asset.price|mul_decimals:asset.decimals|burst_amount|intcomma  asset.quantity|div_decimals:asset.decimals asset.decimals -1 %}
           {% else %}
-            {% multiply asset.price|mul_decimals:asset.decimals|burst_amount|intcomma  asset.quantity|div_decimals:asset.decimals 1 %}
+            {% multiply asset.price|mul_decimals:asset.decimals|burst_amount|intcomma  asset.quantity|div_decimals:asset.decimals asset.decimals 1 %}
           {% endif %}
           <br><span class="text-success"> {% coin_symbol %} </span>
         </td>
