@@ -521,5 +521,9 @@ def smooth_timedelta(timedelta_obj):
     return time_str
 
 @register.simple_tag()
-def multiply(qty, unit_price, direction, *args, **kwargs):
-    return float(qty) * float(unit_price) * float(direction)
+def multiply(qty, unit_price,decimals, direction, *args, **kwargs):
+    if isinstance(qty, str):
+        qty = qty.replace(',','')
+    if isinstance(unit_price, str):
+        unit_price= unit_price.replace(',','')
+    return round(float(qty) * float(unit_price) * float(direction),decimals)
