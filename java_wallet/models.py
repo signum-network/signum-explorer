@@ -215,9 +215,8 @@ class Block(models.Model):
     nonce = PositiveBigIntegerField()
     ats = models.TextField(blank=True, null=True)
     version = os.environ.get('BRS_P2P_VERSION')
-    if version.startswith('3.4'):
-        total_fee_cash_back = PositiveBigIntegerField()
-        total_fee_burnt= PositiveBigIntegerField()
+    total_fee_cash_back = PositiveBigIntegerField()
+    total_fee_burnt= PositiveBigIntegerField()
     
     class Meta:
         managed = True
@@ -424,8 +423,7 @@ class Transaction(models.Model):
     has_encrypttoself_message = models.IntegerField()
     recipients = None
     versionBRS = os.environ.get('BRS_P2P_VERSION')
-    if versionBRS.startswith('3.4'):
-        cash_back_id= PositiveBigIntegerField(blank=True, null=True)
+    cash_back_id= PositiveBigIntegerField(blank=True, null=True)
      
     class Meta:
         managed = True
