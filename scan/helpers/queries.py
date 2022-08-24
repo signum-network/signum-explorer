@@ -110,23 +110,20 @@ def check_is_contract(account_id: int) -> bool:
         )
     return at_id != None
 
-@cache_memoize(3600)
-def query_asset_treasury(asset, account_id) -> bool:
+@cache_memoize(None)
+def query_asset_treasury_acc(asset, account_id) -> (str, str):
     full_hash = (Transaction.objects.using("java_wallet")
         .values_list('full_hash', flat=True)
         .filter(id=asset.asset_id).first()
     )
-
     add_treasury = (Transaction.objects.using("java_wallet")
-        .values_list('referenced_transaction_fullhash', flat=True)
-        .filter(sender_id=asset.account_id, type=TxType.COLORED_COINS,
+        .values_list('referenced_transaction_fullhash')
+        .filter(sender_id=asset.owner_id, type=TxType.COLORED_COINS,
             subtype=TxSubtypeColoredCoins.ADD_TREASURY_ACCOUNT,
-            recipient_id=account_id
-        ).all()
+            recipient_id=account_id ).all()
     )
-
-    return full_hash in add_treasury
-
+    
+    return full_hash, add_treasury
 
 @cache_memoize(None)
 def get_asset_details(asset_id: int) -> (str, int, int, bool):
@@ -134,6 +131,16 @@ def get_asset_details(asset_id: int) -> (str, int, int, bool):
         Asset.objects.using("java_wallet")
         .filter(id=asset_id)
         .values_list("name", "decimals", "quantity", "mintable")
+        .first()
+        )
+    return asset_details
+
+@cache_memoize(None)
+def get_asset_details_owner(asset_id: int) -> (str, int, int, bool, int):
+    asset_details = (
+        Asset.objects.using("java_wallet")
+        .filter(id=asset_id)
+        .values_list("name", "decimals", "quantity", "mintable", "account_id")
         .first()
         )
     return asset_details
