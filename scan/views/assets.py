@@ -151,7 +151,7 @@ class AssetHoldersListView(ListView):
         obj = context[self.context_object_name]
 
         for asset in obj:
-            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(
+            asset.name, asset.decimals, asset.total_quantity, asset.mintable, asset.owner_id = get_asset_details_owner(
                 asset.asset_id
             )
             asset.account_name = get_account_name(asset.account_id)
