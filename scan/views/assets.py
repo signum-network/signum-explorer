@@ -9,7 +9,7 @@ from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS, FEATURED_ASSETS
 
 from java_wallet.models import AccountAsset, Asset, AssetTransfer, Trade,Transaction
 from scan.caching_paginator import CachingPaginator
-from scan.helpers.queries import get_account_name, get_asset_details
+from scan.helpers.queries import get_account_name, get_asset_details, get_asset_details_owner
 from scan.templatetags.burst_tags import burst_amount, mul_decimals
 from scan.views.base import IntSlugDetailView
 from scan.views.filters.assets import AssetTransferFilter, TradeFilter
@@ -255,10 +255,9 @@ class AssetDetailView(IntSlugDetailView):
         )
 
         for asset in assets_holders:
-            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(
-                asset.asset_id
-            )
+            asset.name, asset.decimals, asset.total_quantity, asset.mintable, asset.owner_id = get_asset_details_owner(asset.asset_id)
             asset.account_name = get_account_name(asset.account_id)
+
 
 
         context["assets_holders"] = assets_holders

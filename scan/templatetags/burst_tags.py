@@ -22,7 +22,7 @@ from scan.caching_data.exchange import CachingExchangeData
 import struct
 import os
 
-from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price, query_asset_treasury, get_account_balance,get_account_unconfirmed_balance,get_total_circulating
+from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price,  get_account_balance,get_account_unconfirmed_balance,get_total_circulating, query_asset_treasury_acc
 
 register = template.Library()
 
@@ -379,7 +379,11 @@ def is_asset_phishing(asset) -> bool:
 def is_asset_treasury(asset, account_id) -> bool:
     if not account_id:
         return False
-    return query_asset_treasury(asset, account_id)
+    fullh,resultt= query_asset_treasury_acc(asset, account_id)
+    for i in resultt:
+        if fullh == i[0]:
+            return True
+    return False
 
 def group_list(lst: list or tuple, n: int):
     for i in range(0, len(lst), n):
