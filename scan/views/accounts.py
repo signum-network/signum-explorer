@@ -15,7 +15,7 @@ from java_wallet.models import (
 from scan.caching_paginator import CachingPaginator
 from scan.helpers.queries import (
     get_account_name,
-    get_asset_details,
+    get_asset_details_owner,
     get_pool_id_for_account,
     get_pool_id_for_block,
     get_total_accounts_count,
@@ -130,7 +130,7 @@ class AddressDetailView(IntSlugDetailView):
         )
 
         for asset in assets:
-            asset.name, asset.decimals, asset.total_quantity, asset.mintable = get_asset_details(asset.asset_id)
+            asset.name, asset.decimals, asset.total_quantity, asset.mintable, asset.owner_id = get_asset_details_owner(asset.asset_id)
         context["assets"] = assets
         context["assets_cnt"] = assets_cnt
 
