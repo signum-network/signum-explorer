@@ -116,7 +116,7 @@
             </tr>
             <tr class="collapse show_more_info">
               <th style="min-width: 160px;">Base Target</th>
-              <td>{{ blk.base_target }}</td>
+              <td>{{ blk.base_target|base_target_capacity}}</td>
             </tr>
             <tr class="collapse show_more_info">
               <th>Version</th>
@@ -136,7 +136,7 @@
             </tr>
             <tr class="collapse show_more_info">
               <th>Cumulative Difficulty</th>
-              <td class="text-monospace">{{ blk.cumulative_difficulty|bin2hex }}</td>
+              <td class="text-monospace">{{ blk.cumulative_difficulty|bin2hex}}</td>
             </tr>
             <tr class="collapse show_more_info">
               <th>Generator Public Key</th>
