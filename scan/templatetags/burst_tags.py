@@ -472,6 +472,14 @@ def net_capacity_tib(base_target: int) -> float:
     return MAX_BASE_TARGET / (1.83 * base_target_capacity)
 
 @register.filter
+def base_target_capacity(base_target: int) -> int:
+    if base_target < 100000000000:
+        return int(MAX_BASE_TARGET / (base_target))
+    s = struct.pack('>l', base_target & 0xFFFFFFFF)
+    return int(struct.unpack('>f', s)[0])
+
+
+@register.filter
 def format_capacity(capacity: float) -> str:
     unit = "TiB"
     if capacity > 10000:
