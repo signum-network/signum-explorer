@@ -4,7 +4,7 @@ from django.conf import settings
 from pycoingecko import CoinGeckoAPI
 
 from scan.caching_data.base import CachingDataBase
-
+from cache_memoize import cache_memoize
 import os
 
 @dataclass
@@ -33,6 +33,7 @@ class CachingExchangeData(CachingDataBase):
     def _dumps(self, data):
         return data.__dict__
 
+    @cache_memoize(10)
     def _get_live_data(self):
         if settings.TEST_NET:
             return self.default_data_if_empty
