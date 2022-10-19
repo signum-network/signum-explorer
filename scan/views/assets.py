@@ -14,12 +14,16 @@ from scan.templatetags.burst_tags import burst_amount, mul_decimals
 from scan.views.base import IntSlugDetailView
 from scan.views.filters.assets import AssetTransferFilter, TradeFilter
 
+  
 
 def fill_data_asset_transfer(transfer):
-    transfer.name, transfer.decimals, transfer.total_quantity, mintable = get_asset_details(transfer.asset_id)
+    try:
+        transfer.name, transfer.decimals, transfer.total_quantity, mintable = get_asset_details(transfer.asset_id) 
+    except:
+        transfer.name, transfer.decimals, transfer.total_quantity = ["NOTKNOWN",1,0]
     transfer.sender_name = get_account_name(transfer.sender_id)
     transfer.recipient_name = get_account_name(transfer.recipient_id)
-
+    
 
 def fill_data_asset_trade(trade):
     trade.name, trade.decimals, trade.total_quantity, mintable = get_asset_details(trade.asset_id)
