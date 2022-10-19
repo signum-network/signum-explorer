@@ -238,7 +238,7 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
         try:
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
         except:
-            decimals = 8
+            decimals = 1
         quantity = int.from_bytes(tx.attachment_bytes[offset+8:offset+16], byteorder=sys.byteorder)
         return div_decimals(quantity, decimals)
     else:
