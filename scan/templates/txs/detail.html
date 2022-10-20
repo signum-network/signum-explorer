@@ -10,7 +10,7 @@
 {% if tx.type == 2 and tx.subtype == 2 or tx.subtype == 3 %}{{ tx|tx_quantity|intcomma }} {{ tx|tx_symbol }}{% endif %}
 {% if tx.type == 2 and tx.subtype == 1 %}
   {{ tx|tx_quantity|intcomma }} {{ tx|tx_symbol }}
-  {{ tx|tx_amount|intcomma }} {{ tx|tx_symbol }}
+  {{ tx|tx_amount|intcomma }} {{ coin_symbol }}
 {% endif %}
 {% if tx.type == 2 and tx.subtype == 9 %}
   {{ tx|tx_quantity_multi:1|rounding:5|intcomma }} {{ tx|tx_symbol_multi:1 }} 
