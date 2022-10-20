@@ -302,6 +302,14 @@ def tx_symbol_multi(tx: Transaction,asset_number = 1) -> str:
         if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
             return str(asset_id)[0:10]
         return name
+@register.filter
+def tx_assetid_multi(tx: Transaction,asset_number = 1) -> str:
+    asset_offset=[2,18,34,50]
+    asset_id_offset = asset_offset[asset_number-1]
+    asset_id_offset2 =   asset_id_offset + 8
+    if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
+        asset_id = int.from_bytes(tx.attachment_bytes[asset_id_offset:asset_id_offset2], byteorder=sys.byteorder)
+        return asset_id
 
 @register.filter
 def tx_symbol_distribution(tx: Transaction) -> str:
