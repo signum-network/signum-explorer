@@ -7,9 +7,9 @@
 
 {% block description %}
 {{ tx|tx_type }}
-{% if tx.type == 2 and tx.subtype == 2 or tx.subtype == 3 %}
+{% if tx.type == 2 and tx.subtype == 2 or tx.subtype == 3 %}{{ tx|tx_quantity|intcomma }} {{ tx|tx_symbol }}{% endif %}
+{% if tx.type == 2 and tx.subtype == 1 %}
   {{ tx|tx_quantity|intcomma }} {{ tx|tx_symbol }}
-{% else %}
   {{ tx|tx_amount|intcomma }} {{ tx|tx_symbol }}
 {% endif %}
 {% if tx.type == 2 and tx.subtype == 9 %}
@@ -19,7 +19,6 @@
   {% if tx|tx_asset_multi_size == 4 %} {{ tx|tx_quantity_multi:4|rounding:5|intcomma }} {{ tx|tx_symbol_multi:4 }}{% endif %}
 {% endif %}
 {% endblock %}
-
 {% block content %}
 
   <h5 class="p-2">Transaction ID<br class="d-md-none" /> {{ tx.id }}
