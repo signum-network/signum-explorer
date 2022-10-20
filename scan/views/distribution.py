@@ -21,18 +21,19 @@ def fill_data_indirect(obj, list_page=True):
 
 class DistributionListView(ListView):
     model = IndirecIncoming
-    queryset = IndirecIncoming.objects.using("java_wallet").all()
+    queryset = IndirecIncoming.objects.using("java_wallet").all().order_by("-amount","-quantity")
     template_name = "distribution/list.html"
     context_object_name = "distribution"
     paginator_class = CachingPaginator
     paginate_by = 25
-    ordering = "-height"
+    # ordering = "-amount"
 
     def get_queryset(self):
         qs = self.queryset
         if 'a' in self.request.GET:
             qs = qs.filter(transaction_id=self.request.GET['a'])
-        return qs.order_by(self.ordering)
+         # return qs.order_by(self.ordering)
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
