@@ -15,8 +15,8 @@
 {% if tx.type == 2 and tx.subtype == 9 %}
   {{ tx|tx_quantity_multi:1|rounding:5|intcomma }} {{ tx|tx_symbol_multi:1 }} 
   {{ tx|tx_quantity_multi:2|rounding:5|intcomma }} {{ tx|tx_symbol_multi:2 }} 
-  {% if tx|tx_asset_multi_size > 2 %} {{ tx|tx_quantity_multi:3|rounding:5|intcomma }}{{ tx|tx_symbol_multi:3 }}  {% endif %}
-  {% if tx|tx_asset_multi_size == 4 %} {{ tx|tx_quantity_multi:4|rounding:5|intcomma }} {{ tx|tx_symbol_multi:4 }} {% endif %}
+  {% if tx|tx_asset_multi_size > 2 %} {{ tx|tx_quantity_multi:3|rounding:5|intcomma }}{{ tx|tx_symbol_multi:3 }}{% endif %}
+  {% if tx|tx_asset_multi_size == 4 %} {{ tx|tx_quantity_multi:4|rounding:5|intcomma }} {{ tx|tx_symbol_multi:4 }}{% endif %}
 {% endif %}
 {% endblock %}
 
