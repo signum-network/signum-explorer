@@ -17,7 +17,7 @@ class ExchangeData:
 
 class CachingExchangeData(CachingDataBase):
     _cache_key = "exchange_data"
-    _cache_expiring = 600
+    _cache_expiring = 3600
     live_if_empty = True
     default_data_if_empty = ExchangeData()
 
