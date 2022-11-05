@@ -33,7 +33,7 @@ class CachingExchangeData(CachingDataBase):
     def _dumps(self, data):
         return data.__dict__
 
-    @cache_memoize(10)
+    @cache_memoize(60)
     def _get_live_data(self):
         if settings.TEST_NET:
             return self.default_data_if_empty
