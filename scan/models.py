@@ -30,6 +30,7 @@ class PeerMonitor(Model):
     )
 
     announced_address = CharField(primary_key=True, max_length=255)
+    real_ip = CharField(max_length=255, blank=True)
     platform = CharField(max_length=255, blank=True)
     application = CharField(max_length=255, blank=True)
     version = CharField(max_length=255, blank=True)

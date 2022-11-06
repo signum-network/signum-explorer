@@ -4,7 +4,6 @@ from django.conf import settings
 from pycoingecko import CoinGeckoAPI
 
 from scan.caching_data.base import CachingDataBase
-from cache_memoize import cache_memoize
 import os
 
 @dataclass
@@ -17,7 +16,7 @@ class ExchangeData:
 
 class CachingExchangeData(CachingDataBase):
     _cache_key = "exchange_data"
-    _cache_expiring = 600
+    _cache_expiring = 120  #SECONDS Due to rate limits on CoinGecko API
     live_if_empty = True
     default_data_if_empty = ExchangeData()
 
@@ -33,7 +32,6 @@ class CachingExchangeData(CachingDataBase):
     def _dumps(self, data):
         return data.__dict__
 
-    @cache_memoize(10)
     def _get_live_data(self):
         if settings.TEST_NET:
             return self.default_data_if_empty
@@ -46,7 +44,7 @@ class CachingExchangeData(CachingDataBase):
                 include_market_cap="true",
                 include_24hr_change="true",
             )["signum"]
-
+            CachingExchangeData().update_live_data()
             return ExchangeData(
                 price_usd=response["usd"],
                 price_btc=response["btc"],

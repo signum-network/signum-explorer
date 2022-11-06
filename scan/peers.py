@@ -68,7 +68,7 @@ def get_country_by_ip(ip: str) -> str:
 class PeerMonitorForm(forms.ModelForm):
     class Meta:
         model = PeerMonitor
-        fields = ['announced_address', 'platform', 'application', 'version', 'height', 'cumulative_difficulty', 'country_code', 'state', 'downtime', 'lifetime', 'availability', 'last_online_at']
+        fields = ['announced_address', 'real_ip', 'platform', 'application', 'version', 'height', 'cumulative_difficulty', 'country_code', 'state', 'downtime', 'lifetime', 'availability', 'last_online_at']
 
 
 def is_good_version(version: str) -> bool:
@@ -143,6 +143,7 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
 
     updates[address] = {
         "announced_address": peer_info["announcedAddress"],
+        "real_ip": ip,
         "country_code": get_country_by_ip(ip) if ip else "??",
         "application": peer_info["application"],
         "platform": peer_info["platform"],

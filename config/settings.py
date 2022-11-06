@@ -173,7 +173,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 CACHES = {
     "default": {
-        "BACKEND": "redis_lock.django_cache.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": f'redis://{os.environ.get("CACHE_DEFAULT_HOST")}:'
         f'{os.environ.get("CACHE_DEFAULT_PORT")}/'
         f'{os.environ.get("CACHE_DEFAULT_DB")}',
