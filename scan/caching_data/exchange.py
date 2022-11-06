@@ -16,7 +16,7 @@ class ExchangeData:
 
 class CachingExchangeData(CachingDataBase):
     _cache_key = "exchange_data"
-    _cache_expiring = 63  //SECONDS Due to rate limits on CoinGecko API
+    _cache_expiring = 120  //SECONDS Due to rate limits on CoinGecko API
     live_if_empty = True
     default_data_if_empty = ExchangeData()
 
