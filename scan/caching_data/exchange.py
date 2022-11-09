@@ -37,7 +37,7 @@ class CachingExchangeData(CachingDataBase):
             return self.default_data_if_empty
 
         try:
-            cg = CoinGeckoAPI()
+            cg = CoinGeckoAPI(retries=0)
             response = cg.get_price(
                 ids=os.environ.get("COINGECKO_PRICE_ID"),
                 vs_currencies=["usd", "btc"],
