@@ -38,9 +38,9 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
                 <span class="text-info small">
                   ${{ burst_info.exchange.price_usd|rounding:8|intcomma }} @ {{ burst_info.exchange.price_btc|floatformat:-8 }} BTC 
                   {% if burst_info.exchange.percent_change_24h < 0 %}
-                  <span style="color: red">&#11206; 
+                  <span style="color: red">&#9660; 
                   {% else %}
-                  <span style="color: green">&#11205; 
+                  <span style="color: green">&#9650; 
                   {% endif %}
                   ({{ burst_info.exchange.percent_change_24h|stringformat:"+0.1f" }}%)</span>
                 </span>
