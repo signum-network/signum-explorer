@@ -31,7 +31,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
       <div class="card-body">
         <div class="row mx-gutters-md-1">
           {% if not test_net %}
-          <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-md">
+          <div class="col-md-6 col-lg-4">
             <div class="media align-items-center">
               <div class="text-left">
                 <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-dollar-sign fa-fw"></i> {% coin_symbol %} price</h6>
@@ -54,10 +54,11 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
               </div>
             </div>
             <hr class="hr-space-lg d-block d-lg-none">
+            <div class="vdivider d-none d-lg-block"></div>
           </div>
           {% endif %}
 
-          <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-lg">
+          <div class="col-md-6 col-lg-4">
             <div class="media align-items-center">
               <div class="text-left">
                 <h6 class="text-uppercase text-secondary mb-0"><i class="fas fa-cubes fa-fw"></i> Latest block</h6>
@@ -86,9 +87,10 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
               </div>
             </div>
             <hr class="hr-space-lg d-block d-md-none">
+            <div class="vdivider d-none d-lg-block"></div>
           </div>
           
-          <div class="col-md-6 col-lg-4 u-ver-divider u-ver-divider--none-lg">
+          <div class="col-md-6 col-lg-4">
             <div class="media align-items-center">
               <div class="text-left">
                 <h6 class="text-uppercase text-secondary mb-0"><i class="fa fa-coins"></i> Total Supply</h6>
