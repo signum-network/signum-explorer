@@ -46,6 +46,15 @@ body, html {
   border: none;
 }
 
+.vdivider{
+  position:absolute;
+  left:100%;
+  top:5%;
+  bottom:5%;
+  border-left:1px solid;
+  color:rgba(0,0,0,.1);
+}
+
 #push {
   height: 80px
 }
