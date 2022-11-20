@@ -40,14 +40,13 @@ class CachingExchangeData(CachingDataBase):
             cg = CoinGeckoAPI(retries=0)
             response = cg.get_price(
                 ids=os.environ.get("COINGECKO_PRICE_ID"),
-                vs_currencies=["usd", "btc"],
+                vs_currencies=["usd"],
                 include_market_cap="true",
                 include_24hr_change="true",
             )["signum"]
             CachingExchangeData().update_live_data()
             return ExchangeData(
                 price_usd=response["usd"],
-                price_btc=response["btc"],
                 market_cap_usd=response["usd_market_cap"],
                 percent_change_24h=response["usd_24h_change"],
             )
