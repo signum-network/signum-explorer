@@ -28,7 +28,7 @@ from scan.models import PeerMonitor
 logger = logging.getLogger(__name__)
 
 if PEERS_SCAN_DELAY > 0:
-    logger.info(f"Sleeping for {PEERS_SCAN_DELAY} seconds...")
+    logger.info(f"Peers sleeping for {PEERS_SCAN_DELAY} seconds...")
 sleep(PEERS_SCAN_DELAY)
 
 def get_ip_by_domain(peer: str) -> str or None:
