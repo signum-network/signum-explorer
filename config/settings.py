@@ -278,6 +278,7 @@ PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 
 PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "0"))
+TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "0"))
 
 SITE_HOSTING = os.environ.get("SITE_HOSTING", " ")
 
