@@ -102,7 +102,8 @@ def blkatid(value: bytes) -> str:
     s = value.hex().upper()
     for x in (s[k:k+16] for k in range(0, len(s), 3*16)):
         i = struct.unpack('<Q', bytes.fromhex(x))[0]
-        lst.append(i)
+        j = str(i)
+        lst.append(j)
     return lst
 
 @register.filter
