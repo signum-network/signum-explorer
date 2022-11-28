@@ -95,6 +95,17 @@ def bin2hex(value: bytes) -> str:
     return value.hex().upper()
 
 @register.filter
+def blkatid(value: bytes) -> str:
+    if not value:
+        return ""
+    lst=[]
+    s = value.hex().upper()
+    for x in (s[k:k+16] for k in range(0, len(s), 3*16)):
+        i = struct.unpack('<Q', bytes.fromhex(x))[0]
+        lst.append(i)
+    return lst
+
+@register.filter
 def gzip2hex(value: bytes) -> str:
     if not value:
         return ""
