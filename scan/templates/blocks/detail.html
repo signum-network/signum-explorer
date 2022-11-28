@@ -5,6 +5,14 @@
 
 {% block title %} - Block {{ blk.height }}{% endblock %}
 
+{% block description %}
+Block #{{ blk.id }}
+{% if blk.txs_cnt > 0 %}{{ blk.txs_cnt|intcomma }} transactions
+{% else %}
+ 0 transactions
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
   <h5 class="p-2">Block #{{ blk.id }}</h5>
