@@ -11,7 +11,7 @@ from burst.constants import MAX_BASE_TARGET, TxSubtypeBurstMining, TxSubtypeColo
 from burst.libs.functions import calc_block_reward
 from burst.libs.multiout import MultiOutPack
 from burst.libs.reed_solomon import ReedSolomon
-from burst.libs.transactions import get_message
+from burst.libs.transactions import get_message, get_message_sub
 from burst.api.brs.v1.api import BrsApi
 from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS
 
@@ -118,6 +118,12 @@ def tx_message(tx: Transaction) -> str:
     if not tx.has_message or not tx.attachment_bytes:
         return ""
     return get_message(tx.attachment_bytes)
+
+@register.filter
+def tx_message_sub(tx: Transaction) -> str:
+    if not tx.has_message or not tx.attachment_bytes:
+        return ""
+    return get_message_sub(tx.attachment_bytes)
 
 @register.filter
 def tx_type(tx: Transaction) -> str:
