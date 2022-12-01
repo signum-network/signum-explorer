@@ -32,7 +32,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "off") == "on"
 
-INTERNAL_IPS = json.loads(os.environ.get("DEBUG_TOOLBAR_INTERNAL_IPS", "[]"))
+INTERNAL_IPS = os.environ.get("DEBUG_TOOLBAR_INTERNAL_IPS", "[]")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -278,6 +278,7 @@ PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 
 PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "0"))
+TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "0"))
 
 SITE_HOSTING = os.environ.get("SITE_HOSTING", " ")
 

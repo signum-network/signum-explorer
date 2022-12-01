@@ -5,6 +5,14 @@
 
 {% block title %} - Block {{ blk.height }}{% endblock %}
 
+{% block description %}
+Block #{{ blk.id }}
+{% if blk.txs_cnt > 0 %}{{ blk.txs_cnt|intcomma }} transactions
+{% else %}
+ 0 transactions
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
   <h5 class="p-2">Block #{{ blk.id }}</h5>
@@ -152,10 +160,7 @@
             </tr>
             <tr class="collapse show_more_info">
               <th>Contracts</th>
-              <td>
-                <textarea id="ats" class="form-control" spellcheck="false" rows="5" disabled>{{ blk.ats|bin2hex }}</textarea>
-                <label for="ats"></label>
-              </td>
+              <td style="word-wrap: break-word; max-width: 250px"><script type="text/javascript">const out = {{ blk.ats|blkatid|safe }}.reduce((prev, item) => prev += `<a href=/at/${item}>${item}</a><br/>`, ''); document.write(out);</script></td>
             </tr>
             </tbody>
           </table>

@@ -220,7 +220,13 @@
             <tr>
               <th>Message</th>
               <td class="text-monospace">
+              {% if tx.type == 21 and tx.subtype == 3 %}
+                <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message_sub }}</textarea>
+              {% elif tx.type == 2 and tx.subtype == 1 %}
+                <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message_token }}</textarea>
+                {% else %}
                 <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message }}</textarea>
+                {% endif %}
                 <label for="attachment"></label>
               </td>
             </tr>

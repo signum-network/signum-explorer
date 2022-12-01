@@ -28,7 +28,7 @@ from scan.models import PeerMonitor
 logger = logging.getLogger(__name__)
 
 if PEERS_SCAN_DELAY > 0:
-    logger.info(f"Sleeping for {PEERS_SCAN_DELAY} seconds...")
+    logger.info(f"Peers sleeping for {PEERS_SCAN_DELAY} seconds...")
 sleep(PEERS_SCAN_DELAY)
 
 def get_ip_by_domain(peer: str) -> str or None:
@@ -240,8 +240,8 @@ def peer_cmd():
     logger.info(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
 
     addresses = get_nodes_list()
-    logger.info("The list of peers:")
-    logger.info(addresses)
+    #logger.info("The list of peers:") #enable to troubleshoot peers list
+    #logger.info(addresses)            #enable to troubleshoot peers list
     # explore every peer and collect updates
     updates = {}
     if settings.TEST_NET:

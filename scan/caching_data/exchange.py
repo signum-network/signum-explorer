@@ -5,6 +5,8 @@ from pycoingecko import CoinGeckoAPI
 
 from scan.caching_data.base import CachingDataBase
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 @dataclass
 class ExchangeData:
@@ -16,8 +18,8 @@ class ExchangeData:
 
 class CachingExchangeData(CachingDataBase):
     _cache_key = "exchange_data"
-    _cache_expiring = 120  #SECONDS Due to rate limits on CoinGecko API
-    live_if_empty = True
+    _cache_expiring = 3600  #SECONDS to hold value if API breaks
+    live_if_empty = False
     default_data_if_empty = ExchangeData()
 
     @property
@@ -32,11 +34,12 @@ class CachingExchangeData(CachingDataBase):
     def _dumps(self, data):
         return data.__dict__
 
-    def _get_live_data(self):
+    def _get_live_data(self):    # Force cache to update unless testnet
         if settings.TEST_NET:
             return self.default_data_if_empty
 
         try:
+            logger.info("Getting Exchange data from API")
             cg = CoinGeckoAPI(retries=0)
             response = cg.get_price(
                 ids=os.environ.get("COINGECKO_PRICE_ID"),
@@ -44,7 +47,7 @@ class CachingExchangeData(CachingDataBase):
                 include_market_cap="true",
                 include_24hr_change="true",
             )["signum"]
-            CachingExchangeData().update_live_data()
+            logger.info(response)
             return ExchangeData(
                 price_usd=response["usd"],
                 market_cap_usd=response["usd_market_cap"],
