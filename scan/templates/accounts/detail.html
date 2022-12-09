@@ -56,17 +56,21 @@
               </th>
               </tr>
             <tr>
-              <th>ID</th>
+              <th style="width: 160px;">ID</th>
               <th>{{ address.id }}</th>
             </tr>
+            {% if address.name %}
             <tr>
-              <th style="width: 160px;">Name</th>
-              <td style="word-wrap: break-word; max-width: 250px">{% if address.name %}{{ address.name }}{% endif %}</td>
+              <th>Name</th>
+              <td style="word-wrap: break-word; max-width: 250px">{{ address.name }}</td>
             </tr>
+            {% endif %}
+            {% if address.description %}
             <tr>
-              <th class="d-none d-sm-table-cell">Description</th>
-              <td class="d-none d-sm-table-cell" style="word-wrap: break-word; max-width: 250px">{% if address.description %}{{ address.description }}{% endif %}</td>
+              <th>Description</th>
+              <td name="src44field" style="word-wrap: break-word; max-width: 250px">{{ address.description }}</td>
             </tr>
+            {% endif %}
             <tr>
               <th>Total Balance</th>
               <td>
@@ -265,5 +269,47 @@
       </div>
     </div>
   </div>
+
+<script>
+window.onload = function() {
+
+const template = `
+<div style='display: inline-block; text-align: center;'>
+<img src='%avatar%' style='width:50px; border-radius: 50%;'><br>
+<strong>%name%</strong></div>
+<br><br>
+%description%<br> 
+<a href='%web%' target='_blank'>%web%</a>`;
+
+   const fields = document.getElementsByName('src44field');
+   if (!fields) {
+     return
+   }
+   for (const field of fields) {
+     const source = field.innerHTML;
+     try {
+       const obj = JSON.parse(source);
+       
+         const item = {
+            name: obj.nm ?? '',
+            description: obj.ds ?? '',
+            web: obj.hp ?? '',
+            avatar: Object.keys(obj.av)[0] ?? ''
+         }
+       if (item.avatar) {
+           item.avatar = 'https://ipfs.io/ipfs/' + item.avatar;
+       }
+         out = template
+           .replace('%avatar%', item.avatar)
+           .replace('%name%', item.name)
+           .replace('%description%', item.description)
+           .replace(/%web%/g, item.web);
+
+       field.innerHTML = out;
+     } catch (_e) {
+     }
+   }
+ }
+</script>
 
 {% endblock %}
