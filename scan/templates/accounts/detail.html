@@ -275,7 +275,7 @@ window.onload = function() {
 
 const template = `
 <div style='display: inline-block; text-align: center;'>
-<img src='%avatar%' style='width:50px; border-radius: 50%;'><br>
+%avatar%
 <strong>%name%</strong></div>
 <br><br>
 %description%<br> 
@@ -294,10 +294,13 @@ const template = `
             name: obj.nm ?? '',
             description: obj.ds ?? '',
             web: obj.hp ?? '',
-            avatar: Object.keys(obj.av)[0] ?? ''
          }
-       if (item.avatar) {
-           item.avatar = 'https://ipfs.io/ipfs/' + item.avatar;
+       if (obj.av) {
+           avatar = Object.keys(obj.av)[0] ?? ''
+           item.avatar = '<img src="https://ipfs.io/ipfs/' + avatar + '" style="width:50px; border-radius: 50%;"><br>';
+       }
+       else {
+           item.avatar = "";
        }
          out = template
            .replace('%avatar%', item.avatar)
