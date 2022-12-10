@@ -294,20 +294,17 @@ const template = `
             name: obj.nm ?? '',
             description: obj.ds ?? '',
             web: obj.hp ?? '',
+            avatar: ''
          }
        if (obj.av) {
            avatar = Object.keys(obj.av)[0] ?? ''
            item.avatar = '<img src="https://ipfs.io/ipfs/' + avatar + '" style="width:50px; border-radius: 50%;"><br>';
-       }
-       else {
-           item.avatar = "";
        }
          out = template
            .replace('%avatar%', item.avatar)
            .replace('%name%', item.name)
            .replace('%description%', item.description)
            .replace(/%web%/g, item.web);
-
        field.innerHTML = out;
      } catch (_e) {
      }
