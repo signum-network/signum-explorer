@@ -28,7 +28,10 @@
           {% endif %}
         </td>
         <td class="text-nowrap d-none d-sm-table-cell align-top" title="Amount">
-           {% if tx.type == 2 and tx.subtype == 2  %}
+           {% if tx.quantity and tx.amount <= 0 %}
+             <span></span><br>
+             <span></span><br>
+           {% elif tx.type == 2 and tx.subtype == 2  %}
              <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
              <span class="text-success"> {{ tx|tx_symbol }} </span>
            {% elif tx.type == 2 and  tx.subtype == 3  %}
