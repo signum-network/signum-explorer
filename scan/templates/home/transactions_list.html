@@ -43,18 +43,15 @@
            {%elif tx.type == 20 or tx.type == 22 %}        
              <span>{{ tx|tx_amount|rounding:5|intcomma }}</span><br>
              <span class="text-success"> {% coin_symbol %} </span><br>
-           {% endif %}
-           {% if tx.type == 2 and tx.subtype == 1 %}
-              <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
-              <span class="text-success">  {{ tx|tx_symbol }} </span><br>
-           {% endif %}          
-           {% if tx.type == 2 and tx.subtype == 9 %}
+           {% elif tx.type == 2 and tx.subtype == 1 %}
+             <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+             <span class="text-success">  {{ tx|tx_symbol }} </span><br>        
+           {% elif tx.type == 2 and tx.subtype == 9 %}
              <span>{{ tx|tx_quantity_multi|rounding:5|intcomma }}</span><br>
-           {% endif %}
-           {% if tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
+           {% elif tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
              <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
              <span class="text-success"> {{ tx|tx_symbol_distribution}} </span><br>
-           {% endif %} 
+           {% endif %}  
         </td>
       </tr>
     {% endfor %}
