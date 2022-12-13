@@ -104,39 +104,45 @@
             <tr>
               <th>Value</th>
               <td>
-                {% if tx.type == 2 and tx.subtype == 1 and tx.amount > 0 %}
-                  <br> 
-                  <span>{{ tx.amount|burst_amount|rounding:5|intcomma }}</span>
-                  <span class="text-success"> {% coin_symbol %} </span><br>
+                {% if tx.quantity and tx.amount <= 0 %}
+                  <span></span><br>
+                  <span></span><br>
+                {% elif tx.type == 2 and tx.subtype == 2  %}
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span class="text-success"> {{ tx|tx_symbol }} </span>
+                {% elif tx.type == 2 and  tx.subtype == 3  %}
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span class="text-success"> {{ tx|tx_symbol }} </span>
+                {% elif tx.type == 2 and  tx.subtype == 6 %}
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span class="text-success"> {{ tx|tx_symbol }} </span>
+                {%elif tx.type == 20 or tx.type == 22 %}        
+                  <span>{{ tx|tx_amount|rounding:5|intcomma }}</span>
+                  <span> {% coin_symbol %} {% if coin_symbol == SIGNA %}<span class="text-info"> (${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span>{% endif %}</span>
+                {% elif tx.type == 2 and tx.subtype == 1 %}
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span class="text-success">  {{ tx|tx_symbol }} </span><br> 
+                {% elif tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span class="text-success"> {{ tx|tx_symbol_distribution}} </span><br>
+                {% elif tx.amount > 0 %}        
+                  <span>{{ tx|tx_amount|rounding:5|intcomma }}</span>
+                  <span> {% coin_symbol %} {% if coin_symbol == SIGNA %}<span class="text-info"> (${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span>{% endif %}</span>
                 {% endif %}
-                {% if tx.type == 20 or tx.type == 22 %}        
-                  {{ tx|tx_amount|rounding:5|intcomma }} 
-                {% elif tx.type == 2 and tx.subtype == 3 or tx.subtype == 1 or tx.subtype == 2 or tx.subtype == 6 %}
-                  {{ tx|tx_quantity|rounding:5|intcomma }}
-                {% else %}
-                  {{ tx|tx_amount|intcomma }} 
-                {% endif %}
-                {{ tx|tx_symbol }} <br>
-                {% if tx.type != 2 %}
-                  <span class="text-info">(${{ tx|tx_amount|in_usd|rounding:4|intcomma }})</span>
-                {% endif %}
-              
-              {% if tx.type == 2 and tx.subtype == 9 %}
-              <span>{{ tx|tx_quantity_multi:1|rounding:5|intcomma }}</span>
-              <span class="text-success">  <a href="{% url 'asset-detail' tx|tx_assetid_multi:1 %}"> {{ tx|tx_symbol_multi:1 }} </a></span><br>
-              <span>{{ tx|tx_quantity_multi:2|rounding:5|intcomma }}</span>
-              <span class="text-success"> <a href="{% url 'asset-detail' tx|tx_assetid_multi:2 %}"> {{ tx|tx_symbol_multi:2 }} </a></span><br>
-                {% if tx|tx_asset_multi_size > 2 %}
-                  <span>{{ tx|tx_quantity_multi:3|rounding:5|intcomma }}</span>
-                  <span class="text-success"> <a href="{% url 'asset-detail' tx|tx_assetid_multi:3 %}"> {{ tx|tx_symbol_multi:3 }} </a></span><br>
-                {% endif %}
-                {% if tx|tx_asset_multi_size == 4 %}
-                  <span>{{ tx|tx_quantity_multi:4|rounding:5|intcomma }}</span>
-                  <span class="text-success"> <a href="{% url 'asset-detail' tx|tx_assetid_multi:4 %}"> {{ tx|tx_symbol_multi:4 }} </a></span><br>
-                {% endif %}
-              {% endif %}
-
-
+                {% if tx.type == 2 and tx.subtype == 9 %}       
+                   <span>{{ tx|tx_quantity_multi:1|rounding:8|intcomma }}</span>
+                   <span class="text-success">  <a href="{% url 'asset-detail' tx|tx_assetid_multi:1 %}"> {{ tx|tx_symbol_multi:1 }} </a></span><br>
+                   <span>{{ tx|tx_quantity_multi:2|rounding:8|intcomma }}</span>
+                   <span class="text-success"> <a href="{% url 'asset-detail' tx|tx_assetid_multi:2 %}"> {{ tx|tx_symbol_multi:2 }} </a></span><br>
+                     {% if tx|tx_asset_multi_size > 2 %}
+                       <span>{{ tx|tx_quantity_multi:3|rounding:8|intcomma }}</span>
+                       <span class="text-success"> <a href="{% url 'asset-detail' tx|tx_assetid_multi:3 %}"> {{ tx|tx_symbol_multi:3 }} </a></span><br>
+                     {% endif %}
+                     {% if tx|tx_asset_multi_size == 4 %}
+                       <span>{{ tx|tx_quantity_multi:4|rounding:8|intcomma }}</span>
+                       <span class="text-success"> <a href="{% url 'asset-detail' tx|tx_assetid_multi:4 %}"> {{ tx|tx_symbol_multi:4 }} </a></span><br>
+                     {% endif %}
+                {% endif %} 
               </td>
             </tr>
             <tr>
