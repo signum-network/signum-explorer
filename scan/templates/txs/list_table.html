@@ -62,13 +62,13 @@
           <td class="text-nowrap">
             {% if tx.type == 2 and tx.subtype == 2  %}
               <span>{{ tx|tx_quantity:filtered_account|rounding:8|intcomma }}</span><br>
-              <span class="text-success"> {{ tx|tx_symbol }} </span>
+              <span class="text-success"><a href="{% url 'asset-detail' tx|tx_asset_id %}">{{ tx|tx_symbol }} </a></span>
             {% elif tx.type == 2 and  tx.subtype == 3  %}
               <span>{{ tx|tx_quantity:filtered_account|rounding:8|intcomma }}</span><br>
-              <span class="text-success"> {{ tx|tx_symbol }} </span>
+              <span class="text-success"><a href="{% url 'asset-detail' tx|tx_asset_id %}">{{ tx|tx_symbol }}</a></span>
             {% elif tx.type == 2 and  tx.subtype == 6 %}
               <span>{{ tx|tx_quantity:filtered_account|rounding:8|intcomma }}</span><br>
-              <span class="text-success"> {{ tx|tx_symbol }} </span>
+              <span class="text-success"><a href="{% url 'asset-detail' tx|tx_asset_id %}">{{ tx|tx_symbol }}</a></span>
             {%elif tx.amount > 0 %}        
               <span>{{ tx|tx_amount:filtered_account|rounding:8|intcomma }}</span><br>
               <span class="text-success"> {% coin_symbol %} </span><br>

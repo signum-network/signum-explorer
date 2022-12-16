@@ -235,6 +235,7 @@
     </script>
     <script>
       $(document).ready(function () {
+        $('#back-to-top').fadeOut(1);
         $(window).scroll(function () {
           if ($(this).scrollTop() > 50) {
             $('#back-to-top').fadeIn();
@@ -252,7 +253,7 @@
       });
     </script>
     {% block scripts %}{% endblock %}
-<a id="back-to-top" href="#" class="border btn btn-light back-to-top" role="button"><i class="fas fa-chevron-up"></i></a>
+<a id="back-to-top" href="#" class="border btn btn-light back-to-top" role="button" style="display:inline;"><i class="fas fa-chevron-up"></i></a>
 </body>
 
 </html>

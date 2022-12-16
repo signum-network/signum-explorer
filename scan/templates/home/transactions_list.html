@@ -28,8 +28,33 @@
           {% endif %}
         </td>
         <td class="text-nowrap d-none d-sm-table-cell align-top" title="Amount">
-          <span>{{ tx|tx_amount|rounding:5|intcomma }}</span><br>
-          <span class="text-success"> {{ tx|tx_symbol }} </span>
+           {% if tx.quantity and tx.amount <= 0 %}
+             <span></span><br>
+             <span></span><br>
+           {% elif tx.type == 2 and tx.subtype == 2  %}
+             <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+             <span class="text-success"> {{ tx|tx_symbol }} </span>
+           {% elif tx.type == 2 and  tx.subtype == 3  %}
+             <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+             <span class="text-success"> {{ tx|tx_symbol }} </span>
+           {% elif tx.type == 2 and  tx.subtype == 6 %}
+             <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+             <span class="text-success"> {{ tx|tx_symbol }} </span>
+           {%elif tx.amount > 0 %}        
+             <span>{{ tx|tx_amount|rounding:5|intcomma }}</span><br>
+             <span class="text-success"> {% coin_symbol %} </span><br>
+           {%elif tx.type == 20 or tx.type == 22 %}        
+             <span>{{ tx|tx_amount|rounding:5|intcomma }}</span><br>
+             <span class="text-success"> {% coin_symbol %} </span><br>
+           {% elif tx.type == 2 and tx.subtype == 1 %}
+             <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+             <span class="text-success">  {{ tx|tx_symbol }} </span><br>        
+           {% elif tx.type == 2 and tx.subtype == 9 %}
+             <span>{{ tx|tx_quantity_multi|rounding:5|intcomma }}</span><br>
+           {% elif tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
+             <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+             <span class="text-success"> {{ tx|tx_symbol_distribution}} </span><br>
+           {% endif %}  
         </td>
       </tr>
     {% endfor %}
