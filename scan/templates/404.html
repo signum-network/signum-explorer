@@ -3,25 +3,25 @@
 {% load humanize %}
 {% load burst_tags %}
 
+{% load static %}
+{% block title %} - 404 Error{% endblock %}
 {% block description %}
-Oops! Page not found.
+404 - Page not found.
 {% endblock %}
 
 {% block content %}
 <div class="container">
-  <div class="row">
-      <div class="col-md-12">
-          <div class="error-template">
-              <h1>
-                  Oops!</h1>
-              <h2>
-                  404 Not Found</h2>
-              <div class="error-details">
-                  Sorry, an error has occured, requested page not found!
-              </div>
-          </div>
-      </div>
-  </div>
+    <div class="error-template" class="media align-items-center">
+        <img src="{% static '404Error.png' %}" class="mx-auto d-block" style="max-width: 40vw;"><br>
+        <h1 class="text-center text-uppercase text-secondary mb-0"><b>IT'S FU*#ED UP!!</b></h1>
+        <h2 class="text-center text-secondary mb-0">Great, lets continue our journey to the moon!</h2>
+        <div class="text-center error-details">
+            Sorry, an error has occured, the requested page was not found! (*We said* "<b>Fueled</b>")
+        </div>
+        <br>
+           <div class="col text-center">
+           <a class="btn btn-primary" href="/" role="button">Go Home</a>
+           </div>
+    </div>
 </div>
-
 {% endblock %}
