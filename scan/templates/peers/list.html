@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-
+{% load burst_tags %}
 {% load humanize %}
 
 {% block title %} - Nodes List{% endblock %}
-
+{% block description %}Signum Node List, {{ paginator.count|intcomma }} Nodes{% endblock %}
 {% block content %}
 
   <h5 class="p-2">Featured Nodes</h5>
@@ -16,7 +16,7 @@
             <thead>
             <tr>
               <th scope="col">Address</th>
-              <th scope="col">State</th>
+              <th scope="col" class="text-center">State</th>
               <th scope="col">Web-Wallet</th>
               <th scope="col">Height</th>
               <th scope="col">Version</th>
@@ -27,8 +27,21 @@
             {% for peer in featured_peers %}
               <tr>
                 <td><a href="{% url 'peer-detail' peer.announced_address %}">{{ peer.announced_address }}</a></td>
-                <td>{{ peer.get_state_display }}</td>
-                <td><a href="https://{{ peer.announced_address }}" target="_blank">https://{{ peer.announced_address }}</a></td>
+                <td class="text-nowrap text-center">
+                {% if peer.get_state_display == 'online' %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" title="Online">🟢</a>
+                {% elif peer.get_state_display == 'unreachable' %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="Unreachable <br> Last online <br> {{ peer.last_online_at|naturaltime }}">🔴</a>
+                {% elif peer.get_state_display == 'stuck' %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" title="Stuck">🟡</a>
+                {% elif peer.get_state_display == 'in sync' %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" title="In Sync">⏳</a>
+                {% endif %}
+                {% if peer.created_at|hours_ago:48 %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="New Node <br> Found <br> {{ peer.created_at|naturaltime }}">⭐</a>
+                {% endif %}
+               <td><a href="https://{{ peer.announced_address }}" target="_blank">https://{{ peer.announced_address }}</a>
+                </td>
                 <td>{{ peer.height }}</td>
                 <td>{{ peer.version }}</td>
                 <td>{{ peer.country_code }}</td>
@@ -70,7 +83,24 @@
             {% for peer in peers %}
               <tr>
                 <td><a href="{% url 'peer-detail' peer.announced_address %}">{{ peer.announced_address }}</a></td>
-                <td>{{ peer.get_state_display }}</td>
+                <td class="text-nowrap">
+                {% if peer.get_state_display == 'online' %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" title="Online">🟢</a>
+                {% elif peer.get_state_display == 'unreachable' %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="Unreachable <br> Last online <br> {{ peer.last_online_at|naturaltime }}">🔴</a>
+                {% elif peer.get_state_display == 'stuck' %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" title="Stuck">🟡</a>
+                {% elif peer.get_state_display == 'in sync' %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" title="In Sync">⏳</a>
+                {% endif %}
+                {% if peer.created_at|hours_ago:48 %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="New Node <br> Found <br> {{ peer.created_at|naturaltime }}">⭐</a>
+                {% endif %}
+                {% if peer.reward_state == 'Paid' and peer.reward_time|hours_ago:23 %}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="SNR Paid <br> {{ peer.reward_time|naturaltime }}">💲</a>
+                {% elif peer.reward_state == 'Duplicate' %}<a href="#" style="text-decoration: none;" data-toggle="modal" title="SNR Duplicate">❌</a>
+                {% endif %}
+                </td>
                 <td>{{ peer.availability|floatformat:2 }}%</td>
                 <td>{{ peer.height }}</td>
                 <td>{{ peer.version }}</td>

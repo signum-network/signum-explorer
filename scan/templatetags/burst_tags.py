@@ -3,10 +3,8 @@ from math import ceil
 import sys
 import gzip
 from cache_memoize import cache_memoize
-
 from django import template
 from django.conf import settings
-
 from burst.constants import MAX_BASE_TARGET, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxSubtypePayment, TxType
 from burst.libs.functions import calc_block_reward
 from burst.libs.multiout import MultiOutPack
@@ -14,11 +12,9 @@ from burst.libs.reed_solomon import ReedSolomon
 from burst.libs.transactions import get_message, get_message_sub, get_message_token
 from burst.api.brs.v1.api import BrsApi
 from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS
-
 from java_wallet.fields import get_desc_tx_type
 from java_wallet.models import Block, IndirecIncoming, IndirectRecipient, Trade, Transaction
 from scan.caching_data.exchange import CachingExchangeData
-
 import struct
 import os
 
@@ -26,6 +22,9 @@ from scan.helpers.queries import get_account_name,get_asset_details, get_asset_p
 
 register = template.Library()
 
+@register.filter
+def hours_ago(time, hours):
+    return time + timedelta(hours=hours) > datetime.now()
 
 @register.filter
 def block_reward(block: Block) -> int:
