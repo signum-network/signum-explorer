@@ -3,7 +3,9 @@
 {% load humanize %}
 
 {% block title %} - Nodes List{% endblock %}
-{% block description %}Signum Node List, {{ paginator.count|intcomma }} Nodes{% endblock %}
+{% block description %}Signum Node List
+{{ paginator.count|intcomma }} Nodes
+{% endblock %}
 {% block content %}
 
   <h5 class="p-2">Featured Nodes</h5>
@@ -36,6 +38,8 @@
                 <a href="#" style="text-decoration: none;" data-toggle="modal" title="Stuck">🟡</a>
                 {% elif peer.get_state_display == 'in sync' %}
                 <a href="#" style="text-decoration: none;" data-toggle="modal" title="In Sync">⏳</a>
+                {% elif peer.get_state_display == 'forked' %}
+                <a href="#" style="text-decoration: none; font-weight:bold;" data-toggle="modal" title="Forked">Ψ</a>
                 {% endif %}
                 {% if peer.created_at|hours_ago:48 %}
                 <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="New Node <br> Found <br> {{ peer.created_at|naturaltime }}">⭐</a>
@@ -84,7 +88,7 @@
               <tr>
                 <td><a href="{% url 'peer-detail' peer.announced_address %}">{{ peer.announced_address }}</a></td>
                 <td class="text-nowrap">
-                {% if peer.get_state_display == 'online' %}
+                {% if peer.get_state_display == 'online' %}    {# node state badges here #}
                 <a href="#" style="text-decoration: none;" data-toggle="modal" title="Online">🟢</a>
                 {% elif peer.get_state_display == 'unreachable' %}
                 <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="Unreachable <br> Last online <br> {{ peer.last_online_at|naturaltime }}">🔴</a>
@@ -92,13 +96,15 @@
                 <a href="#" style="text-decoration: none;" data-toggle="modal" title="Stuck">🟡</a>
                 {% elif peer.get_state_display == 'in sync' %}
                 <a href="#" style="text-decoration: none;" data-toggle="modal" title="In Sync">⏳</a>
+                {% elif peer.get_state_display == 'forked' %}
+                <a href="#" style="text-decoration: none; font-weight:bold;" data-toggle="modal" title="Forked">Ψ</a>
                 {% endif %}
-                {% if peer.created_at|hours_ago:48 %}
-                <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="New Node <br> Found <br> {{ peer.created_at|naturaltime }}">⭐</a>
-                {% endif %}
-                {% if peer.reward_state == 'Paid' and peer.reward_time|hours_ago:23 %}
+                {% if peer.reward_state == 'Paid' and peer.reward_time|hours_ago:23 %}   {# SNR badges here #}
                 <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="SNR Paid <br> {{ peer.reward_time|naturaltime }}">💲</a>
                 {% elif peer.reward_state == 'Duplicate' %}<a href="#" style="text-decoration: none;" data-toggle="modal" title="SNR Duplicate">❌</a>
+                {% endif %}
+                {% if peer.created_at|hours_ago:48 %}    {# other badges here #}
+                <a href="#" style="text-decoration: none;" data-toggle="modal" data-html="true" title="New Node <br> Found <br> {{ peer.created_at|naturaltime }}">⭐</a>
                 {% endif %}
                 </td>
                 <td>{{ peer.availability|floatformat:2 }}%</td>
