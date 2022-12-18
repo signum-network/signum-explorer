@@ -4,7 +4,10 @@
 {% load burst_tags %}
 
 {% block title %} - Blocks{% endblock %}
-
+{% block description %}
+Signum Blocks
+Total: {{ last_height|add:1|intcomma }}
+{% endblock %}
 {% block content %}
 
   <h5 class="p-2">Blocks
