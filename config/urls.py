@@ -40,6 +40,7 @@ from scan.views.peers import (
     PeerMonitorDetailView,
     PeerMonitorListView,
     peers_charts_view,
+    getSNRjson,
 )
 from scan.views.pending_transactions import pending_transactions
 from scan.views.search import search_view
@@ -75,6 +76,7 @@ urlpatterns = [
     path("peers/", PeerMonitorListView.as_view(), name="peers"),
     path("peers-charts/", peers_charts_view, name="peers-charts"),
     path("peer/<str:address>", PeerMonitorDetailView.as_view(), name="peer-detail"),
+    path("SNRinfo/", getSNRjson, name="snr-info"),
     # path("admin/", admin.site.urls),
 ]
 

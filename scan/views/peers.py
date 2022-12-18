@@ -3,9 +3,16 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
 from config.settings import BRS_BOOTSTRAP_PEERS
-
+from django.http import HttpResponse
 from scan.models import PeerMonitor
+import json
 
+@require_http_methods(["GET"])
+def getSNRjson(request): 
+    snrraw = PeerMonitor.objects.all().values('announced_address', 'real_ip', 'reward_state', 'reward_time')
+    snr_info = list(snrraw)
+    dump = json.dumps(snr_info, default=str)
+    return HttpResponse(dump, content_type='application/json')
 
 @require_http_methods(["GET"])
 def peers_charts_view(request):
@@ -79,3 +86,4 @@ class PeerMonitorDetailView(DetailView):
     context_object_name = "peer"
     slug_field = "announced_address"
     slug_url_kwarg = "address"
+    

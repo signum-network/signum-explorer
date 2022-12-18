@@ -4,7 +4,10 @@
 {% load burst_tags %}
 
 {% block title %} - Contracts{% endblock %}
-
+{% block description %}
+Signum Smart Contracts
+Total: {{ paginator.count|intcomma }}
+{% endblock %}
 {% block content %}
 
   <h5 class="p-2">Contracts

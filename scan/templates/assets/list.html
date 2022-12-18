@@ -4,7 +4,10 @@
 {% load burst_tags %}
 
 {% block title %} - Tokens{% endblock %}
-
+{% block description %}
+Signum Tokens
+Total: {{ paginator.count|intcomma }}
+{% endblock %}
 {% block content %}
 
   {% if featured_assets %}

@@ -4,7 +4,10 @@
 {% load burst_tags %}
 
 {% block title %} - Transactions{% endblock %}
-
+{% block description %}
+Signum Transactions
+Total: {{ txs_cnt|intcomma }}
+{% endblock %}
 {% block content %}
 
   <h5 class="p-2">Transactions
