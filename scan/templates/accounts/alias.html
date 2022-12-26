@@ -5,17 +5,19 @@
   <table class="table table-hover small table-sm">
     <thead>
     <tr>
-      <th scope="col">Alias</th>
+      <th scope="col">Transaction ID</th>
+      <th scope="col" class="d-none d-sm-table-cell">Block</th>
+      <th scope="col">Alias Name</th>
       <th scope="col">Last Modified</th>
-      <th scope="col">TX</th>
     </tr>
     </thead>
     <tbody>
     {% for alias in aliases %}
       <tr>
+        <td><a href="{% url 'tx-detail' alias.id %}">{{ alias.id|truncatechars:10 }}</a></td>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' alias.height %}">{{ alias.height }}</a></td>
         <td>{{ alias.alias_name }}</td>
         <td>{{ alias.timestamp|naturaltime }}</td>
-        <td><a href="{% url 'tx-detail' alias.id %}">{{ alias.id }}</a></td>
       </tr>
     {% endfor %}
     </tbody>

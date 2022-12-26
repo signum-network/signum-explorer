@@ -5,13 +5,13 @@
   <table class="table table-hover small table-sm">
     <thead>
     <tr>
+      <th scope="col" class="d-none d-sm-table-cell">Transaction ID</th>
+      <th scope="col" class="d-none d-sm-table-cell">Block</th>
+      <th scope="col">Timestamp</th>
       {% if not asset_specific %}
         <th scope="col">Ticker</th>
         <th scope="col" class="d-none d-sm-table-cell">Token ID</th>
       {% endif %}
-      <th scope="col" class="d-none d-sm-table-cell">Block</th>
-      <th scope="col" class="d-none d-sm-table-cell">Transaction ID</th>
-      <th scope="col">Timestamp</th>
       <th scope="col" class="d-none d-sm-table-cell">From</th>
       <th scope="col"></th>
       <th scope="col" class="d-none d-sm-table-cell">To</th>
@@ -21,6 +21,9 @@
     <tbody>
     {% for asset in assets_transfers %}
       <tr>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'tx-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
+        <td class="text-nowrap"><a href="{% url 'tx-detail' asset.id %}">{{ asset.timestamp|naturaltime }}</a></td>
         {% if not asset_specific %}
           <td class="text-nowrap text-uppercase">
             <a href="{% url 'asset-detail' asset.asset_id %}">
@@ -35,9 +38,6 @@
             <a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a>
           </td>
         {% endif %}
-        <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
-        <td class="d-none d-sm-table-cell"><a href="{% url 'tx-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
-        <td class="text-nowrap"><a href="{% url 'tx-detail' asset.id %}">{{ asset.timestamp|naturaltime }}</a></td>
         <td class="text-nowrap d-none d-sm-table-cell">
           {% include "account_link.html" with account_id=asset.sender_id account_name=asset.sender_name %}
         </td>
