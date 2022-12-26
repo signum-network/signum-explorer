@@ -8,9 +8,10 @@ Cashbacks
 {% endblock %}
 {% block content %}
   <h5 class="p-2">Cashbacks 
-         <br class="d-md-none" />
+      {% if 'a' in request.GET %}
       <small class="text-muted">for address <a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
- </h5>
+      {% endif %}
+  </h5>
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
