@@ -6,7 +6,9 @@
 
 {% block content %}
 
-  <h5 class="p-2">Peer {{ peer.announced_address }}</h5>
+  <h5 class="p-2">Peer {{ peer.announced_address }}
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ peer.announced_address }}"><i class="far fa-copy"></i></a>
+  </h5>
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">

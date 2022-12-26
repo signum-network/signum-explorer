@@ -5,6 +5,7 @@ from java_wallet.models import (
     Account,
     AccountBalance,
     AccountAsset,
+    Alias,
     AssetTransfer,
     At,
     Block,
@@ -95,7 +96,7 @@ class AddressDetailView(IntSlugDetailView):
         context["txs"] = txs
         context["txs_cnt"] = txs_cnt
         
-        #cashback
+        # cashback
         if obj.id == 0:
             cbs =0
             cbs_cnt = 0
@@ -114,7 +115,21 @@ class AddressDetailView(IntSlugDetailView):
         context["total_cashback"]=total_cashback
         context["cbs"] = cbs
         context["cbs_cnt"] = cbs_cnt
+
+        # aliases
+
+        alias_query = (
+            Alias.objects.using("java_wallet")
+            .filter(account_id=obj.id, latest=True)
+            .order_by("alias_name")
+        )
+            
+        alias_cnt = alias_query.count()
+        aliases = alias_query
         
+        context["aliases"] = aliases[:25]
+        context["alias_cnt"] = alias_cnt
+
 
         # assets
 

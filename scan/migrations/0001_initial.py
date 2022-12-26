@@ -19,6 +19,7 @@ class Migration(migrations.Migration):
                     "announced_address",
                     models.CharField(max_length=255, primary_key=True, serialize=False),
                 ),
+                ("real_ip", models.CharField(blank=True, max_length=255)),
                 ("platform", models.CharField(blank=True, max_length=255)),
                 ("application", models.CharField(blank=True, max_length=255)),
                 ("version", models.CharField(blank=True, max_length=255)),
@@ -44,6 +45,8 @@ class Migration(migrations.Migration):
                 ("last_online_at", models.DateTimeField()),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("modified_at", models.DateTimeField(auto_now=True)),
+                ("reward_state", models.CharField(blank=True, null=True, default='None', max_length=255)),
+                ("reward_time", models.DateTimeField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
