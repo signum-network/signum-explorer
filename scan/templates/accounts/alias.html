@@ -1,0 +1,23 @@
+{% load humanize %}
+{% load burst_tags %}
+
+<div class="table-responsive">
+  <table class="table table-hover small table-sm">
+    <thead>
+    <tr>
+      <th scope="col">Alias</th>
+      <th scope="col">Last Modified</th>
+      <th scope="col">TX</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for alias in aliases %}
+      <tr>
+        <td>{{ alias.alias_name }}</td>
+        <td>{{ alias.timestamp|naturaltime }}</td>
+        <td>{{ alias.id }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
