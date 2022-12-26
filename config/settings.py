@@ -221,17 +221,17 @@ LOGGING = {
 }
 
 # Celery
-
-CELERY_BROKER_URL = (
-    f'redis://{os.environ.get("CELERY_BROKER_HOST")}:'
-    f'{os.environ.get("CELERY_BROKER_PORT")}/'
-    f'{os.environ.get("CELERY_BROKER_DB")}'
-)
-CELERY_RESULT_BACKEND = None
-CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERYD_TASK_TIME_LIMIT = 600
+#
+#CELERY_BROKER_URL = (
+#    f'redis://{os.environ.get("CELERY_BROKER_HOST")}:'
+#    f'{os.environ.get("CELERY_BROKER_PORT")}/'
+#    f'{os.environ.get("CELERY_BROKER_DB")}'
+#)
+#CELERY_RESULT_BACKEND = None
+#CELERY_ACCEPT_CONTENT = ["json"]
+#CELERY_TASK_SERIALIZER = "json"
+#CELERY_RESULT_SERIALIZER = "json"
+#CELERYD_TASK_TIME_LIMIT = 600
 
 # Sentry
 
@@ -239,7 +239,7 @@ SENTRY_DSN = os.environ.get("SENTRY_DSN")
 
 if SENTRY_DSN:
     from sentry_sdk import init
-    from sentry_sdk.integrations.celery import CeleryIntegration
+#    from sentry_sdk.integrations.celery import CeleryIntegration
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.logging import LoggingIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
@@ -248,7 +248,7 @@ if SENTRY_DSN:
         dsn=SENTRY_DSN,
         integrations=[
             DjangoIntegration(),
-            CeleryIntegration(),
+#            CeleryIntegration(),
             LoggingIntegration(event_level=logging.WARNING),
             RedisIntegration(),
         ],
