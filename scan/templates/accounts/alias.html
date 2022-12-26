@@ -15,7 +15,7 @@
       <tr>
         <td>{{ alias.alias_name }}</td>
         <td>{{ alias.timestamp|naturaltime }}</td>
-        <td>{{ alias.id }}</td>
+        <td><a href="{% url 'tx-detail' alias.id %}">{{ alias.id }}</a></td>
       </tr>
     {% endfor %}
     </tbody>
