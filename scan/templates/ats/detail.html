@@ -11,7 +11,16 @@
 {% endblock %}
 
 {% block scripts %}
-  <script>jQuery('#qr_code').qrcode({text: "{{ at.id|num2rs }}", width: 240, height: 240});</script>
+ <script>
+    var qrcode = new QRCode(document.getElementById("qr_code"), {
+        text: "{{ at.id|num2rs }}",
+        dotScale: .7,
+        backgroundImage: "/static/Signum_Logomark_blue_filled.svg",
+        backgroundImageAlpha: .3,
+        logoBackgroundTransparent: true,
+        correctLevel: QRCode.CorrectLevel.H,
+    }); 
+</script>
 {% endblock %}
 
 {% block content %}
