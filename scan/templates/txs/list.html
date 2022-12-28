@@ -5,8 +5,16 @@
 
 {% block title %} - Transactions{% endblock %}
 {% block description %}
+{% if 'block' in request.GET %}
+Transactions for block# {{ request.GET.block }}
+Total: {{ paginator.count|intcomma }}
+{% elif 'a' in request.GET %}
+Transactions for address {{ request.GET.a|num2rs }}
+Total: {{ paginator.count|intcomma }}
+{% else %}
 Signum Transactions
 Total: {{ txs_cnt|intcomma }}
+{% endif %}
 {% endblock %}
 {% block content %}
 

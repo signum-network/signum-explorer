@@ -11,7 +11,16 @@
 {% endblock %}
 
 {% block scripts %}
-  <script>jQuery('#qr_code').qrcode({text: "{{ at.id|num2rs }}", width: 240, height: 240});</script>
+ <script>
+    var qrcode = new QRCode(document.getElementById("qr_code"), {
+        text: "{{ at.id|num2rs }}",
+        dotScale: .7,
+        backgroundImage: "/static/Signum_Logomark_blue_filled.svg",
+        backgroundImageAlpha: .3,
+        logoBackgroundTransparent: true,
+        correctLevel: QRCode.CorrectLevel.H,
+    }); 
+</script>
 {% endblock %}
 
 {% block content %}
@@ -33,9 +42,9 @@
   </div>
 
   <h5 class="p-2">Contract<br class="d-md-none" /> {{ at.id|num2rs }}
-    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ at.id|num2rs }}"><i class="far fa-copy"></i></a>
-    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
-    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn" title="" href="https://signum-contract-inspector.vercel.app/?address={{ at.id|num2rs }}" target="_blank" data-original-title="Click to view contract data"><i class="far fa-file-code"></i></a>
+    <a class="btn btn-sm btn-icon btn-light rounded-circle copy-btn" href="#" data-clipboard-text="{{ at.id|num2rs }}"><i class="far fa-copy"></i></a>
+    <a class="btn btn-sm btn-icon btn-light rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
+    <a class="btn btn-sm btn-icon btn-light rounded-circle copy-btn" title="" href="https://signum-contract-inspector.vercel.app/?address={{ at.id|num2rs }}" target="_blank" data-original-title="Click to view contract data"><i class="far fa-file-code"></i></a>
   </h5>
 
   <div class="card-deck mb-3">
