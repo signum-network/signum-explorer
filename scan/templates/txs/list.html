@@ -6,7 +6,7 @@
 {% block title %} - Transactions{% endblock %}
 {% block description %}
 Signum Transactions
-Total: {{ txs_cnt|intcomma }}
+Total: {{ paginator.count|intcomma }}
 {% endblock %}
 {% block content %}
 
