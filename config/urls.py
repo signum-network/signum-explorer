@@ -47,6 +47,7 @@ from scan.views.search import search_view
 from scan.views.transactions import TxDetailView, TxListView, tx_export_csv
 from scan.views.cashbacks import CBListView
 from scan.views.aliases import AliasListView
+from scan.views.subscriptions import SubscriptionListView
 from scan.views.distribution import DistributionListView
 
 urlpatterns = [
@@ -78,6 +79,7 @@ urlpatterns = [
     path("peers-charts/", peers_charts_view, name="peers-charts"),
     path("peer/<str:address>", PeerMonitorDetailView.as_view(), name="peer-detail"),
     path("alias/", AliasListView.as_view(), name="alias"),
+    path("sub/", SubscriptionListView.as_view(), name="subscription"),
     path("SNRinfo/", getSNRjson, name="snr-info"),
     # path("admin/", admin.site.urls),
 ]

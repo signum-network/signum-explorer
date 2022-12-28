@@ -201,6 +201,9 @@ const template = `
               {% if cbs_cnt > 0 %}
               <a class="nav-item nav-link" id="nav-cashback-tab" data-toggle="tab" href="#nav-cashback" role="tab" aria-controls="nav-cashback" aria-selected="false">{{ cbs_cnt|intcomma }} Cashbacks</a>
               {% endif %}
+              {% if subscription_cnt > 0 %}
+              <a class="nav-item nav-link" id="nav-subscription-tab" data-toggle="tab" href="#nav-subscription" role="tab" aria-controls="nav-subscription" aria-selected="false">{{ subscription_cnt|intcomma }} Auto-Payments</a>
+              {% endif %}
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
@@ -337,6 +340,23 @@ const template = `
                     <a href="{% url 'alias' %}?a={{ address.id }}">View all Aliases</a>
                   </div>
             </div>
+            <div class="tab-pane fade" id="nav-subscription" role="tabpanel" aria-labelledby="nav-subscription-tab">
+              {% if subscription_cnt > 0 %}
+                <p class=style="margin-top: 10px">
+                  <div class="float-left small p-1">Account has {{ subscription_cnt }} auto-payments</div>
+                  <div class="float-right  small p-1">
+                    <a href="{% url 'subscription' %}?a={{ address.id }}">View all Auto-Payments</a>
+                  </div>
+                </p>
+                {% include "accounts/subscription.html" %}
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No auto-payments found</p>
+              {% endif %}
+                  <div class="float-right  small p-1">
+                    <a href="{% url 'subscription' %}?a={{ address.id }}">View all Auto-Payments</a>
+                  </div>
+            </div>
+
 
           </div>
 
