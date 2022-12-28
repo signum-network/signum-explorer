@@ -4,7 +4,10 @@
 
 {% block title %} - Aliases {% endblock %}
 {% block description %}
-Aliases
+{% if 'a' in request.GET %}
+{{ request.GET.a|num2rs }}
+{% endif %}
+{{ paginator.count|intcomma }} Aliases
 {% endblock %}
 {% block content %}
   <h5 class="p-2">Aliases 
