@@ -4,9 +4,7 @@
 
 {% block title %} - Aliases {% endblock %}
 {% block description %}
-{% if 'a' in request.GET %}
-{{ request.GET.a|num2rs }}
-{% endif %}
+{% if 'a' in request.GET %}{{ request.GET.a|num2rs }}{% endif %}
 {{ paginator.count|intcomma }} Aliases
 {% endblock %}
 {% block content %}
