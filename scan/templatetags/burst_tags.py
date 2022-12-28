@@ -457,6 +457,11 @@ def tx_load_recipients(tx: Transaction) -> Transaction:
 def num2rs(value: str or int) -> str:
     return os.environ.get("ADDRESS_PREFIX") + ReedSolomon().encode(str(value))
 
+@register.filter
+def subNextsend(value):
+    stamp = 1407722400 + value
+    nextSend = datetime.fromtimestamp(stamp)
+    return nextSend
 
 @register.simple_tag()
 def block_generation_time(block: Block) -> timedelta:
@@ -466,6 +471,9 @@ def block_generation_time(block: Block) -> timedelta:
         # first block
         return timedelta(0)
 
+@register.filter
+def to_int(value):
+    return int(value)
 
 @register.filter
 def sub(a: int or float, b: int or float) -> int or float:
@@ -545,6 +553,27 @@ def rank_row(context: dict, number: int) -> int:
 def tx_deadline(value):
     return value["timestamp"] + timedelta(minutes=value["deadline"]) - datetime.now()
 
+@register.filter()
+def sec_time(secs):
+    time_str = ""
+    if secs > 86400:  # 60sec * 60min * 24hrs
+        days = secs // 86400
+        time_str += f"{int(days)} day(s)"
+        secs = secs - days * 86400
+
+    if secs > 3600:
+        hours = secs // 3600
+        time_str += f" {int(hours)} hr"
+        secs = secs - hours * 3600
+
+    if secs > 60:
+        minutes = ceil(secs / 60)
+        time_str += f" {int(minutes)} min"
+
+    if not time_str:
+        time_str = f"{int(secs)} seconds"
+
+    return time_str
 
 @register.filter()
 def smooth_timedelta(timedelta_obj):

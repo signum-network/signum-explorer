@@ -6,6 +6,7 @@ from java_wallet.models import (
     AccountBalance,
     AccountAsset,
     Alias,
+    Subscription,
     AssetTransfer,
     At,
     Block,
@@ -130,6 +131,19 @@ class AddressDetailView(IntSlugDetailView):
         context["aliases"] = aliases[:25]
         context["alias_cnt"] = alias_cnt
 
+        # subscriptions
+
+        subscription_query = (
+            Subscription.objects.using("java_wallet")
+            .filter(sender_id=obj.id, latest=True)
+            .order_by("-height")
+        )
+            
+        subscription_cnt = subscription_query.count()
+        subscriptions = subscription_query
+        
+        context["subscriptions"] = subscriptions[:25]
+        context["subscription_cnt"] = subscription_cnt
 
         # assets
 

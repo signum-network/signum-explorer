@@ -1,0 +1,29 @@
+{% load humanize %}
+{% load burst_tags %}
+
+<div class="table-responsive">
+  <table class="table table-hover small table-sm">
+    <thead>
+    <tr>
+      <th scope="col">Transaction ID</th>
+      <th scope="col" class="d-none d-sm-table-cell">Block</th>
+      <th scope="col" class="d-none d-sm-table-cell">Frequency</th>
+      <th scope="col">Next Payment</th>
+      <th scope="col" >To</th>
+      <th scope="col">Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for subscription in subscriptions %}
+      <tr>
+        <td><a href="{% url 'tx-detail' subscription.id %}">{{ subscription.id|truncatechars:10 }}</a></td>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' subscription.height %}">{{ subscription.height }}</a></td>
+        <td class="d-none d-sm-table-cell">{{ subscription.frequency|sec_time }}</td>
+        <td>{{ subscription.time_next|subNextsend|naturaltime }}</td>
+        <td>{% include "recipient_link.html" with account_id=subscription.recipient_id account_name=subscription.recipient_name %}</td>
+        <td>{{ subscription.amount|burst_amount }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
