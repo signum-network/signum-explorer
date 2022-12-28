@@ -84,9 +84,9 @@ const template = `
   </div>
 
   <h5 class="p-2">Account<br class="d-md-none" /> {{ address.id|num2rs }}
-    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" href="#" data-clipboard-text="{{ address.id|num2rs }}"><i class="far fa-copy"></i></a>
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn" href="#" data-clipboard-text="{{ address.id|num2rs }}"><i class="far fa-copy"></i></a>
     <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
-    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" title="Click to view SignaRank" href="https://signarank.club/address/{{ address.id }}" target="_blank"><i class="fa fa-trophy"></i></a>
+    <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn" title="Click to view SignaRank" href="https://signarank.club/address/{{ address.id }}" target="_blank"><i class="fa fa-trophy"></i></a>
   </h5>
 
   <div class="card-deck mb-3">
