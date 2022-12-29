@@ -2,13 +2,13 @@
 {% load humanize %}
 {% load burst_tags %}
 
-{% block title %} - Subscriptions {% endblock %}
+{% block title %} - Auto-Payments {% endblock %}
 {% block description %}
-{% if 'a' in request.GET %}Subscriptions for address {{ request.GET.a|num2rs }}{% endif %}
-{{ paginator.count|intcomma }} Subscriptions
+{% if 'a' in request.GET %}Auto-Payments for address {{ request.GET.a|num2rs }}{% endif %}
+{{ paginator.count|intcomma }} Auto-Payments
 {% endblock %}
 {% block content %}
-  <h5 class="p-2">Subscriptions 
+  <h5 class="p-2">Auto-Payments 
     <br class="d-md-none" />
       {% if 'a' in request.GET %}
       <small class="text-muted">for address <a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
@@ -22,7 +22,7 @@
         <div class="d-flex flex-column flex-md-row align-items-center">
           <small class="my-0 mr-md-auto text-muted">
             {% if 'block' not in request.GET and 'a' not in request.GET %}
-              More than {{ paginator.count|intcomma }} subscriptions found<br>
+              More than {{ paginator.count|intcomma }} auto-payments found<br>
               <small>(Showing the lastest 10k records)</small>
             {% else %}
               A total of 
@@ -31,7 +31,7 @@
               {% else %}
                 0
               {% endif %}
-              Subscriptions found
+              Auto-Payments found
               {% if 'a' in request.GET %}
  {#               <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle copy-btn px-1" title="Download the latest 2k txs" href="{% url 'account-csv' request.GET.a %}"> #}
  {#               <i class="fas fa-file-csv"></i></a> #}

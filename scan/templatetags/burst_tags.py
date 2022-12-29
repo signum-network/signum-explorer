@@ -555,25 +555,8 @@ def tx_deadline(value):
 
 @register.filter()
 def sec_time(secs):
-    time_str = ""
-    if secs > 86400:  # 60sec * 60min * 24hrs
-        days = secs // 86400
-        time_str += f"{int(days)} day(s)"
-        secs = secs - days * 86400
+    return timedelta(seconds = secs)
 
-    if secs > 3600:
-        hours = secs // 3600
-        time_str += f" {int(hours)} hr"
-        secs = secs - hours * 3600
-
-    if secs > 60:
-        minutes = ceil(secs / 60)
-        time_str += f" {int(minutes)} min"
-
-    if not time_str:
-        time_str = f"{int(secs)} seconds"
-
-    return time_str
 
 @register.filter()
 def smooth_timedelta(timedelta_obj):

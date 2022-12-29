@@ -50,14 +50,6 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'ats' %}">Contracts</a>
               </li>
-              <!--
-                        <li class="nav-item">
-                          <a class="nav-link" href="{% url 'mps' %}">Marketplace</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link text-nowrap" href="{% url 'accounts' %}">Top Accounts</a>
-                        </li>
-                        -->
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'blocks' %}">Blocks</a>
               </li>
@@ -65,11 +57,10 @@
                 <a class="nav-link dropdown-toggle" href="#" id="transactions-nav" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">Transactions</a>
                 <div class="dropdown-menu" aria-labelledby="transactions-nav">
-                  <a class="dropdown-item" href="{% url 'txs' %}">Confirmed Transactions</a>
                   <a class="dropdown-item" href="{% url 'txs-pending' %}">Pending Transactions</a>
-                  <!--
-                              <a class="dropdown-item" href="{% url 'ats' %}">Contracts</a>
-                              -->
+                  <a class="dropdown-item" href="{% url 'txs' %}">Confirmed Transactions</a>
+                  <a class="dropdown-item" href="{% url 'subscription' %}">Auto-Payments</a>
+                  <a class="dropdown-item" href="{% url 'alias' %}">Aliases</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
