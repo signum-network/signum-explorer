@@ -214,8 +214,8 @@ class AssetDetailView(IntSlugDetailView):
         # asset minting
         mint_tx  = (
             Transaction.objects.using("java_wallet")
-            .filter(type=2,subtype =6,sender_id=obj.account_id).order_by("-height")
-        )
+            .filter(type=2,subtype =6).order_by("-height")
+        )        
         assets_minting_cnt = 0
         asset_minting_tx =[]
         for mints in mint_tx:
