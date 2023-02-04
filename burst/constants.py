@@ -57,6 +57,7 @@ class TxSubtypeColoredCoins:
     ADD_TREASURY_ACCOUNT = 7
     DISTRIBUTE_TO_HOLDERS = 8
     ASSET_TRANSFER_MULTI = 9
+    ASSET_TRANSFER_OWNERSHIP = 10
 
 
 class TxSubtypeDigitalGoods:

@@ -45,6 +45,7 @@ TX_TYPES = {
         "Distribute to Holders"
     ),
     (TxType.COLORED_COINS, TxSubtypeColoredCoins.ASSET_TRANSFER_MULTI): _("Token Multi Transfer"),
+    (TxType.COLORED_COINS, TxSubtypeColoredCoins.ASSET_TRANSFER_OWNERSHIP): _("Token Ownership Transfer"),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.LISTING): _("Marketplace Listing"),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.DELISTING): _("Marketplace Removal"),
     (TxType.DIGITAL_GOODS, TxSubtypeDigitalGoods.PRICE_CHANGE): _(
@@ -75,13 +76,13 @@ TX_TYPES = {
         "Escrow Result"
     ),
     (TxType.ADVANCED_PAYMENT, TxSubtypeAdvancedPayment.SUBSCRIPTION_SUBSCRIBE): _(
-        "Subscription Subscribe"
+        "Auto-Payment Subscribe"
     ),
     (TxType.ADVANCED_PAYMENT, TxSubtypeAdvancedPayment.SUBSCRIPTION_CANCEL): _(
-        "Subscription Cancel"
+        "Auto-Payment Cancel"
     ),
     (TxType.ADVANCED_PAYMENT, TxSubtypeAdvancedPayment.SUBSCRIPTION_PAYMENT): _(
-        "Subscription Payment"
+        "Auto-Payment"
     ),
     (TxType.AUTOMATED_TRANSACTIONS, TxSubtypeAutomatedTransactions.CREATION): _(
         "Deploy Contract"

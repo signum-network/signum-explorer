@@ -136,66 +136,41 @@ class GetAsset(QueryBase):
 
     version = os.environ.get('BRS_P2P_VERSION')
 
-    if version.startswith('3.3'):
-        _response_json_schema = {
-            "type": "object",
-            "properties": {
-                "account": {"type": "string"},
-                "accountRS": {"type": "string"},
-                "name": {"type": "string"},
-                "description": {"type": "string"},
-                "decimals": {"type": "number"},
-                "mintable": {"type": "boolean"},
-                "quantityQNT": {"type": "string"},
-                "quantityCirculatingQNT": {"type": "string"},
-                "asset": {"type": "string"},
-                "numberOfTransfers": {"type": "number"},
-                "numberOfAccounts": {"type": "number"},
-                "requestProcessingTime": {"type": "number"},
-            },
-            "required": [
-                "account",
-                "accountRS",
-                "name",
-                "description",
-                "decimals",
-                "mintable",
-                "quantityQNT",
-                "quantityCirculatingQNT",
-                "asset",
-                "numberOfTransfers",
-                "numberOfAccounts",
-                "requestProcessingTime",
-            ],
-        }
-    else:
-        _response_json_schema = {
-            "type": "object",
-            "properties": {
-                "account": {"type": "string"},
-                "accountRS": {"type": "string"},
-                "name": {"type": "string"},
-                "description": {"type": "string"},
-                "decimals": {"type": "number"},
-                "quantityQNT": {"type": "string"},
-                "asset": {"type": "string"},
-                "numberOfTransfers": {"type": "number"},
-                "numberOfAccounts": {"type": "number"},
-                "requestProcessingTime": {"type": "number"},
-            },
-            "required": [
-                "account",
-                "accountRS",
-                "name",
-                "description",
-                "decimals",
-                "quantityQNT",
-                "asset",
-                "numberOfTransfers",
-                "numberOfAccounts",
-                "requestProcessingTime",
-            ],
-        }
+    _response_json_schema = {
+        "type": "object",
+        "properties": {
+            "account": {"type": "string"},
+            "accountRS": {"type": "string"},
+            "issuer": {"type": "string"},
+            "issuerRS": {"type": "string"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "decimals": {"type": "number"},
+            "mintable": {"type": "boolean"},
+            "quantityQNT": {"type": "string"},
+            "quantityCirculatingQNT": {"type": "string"},
+            "asset": {"type": "string"},
+            "numberOfTransfers": {"type": "number"},
+            "numberOfAccounts": {"type": "number"},
+            "requestProcessingTime": {"type": "number"},
+        },
+        "required": [
+            "account",
+            "accountRS",
+            "issuer",
+            "issuerRS",
+            "name",
+            "description",
+            "decimals",
+            "mintable",
+            "quantityQNT",
+            "quantityCirculatingQNT",
+            "asset",
+            "numberOfTransfers",
+            "numberOfAccounts",
+            "requestProcessingTime",
+        ],
+    }
 
 class GetBlockChainStatus(QueryBase):
     _request_type = "getBlockchainStatus"
