@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
-
+{% load burst_tags %}
 {% load humanize %}
 
 {% block title %} - Peer {{ peer.announced_address }}{% endblock %}
-
+{% block description %}Signum Node
+{{ peer.announced_address }}
+{% endblock %}
 {% block content %}
 
   <h5 class="p-2">Peer {{ peer.announced_address }}
@@ -43,8 +45,28 @@
             </tr>
             <tr>
               <th>Platform</th>
-              <td>{{ peer.platform }} <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle my-n2 px-2" href="/search/?q={{ peer.platform }}&submit=Search"><i class="fas fa-search" data-toggle="modal" title="" data-original-title="Search"></i></a></td>
+              {% with peer.platform|split:';' as platf %}
+              <td>{{ peer.platform }}
+              </td>
             </tr>
+            <tr>
+              <th>SNR Address</th>
+              <td>{{ platf.0 }} <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle my-n2 px-2" href="/search/?q={{ platf.0 }}&submit=Search"><i class="fas fa-search" data-toggle="modal" title="" data-original-title="Search"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <th>Vote Cast</th>
+              {% if platf.1 == '0'%}<td>REJECT</td>{% endif %}
+              {% if platf.1 == '1'%}<td>APPROVE</td>
+              {% else %}<td>No Vote</td>{% endif %}
+            </tr>
+            {% if platf.2 %}
+            <tr>
+              <th>Other</th>
+              <td>{{ platf.2 }}</td>
+            </tr>
+            {% endif %} 
+              {% endwith %}
               {% if peer.reward_state == 'Queued' or peer.reward_state == 'Paid' or peer.reward_state == 'Duplicate' %}
             <tr>
               <th>Reward Status</th>
