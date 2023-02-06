@@ -43,12 +43,14 @@
               <th>Application</th>
               <td>{{ peer.application }}</td>
             </tr>
+            {% with peer.platform|split:';' as platf %}
+            {% if platf.0 %}
             <tr>
               <th>SNR Address</th>
-              {% with peer.platform|split:';' as platf %}
               <td>{{ platf.0 }} <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle my-n2 px-2" href="/search/?q={{ platf.0 }}&submit=Search"><i class="fas fa-search" data-toggle="modal" title="" data-original-title="Search"></i></a>
               </td>
             </tr>
+            {% endif %}
             <tr>
               <th>Vote Cast</th>
               {% if platf.1 == '0'%}<td>REJECT <i class="fa-regular fa-thumbs-down"></i></td>{% endif %}
