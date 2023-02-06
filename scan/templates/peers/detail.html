@@ -56,8 +56,8 @@
             </tr>
             <tr>
               <th>Vote Cast</th>
-              {% if platf.1 == '0'%}<td>REJECT</td>{% endif %}
-              {% if platf.1 == '1'%}<td>APPROVE</td>
+              {% if platf.1 == '0'%}<td>REJECT <i class="fa-regular fa-thumbs-down"></i></td>{% endif %}
+              {% if platf.1 == '1'%}<td>APPROVE <i class="fa-regular fa-thumbs-up"></td>
               {% else %}<td>No Vote</td>{% endif %}
             </tr>
             {% if platf.2 %}
