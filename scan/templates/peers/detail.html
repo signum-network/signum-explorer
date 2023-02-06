@@ -44,13 +44,8 @@
               <td>{{ peer.application }}</td>
             </tr>
             <tr>
-              <th>Platform</th>
-              {% with peer.platform|split:';' as platf %}
-              <td>{{ peer.platform }}
-              </td>
-            </tr>
-            <tr>
               <th>SNR Address</th>
+              {% with peer.platform|split:';' as platf %}
               <td>{{ platf.0 }} <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle my-n2 px-2" href="/search/?q={{ platf.0 }}&submit=Search"><i class="fas fa-search" data-toggle="modal" title="" data-original-title="Search"></i></a>
               </td>
             </tr>
