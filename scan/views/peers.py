@@ -23,7 +23,14 @@ def peers_charts_view(request):
         .annotate(cnt=Count("version"))
         .order_by("-version", "-cnt")
     )
-
+    
+    votes = (
+        PeerMonitor.objects.filter(state=PeerMonitor.State.ONLINE).exclude(reward_state='Duplicate')
+        .values("platform")
+        .annotate(cnt=Count("platform"))
+        .order_by("-cnt")
+    )
+        
     countries = (
         PeerMonitor.objects.filter(state=PeerMonitor.State.ONLINE)
         .values("country_code")
@@ -52,6 +59,7 @@ def peers_charts_view(request):
             "countries": countries,
             "states": states,
             "last_check": last_check,
+            "votes": votes,
         },
     )
 
