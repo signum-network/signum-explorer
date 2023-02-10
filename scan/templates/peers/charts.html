@@ -138,7 +138,7 @@ var chart = Highcharts.mapChart('geochart', {
     <script type="text/javascript">
     
 function getVotes(input) {
-    const optionsString = [ "REJECT", "APPROVE", "No Vote"];
+    const optionsString = [ "👎 REJECT", "👍 APPROVE", "No Vote"];
     const votingResult = [];
     for (const item of input.split(",")) {
         const userOption = item.split(";");
