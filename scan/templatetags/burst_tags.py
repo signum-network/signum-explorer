@@ -79,6 +79,11 @@ def coin_symbol() -> str:
     return os.environ.get("COIN_SYMBOL")
 
 @register.filter
+def split(str, key):
+    return str.split(key)
+
+
+@register.filter
 def env(key):
     return os.environ.get(key, None)
 
