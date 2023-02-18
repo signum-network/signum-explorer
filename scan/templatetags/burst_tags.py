@@ -51,6 +51,16 @@ def asset_circulating(asset_id: int) -> int:
     return int(asset_details["quantityCirculatingQNT"])
 
 @register.filter
+def asset_owner(asset_id: int) -> int:
+    asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
+    return int(asset_details["account"])
+
+@register.filter
+def asset_issuer(asset_id: int) -> int:
+    asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
+    return int(asset_details["issuer"])
+
+@register.filter
 def burst_amount(value: int) -> float:
     if not value:
         value = int(0)
@@ -71,7 +81,8 @@ def coin_symbol() -> str:
 @register.filter
 def split(str, key):
     return str.split(key)
-    
+
+
 @register.filter
 def env(key):
     return os.environ.get(key, None)
@@ -378,7 +389,7 @@ def tx_asset_id(tx: Transaction) -> int:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         offset = asset_offset(tx.height)
         if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,
-            TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]):
+            TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT,TxSubtypeColoredCoins.ASSET_MINT]):
             asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
             return asset_id
 
