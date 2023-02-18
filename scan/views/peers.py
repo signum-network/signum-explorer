@@ -8,13 +8,6 @@ from scan.models import PeerMonitor
 import json
 
 @require_http_methods(["GET"])
-def getSNRjson(request): 
-    snrraw = PeerMonitor.objects.all().values('announced_address', 'real_ip', 'reward_state', 'reward_time')
-    snr_info = list(snrraw)
-    dump = json.dumps(snr_info, default=str)
-    return HttpResponse(dump, content_type='application/json')
-
-@require_http_methods(["GET"])
 def peers_charts_view(request):
     online_now = PeerMonitor.objects.filter(state=PeerMonitor.State.ONLINE).count()
     versions = (
