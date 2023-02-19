@@ -2,12 +2,12 @@ from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
 
 from java_wallet.models import Block, Transaction
-from scan.helpers.queries import get_unconfirmed_transactions
+from scan.helpers.queries import get_unconfirmed_transactions_index
 from scan.views.blocks import fill_data_block
 from scan.views.transactions import fill_data_transaction
 
 
-@cache_page(5)
+@cache_page(20)
 def index(request):
 
     # redirect the old style URLs
@@ -36,7 +36,7 @@ def index(request):
     context = {
         "txs": txs,
         "blocks": blocks,
-        "txs_pending": get_unconfirmed_transactions()[:5],
+        "txs_pending": get_unconfirmed_transactions_index()[:5],
     }
 
     return render(request, "home/index.html", context)

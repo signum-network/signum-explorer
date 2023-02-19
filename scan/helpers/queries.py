@@ -224,6 +224,39 @@ def get_unconfirmed_transactions():
         t["amountNQT"] = int(t["amountNQT"])
         t["feeNQT"] = int(t["feeNQT"])
         t["sender_name"] = get_account_name(int(t["sender"]))
+        
+        if "recipient" in t:
+            t["recipient_exists"] = (
+                Account.objects.using("java_wallet")
+                .filter(id=t["recipient"])
+                .exists()
+            )
+            if t["recipient_exists"]:
+                t["recipient_name"] = get_account_name(int(t["recipient"]))
+        
+        t["attachment_bytes"] = None
+        if "attachmentBytes" in t:
+            t["attachment_bytes"] =  bytes.fromhex(t["attachmentBytes"])
+        if "attachment" in t and "recipients" in t["attachment"]:
+            t["multiout"] = len(t["attachment"]["recipients"])
+        
+        t["tx_name"] = get_desc_tx_type(t["type"], t["subtype"])
+        
+    txs_pending.sort(key=lambda _x: _x["feeNQT"], reverse=True)
+
+    return txs_pending
+
+@cache_memoize(10)
+def get_unconfirmed_transactions_index():
+    txs_pending = BrsApi(settings.SIGNUM_NODE).get_unconfirmed_transactions()
+
+    for t in txs_pending:
+        t["timestamp"] = datetime.fromtimestamp(
+            t["timestamp"] + BLOCK_CHAIN_START_AT
+        )
+        t["amountNQT"] = int(t["amountNQT"])
+        t["feeNQT"] = int(t["feeNQT"])
+        t["sender_name"] = get_account_name(int(t["sender"]))
 
         if "recipient" in t:
             t["recipient_exists"] = (
@@ -234,14 +267,8 @@ def get_unconfirmed_transactions():
             if t["recipient_exists"]:
                 t["recipient_name"] = get_account_name(int(t["recipient"]))
 
-        t["attachment_bytes"] = None
-        if "attachmentBytes" in t:
-            t["attachment_bytes"] =  bytes.fromhex(t["attachmentBytes"])
-        if "attachment" in t and "recipients" in t["attachment"]:
-            t["multiout"] = len(t["attachment"]["recipients"])
-
         t["tx_name"] = get_desc_tx_type(t["type"], t["subtype"])
-
+        
     txs_pending.sort(key=lambda _x: _x["feeNQT"], reverse=True)
 
     return txs_pending
