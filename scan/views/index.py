@@ -7,7 +7,7 @@ from scan.views.blocks import fill_data_block
 from scan.views.transactions import fill_data_transaction
 
 
-@cache_page(5)
+@cache_page(30)
 def index(request):
 
     # redirect the old style URLs
