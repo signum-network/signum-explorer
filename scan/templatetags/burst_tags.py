@@ -15,6 +15,7 @@ from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS
 from java_wallet.fields import get_desc_tx_type
 from java_wallet.models import Block, IndirecIncoming, IndirectRecipient, Trade, Transaction
 from scan.caching_data.exchange import CachingExchangeData
+from scan.caching_data.total_circulating import CachingTotalCirculating
 import struct
 import os
 
@@ -398,6 +399,10 @@ def tx_asset_id(tx: Transaction) -> int:
 @register.filter
 def total_circulating(account_id : int) -> float:
     return get_total_circulating() - get_account_balance(0)
+
+@register.filter
+def total_circulating_network(account_id : int) -> float:
+    return CachingTotalCirculating().cached_data - get_account_balance(0)
 
 @register.filter
 def account_balance(account_id : int) -> float:
