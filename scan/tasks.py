@@ -5,9 +5,9 @@ from time import sleep
 from django.conf import settings
 from config.settings import TASKS_SCAN_DELAY
 from scan.caching_data.exchange import CachingExchangeData
-
-#from scan.caching_data.total_accounts_count import CachingTotalAccountsCount
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
+from scan.caching_data.total_circulating import CachingTotalCirculating
+#from scan.caching_data.total_accounts_count import CachingTotalAccountsCount
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +33,9 @@ def task_cmd():
     logger.info("TASK - Update Total TX's count data")
     CachingTotalTxsCount().update_live_data()
 
+######### Update Total Circulating #########
+    logger.info("TASK - Update Total Circulating data")
+    CachingTotalCirculating().update_live_data()
 
 #    def update_cache_total_accounts_count():
 #        logger.info("TASK - Update Total Accounts data")
