@@ -51,12 +51,14 @@
               </td>
             </tr>
             {% endif %}
+            {% if 'NODE_VOTING_ENABLED'|env == 'True' %}
             <tr>
               <th>Vote Cast</th>
               {% if platf.1 == '0'%}<td>REJECT <i class="fa-regular fa-thumbs-down"></i></td>
               {% elif platf.1 == '1'%}<td>APPROVE <i class="fa-regular fa-thumbs-up"></td>
               {% else %}<td>No Vote</td>{% endif %}
             </tr>
+            {% endif %}
             {% if platf.2 %}
             <tr>
               <th>Other</th>
