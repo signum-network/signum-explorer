@@ -8,13 +8,6 @@ from scan.models import PeerMonitor
 import json
 
 @require_http_methods(["GET"])
-def getSNRjson(request): 
-    snrraw = PeerMonitor.objects.all().values('announced_address', 'real_ip', 'reward_state', 'reward_time')
-    snr_info = list(snrraw)
-    dump = json.dumps(snr_info, default=str)
-    return HttpResponse(dump, content_type='application/json')
-
-@require_http_methods(["GET"])
 def peers_charts_view(request):
     online_now = PeerMonitor.objects.filter(state=PeerMonitor.State.ONLINE).count()
     versions = (
@@ -23,7 +16,14 @@ def peers_charts_view(request):
         .annotate(cnt=Count("version"))
         .order_by("-version", "-cnt")
     )
-
+    
+    votes = (
+        PeerMonitor.objects.filter(state=PeerMonitor.State.ONLINE).exclude(reward_state='Duplicate')
+        .values("platform")
+        .annotate(cnt=Count("platform"))
+        .order_by("-cnt")
+    )
+        
     countries = (
         PeerMonitor.objects.filter(state=PeerMonitor.State.ONLINE)
         .values("country_code")
@@ -52,6 +52,7 @@ def peers_charts_view(request):
             "countries": countries,
             "states": states,
             "last_check": last_check,
+            "votes": votes,
         },
     )
 

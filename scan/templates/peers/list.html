@@ -102,7 +102,7 @@
                 {% if peer.reward_state == 'Paid' and peer.reward_time|hours_ago:23 %}   {# SNR badges here #}
                 <a href="#" class="text-success text-decoration-none" data-toggle="modal" data-html="true" title="SNR Paid <br> {{ peer.reward_time|naturaltime }}"><i class="fa-solid fa-dollar-sign"></i></a>
                 {% elif peer.reward_state == 'Duplicate' %}
-                <a href="#" class="text-danger text-decoration-none" data-toggle="modal" title="SNR Duplicate"><i class="fas fa-minus-circle"></i></a>
+                <a href="#" class="text-danger text-decoration-none" data-toggle="modal" title="SNR Duplicate"><i class="fa-solid fa-copy"></i></a>
                 {% endif %}
                 {% if peer.created_at|hours_ago:48 %}    {# other badges here #}
                 <a href="#" class="text-warning text-decoration-none" data-toggle="modal" data-html="true" title="New Node <br> Found <br> {{ peer.created_at|naturaltime }}"><i class="fa-solid fa-star"></i></a>

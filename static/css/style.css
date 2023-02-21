@@ -119,6 +119,7 @@ body, html {
   right: 25px;
   opacity: 90%;
   display: none;
+  z-index: 150;
 }
 
 /* STYLES SPECIFIC TO LOADING BARS */
