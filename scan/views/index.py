@@ -5,7 +5,9 @@ from java_wallet.models import Block, Transaction
 from scan.helpers.queries import get_unconfirmed_transactions_index
 from scan.views.blocks import fill_data_block
 from scan.views.transactions import fill_data_transaction
+from django.views.decorators.csrf import csrf_protect
 
+@csrf_protect
 @cache_page(20)
 def index(request):
     try:

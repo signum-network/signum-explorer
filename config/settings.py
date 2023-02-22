@@ -29,6 +29,7 @@ SECRET_KEY = os.environ.get(
     "SECRET_KEY", "changeme"
 )
 
+APP_ENV=os.environ.get("APP_ENV")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "off") == "on"
 
@@ -221,17 +222,13 @@ LOGGING = {
 }
 
 # Celery
-#
-#CELERY_BROKER_URL = (
-#    f'redis://{os.environ.get("CELERY_BROKER_HOST")}:'
-#    f'{os.environ.get("CELERY_BROKER_PORT")}/'
-#    f'{os.environ.get("CELERY_BROKER_DB")}'
-#)
-#CELERY_RESULT_BACKEND = None
-#CELERY_ACCEPT_CONTENT = ["json"]
-#CELERY_TASK_SERIALIZER = "json"
-#CELERY_RESULT_SERIALIZER = "json"
-#CELERYD_TASK_TIME_LIMIT = 600
+if APP_ENV == "production":
+    CELERY_BROKER_URL = (f'redis://{os.environ.get("CELERY_BROKER_HOST")}:{os.environ.get("CELERY_BROKER_PORT")}/{os.environ.get("CELERY_BROKER_DB")}')
+    CELERY_RESULT_BACKEND = (f'redis://{os.environ.get("CELERY_BROKER_HOST")}:{os.environ.get("CELERY_BROKER_PORT")}/{os.environ.get("CELERY_BROKER_RES")}')
+    CELERY_ACCEPT_CONTENT = ["json"]
+    CELERY_TASK_SERIALIZER = "json"
+    CELERY_RESULT_SERIALIZER = "json"
+    CELERYD_TASK_TIME_LIMIT = 30
 
 # Sentry
 
@@ -239,10 +236,11 @@ SENTRY_DSN = os.environ.get("SENTRY_DSN")
 
 if SENTRY_DSN:
     from sentry_sdk import init
-#    from sentry_sdk.integrations.celery import CeleryIntegration
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.logging import LoggingIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
+    if APP_ENV == "production":
+        from sentry_sdk.integrations.celery import CeleryIntegration
 
     init(
         dsn=SENTRY_DSN,
@@ -277,8 +275,8 @@ PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 
-PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "0"))
-TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "0"))
+PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "60"))
+TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "60"))
 
 SITE_HOSTING = os.environ.get("SITE_HOSTING", " ")
 

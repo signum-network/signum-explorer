@@ -28,29 +28,28 @@ from java_wallet.models import Transaction
 def runner_TxTotal():
     ######### Update Total TX #########
     CachingTotalTxsCount().update_live_data()
+    logger.info("TASK - Updated TX's count data")
 
 @shared_task()
 def runner_Exchange():        
     ######### Update Exchange #########
     CachingExchangeData().update_live_data()
+    logger.info("TASK - Updated Exchange data")
 
 @shared_task
 def runner_Circulating():
     ######### Update Total Circulating #########
     CachingTotalCirculating().update_live_data()
+    logger.info("TASK - Updated Circulating data")
 
 def task_cmd():
     while True:
         if TASKS_SCAN_DELAY > 0:  # Delay in env used when supervisord is used.
             logger.info(f"Tasks Sleeping for {TASKS_SCAN_DELAY} seconds...")
         runner_Exchange.delay()
-        logger.info("TASK - Update Exchange data")
         runner_TxTotal.delay()
-        logger.info("TASK - Update TX's count data")
         runner_Circulating.delay()
-        logger.info("TASK - Update Circulating data")
         sleep(TASKS_SCAN_DELAY)
-
 #    def update_cache_total_accounts_count():
 #        logger.info("TASK - Update Total Accounts data")
 #        CachingTotalAccountsCount().update_live_data()
