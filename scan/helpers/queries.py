@@ -168,11 +168,11 @@ def get_pool_id_for_block_db(block: Block) -> int:
         .first()
     )
 
-@cache_memoize(240)
+@cache_memoize(30)
 def get_total_circulating():
     return (
-        AccountBalance.objects.using("java_wallet")
-        .filter(latest=True)
+        AccountBalance.objects
+        .filter(balance__gt=0, latest=True)
         .exclude(id=0)
         .aggregate(Sum("balance"))["balance__sum"] 
     )  
@@ -248,7 +248,7 @@ def get_unconfirmed_transactions():
 
 @cache_memoize(10)
 def get_unconfirmed_transactions_index():
-    txs_pending = BrsApi(settings.SIGNUM_NODE).get_unconfirmed_transactions()
+    txs_pending = BrsApi(settings.SIGNUM_NODE).get_unconfirmed_transactions()[:5]
 
     for t in txs_pending:
         t["timestamp"] = datetime.fromtimestamp(

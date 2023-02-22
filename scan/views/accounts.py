@@ -29,6 +29,8 @@ from scan.views.base import IntSlugDetailView
 from scan.views.transactions import fill_data_transaction
 from scan.templatetags.burst_tags import cashback_amount
 
+from scan.views.miners import get_miners
+
 class AccountsListView(ListView):
     model = Account
     queryset = (
@@ -246,5 +248,12 @@ class AddressDetailView(IntSlugDetailView):
         context["mined_blocks_cnt"] = (
             Block.objects.using("java_wallet").filter(generator_id=obj.id).count()
         )
+
+        # miners
+        miners = get_miners(obj.id)
+        context["miners"] = miners
+
+        miners_cnt = len(miners)
+        context["miners_cnt"] = miners_cnt
 
         return context
