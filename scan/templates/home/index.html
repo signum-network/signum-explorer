@@ -30,7 +30,6 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
         <div class="row mx-gutters-md-1">
-          {% if not test_net %}
           <div class="col-md-6 col-lg-4">
             <div class="media align-items-center">
               <div class="text-left">
@@ -56,8 +55,6 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
             <hr class="hr-space-lg d-block d-lg-none">
             <div class="vdivider d-none d-lg-block"></div>
           </div>
-          {% endif %}
-
           <div class="col-md-6 col-lg-4">
             <div class="media align-items-center">
               <div class="text-left">
@@ -94,7 +91,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
             <div class="media align-items-center">
               <div class="text-left">
                 <h6 class="text-uppercase text-secondary mb-0"><i class="fa fa-coins"></i> Total Supply</h6>
-                <span class="text-info small"> {{ 0 | total_circulating|burst_amount|floatformat:0|intcomma }}</span>
+                <span class="text-info small"> {{ 0 | total_circulating_network|burst_amount|floatformat:0|intcomma }}</span>
               </div>
             </div>
             <hr class="hr-space-lg">
