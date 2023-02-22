@@ -30,7 +30,11 @@
           <div class="container" style="max-width: 1400px !important;">
           <a class="mb-2" href="/"><img alt="LOGO" src="{% static 'logo.svg' %}" height="32px"></a>
           <a class="p-2" href="/">
+          {% if test_net %}
+            <span class="navbar-brand my-0 mr-auto mb-2 font-weight-bold text-danger">{{ 'SITE_TITLE'|env }} - TESTNET</span><br />
+          {% else %}
             <span class="navbar-brand my-0 mr-auto mb-2 font-weight-bold">{{ 'SITE_TITLE'|env }}</span><br />
+          {% endif %}
             {% if 'SITE_HOSTING'|env %}
             <span class="float-right my-lg-n3 my-n4 text-info small">{{ 'SITE_HOSTING'|env }}</span>
             {% endif %}

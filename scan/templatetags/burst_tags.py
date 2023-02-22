@@ -15,6 +15,7 @@ from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS
 from java_wallet.fields import get_desc_tx_type
 from java_wallet.models import Block, IndirecIncoming, IndirectRecipient, Trade, Transaction
 from scan.caching_data.exchange import CachingExchangeData
+from scan.caching_data.total_circulating import CachingTotalCirculating
 import struct
 import os
 
@@ -51,6 +52,16 @@ def asset_circulating(asset_id: int) -> int:
     return int(asset_details["quantityCirculatingQNT"])
 
 @register.filter
+def asset_owner(asset_id: int) -> int:
+    asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
+    return int(asset_details["account"])
+
+@register.filter
+def asset_issuer(asset_id: int) -> int:
+    asset_details = BrsApi(settings.SIGNUM_NODE).get_asset(asset_id)
+    return int(asset_details["issuer"])
+
+@register.filter
 def burst_amount(value: int) -> float:
     if not value:
         value = int(0)
@@ -67,6 +78,11 @@ def append_symbol(value: float) -> str:
 @register.simple_tag()
 def coin_symbol() -> str:
     return os.environ.get("COIN_SYMBOL")
+
+@register.filter
+def split(str, key):
+    return str.split(key)
+
 
 @register.filter
 def env(key):
@@ -374,7 +390,7 @@ def tx_asset_id(tx: Transaction) -> int:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         offset = asset_offset(tx.height)
         if tx.subtype in ([TxSubtypeColoredCoins.ASSET_TRANSFER,
-            TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT]):
+            TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT, TxSubtypeColoredCoins.BID_ORDER_PLACEMENT,TxSubtypeColoredCoins.ASSET_MINT]):
             asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
             return asset_id
 
@@ -383,6 +399,10 @@ def tx_asset_id(tx: Transaction) -> int:
 @register.filter
 def total_circulating(account_id : int) -> float:
     return get_total_circulating() - get_account_balance(0)
+
+@register.filter
+def total_circulating_network(account_id : int) -> float:
+    return CachingTotalCirculating().cached_data - get_account_balance(0)
 
 @register.filter
 def account_balance(account_id : int) -> float:

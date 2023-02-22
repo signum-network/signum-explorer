@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
-
+{% load burst_tags %}
 {% load humanize %}
 
 {% block title %} - Nodes Distribution around the Globe{% endblock %}
-
+{% block description %}Signum Nodes
+Online: {{ online_now }}
+{% endblock %}
 {% block scripts %}
 
   <script src="https://code.highcharts.com/maps/highmaps.js"></script>
@@ -128,6 +130,75 @@ var chart = Highcharts.mapChart('geochart', {
 	 easing: 'linear'
         },
         data: [{% for version in versions %}['{{ version.version }}', {{ version.cnt }}],{% endfor %}]
+    }]
+});
+
+  </script>
+
+    <script type="text/javascript">
+    
+function getVotes(input) {
+    const optionsString = [ "👎 REJECT", "👍 APPROVE", "No Vote"];
+    const votingResult = [];
+    for (const item of input.split(",")) {
+        const userOption = item.split(";");
+        if (userOption.length <= 1) continue;
+        const vote = Number(userOption[1]);
+        if (isNaN(vote) || vote < 0 || vote >= optionsString.length || vote % 1) continue;
+        const selectedOption = votingResult.find(voteOption => voteOption[0] === optionsString[vote]);
+        if (selectedOption) selectedOption[1]++;
+        else votingResult.push([optionsString[vote], 1]);
+    }
+    return votingResult;
+}
+Highcharts.chart('piechart-votes', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+        marginLeft: 0
+    },
+    legend: {
+        align: 'left',
+        verticalAlign: 'top',
+        layout: 'vertical',
+        x: 0,
+        y: 40
+    },
+    title: {
+        text: 'Node Votes (TEST ONLY)',
+        align: 'left'
+    },
+    credits: {
+        enabled: false
+    },
+    exporting: {
+        enabled: true
+    },
+    tooltip: {
+        pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b></br>{point.percentage:.1f}% {point.y} Votes'
+            },
+            showInLegend: false
+        }
+    },
+    series: [{
+        name: 'Votes',
+        colorByPoint: true,
+        animation: {
+            enabled: true,
+            duration: 300,
+            easing: 'linear'
+        },
+    data: getVotes("{% for platform in votes %}{{ platform.platform }}, {% endfor %}")
     }]
 });
 
@@ -297,19 +368,26 @@ var chartSpeed = Highcharts.chart('container-nodes', Highcharts.merge(gaugeOptio
         <div class="row mx-gutters-md-1 pt-4">
           <div class="col-md-6 col-lg-4">
             <div class="media align-items-center">
-             <div id="piechart-versions" style="height: 200px; width: 400px; min-width: 357px; margin: 0 auto"></div>
-          </div>
+             <div id="piechart-versions" style="height: 200px; width: 400px; min-width: 325px; margin: 0 auto"></div>
+            </div>
           </div>
           <div class="col-md-6 col-lg-4">
             <div class="media align-items-center">
-             <div id="container-nodes" style="height: 200px; width: 400px; min-width: 357px; margin: 0 auto"></div>
+             <div id="container-nodes" style="height: 200px; width: 400px; min-width: 325px; margin: 0 auto"></div>
             </div>
            </div>
           <div class="col-md-6 col-lg-4 mx-auto">
             <div class="media align-items-center">
-             <div id="piechart-states" style="height: 200px; width: 400px; min-width: 357px; margin: 0 auto"></div>
-           </div>
+             <div id="piechart-states" style="height: 200px; width: 400px; min-width: 325px; margin: 0 auto"></div>
+            </div>
           </div>
+          {% if 'NODE_VOTING_ENABLED'|env == 'True' %}
+          <div class="col align-self-center">
+            <div class="media align-items-center">
+             <div id="piechart-votes" style="height: 200px; width: 400px; min-width: 325px; margin: 0 auto; z-index: 100 !important"></div>
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>

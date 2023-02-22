@@ -6,9 +6,9 @@ from django.conf import settings
 from config.settings import TASKS_SCAN_DELAY
 from scan.caching_data.exchange import CachingExchangeData
 from celery import shared_task
-
-#from scan.caching_data.total_accounts_count import CachingTotalAccountsCount
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
+from scan.caching_data.total_circulating import CachingTotalCirculating
+#from scan.caching_data.total_accounts_count import CachingTotalAccountsCount
 
 logger = logging.getLogger(__name__)
 
@@ -34,14 +34,21 @@ def runner_Exchange():
     ######### Update Exchange #########
     CachingExchangeData().update_live_data()
 
+@shared_task
+def runner_Circulating():
+    ######### Update Total Circulating #########
+    CachingTotalCirculating().update_live_data()
+
 def task_cmd():
     while True:
         if TASKS_SCAN_DELAY > 0:  # Delay in env used when supervisord is used.
             logger.info(f"Tasks Sleeping for {TASKS_SCAN_DELAY} seconds...")
         runner_Exchange.delay()
-        logger.info("TASK - Update Cache Exchange data")
+        logger.info("TASK - Update Exchange data")
         runner_TxTotal.delay()
-        logger.info("TASK - Update Total TX's count data")
+        logger.info("TASK - Update TX's count data")
+        runner_Circulating.delay()
+        logger.info("TASK - Update Circulating data")
         sleep(TASKS_SCAN_DELAY)
 
 #    def update_cache_total_accounts_count():
