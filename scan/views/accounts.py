@@ -29,7 +29,7 @@ from scan.views.base import IntSlugDetailView
 from scan.views.transactions import fill_data_transaction
 from scan.templatetags.burst_tags import cashback_amount
 
-from scan.views.miners import get_miners
+#from scan.views.miners import get_miners
 
 class AccountsListView(ListView):
     model = Account
@@ -250,10 +250,10 @@ class AddressDetailView(IntSlugDetailView):
         )
 
         # miners
-        miners = get_miners(obj.id)
-        context["miners"] = miners
+        #miners = get_miners(obj.id)
+        #context["miners"] = miners
 
-        miners_cnt = len(miners)
-        context["miners_cnt"] = miners_cnt
+        #miners_cnt = len(miners)
+        #context["miners_cnt"] = miners_cnt
 
         return context
