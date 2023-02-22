@@ -91,7 +91,7 @@ Network Difficulty: {% if blocks %}{%  with blocks|first as last_block %}
             <div class="media align-items-center">
               <div class="text-left">
                 <h6 class="text-uppercase text-secondary mb-0"><i class="fa fa-coins"></i> Total Supply</h6>
-                <span class="text-info small"> {{ 0 | total_circulating|burst_amount|floatformat:0|intcomma }}</span>
+                <span class="text-info small"> {{ 0 | total_circulating_network|burst_amount|floatformat:0|intcomma }}</span>
               </div>
             </div>
             <hr class="hr-space-lg">
