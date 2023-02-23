@@ -125,7 +125,7 @@ def query_asset_treasury_acc(asset, account_id) -> (str, str):
     
     return full_hash, add_treasury
 
-@cache_memoize(None)
+@cache_memoize(60)
 def get_asset_details(asset_id: int) -> (str, int, int, bool):
     asset_details = (
         Asset.objects.using("java_wallet")
@@ -135,12 +135,12 @@ def get_asset_details(asset_id: int) -> (str, int, int, bool):
         )
     return asset_details
 
-@cache_memoize(None)
+@cache_memoize(60)
 def get_asset_details_owner(asset_id: int) -> (str, int, int, bool, int):
     asset_details = (
-        Asset.objects.using("java_wallet")
-        .filter(id=asset_id)
-        .values_list("name", "decimals", "quantity", "mintable", "account_id")
+        Asset.objects.filter(id=asset_id)
+        .prefetch_related("name__decimals__quantity__mintable__account_id")
+        #.values_list("name", "decimals", "quantity", "mintable", "account_id")
         .first()
         )
     return asset_details

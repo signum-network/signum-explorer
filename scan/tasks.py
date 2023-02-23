@@ -1,19 +1,14 @@
 import logging
 import os
-
 from time import sleep
 from django.conf import settings
 from config.settings import TASKS_SCAN_DELAY
 from scan.caching_data.exchange import CachingExchangeData
-from celery import shared_task
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
 from scan.caching_data.total_circulating import CachingTotalCirculating
-#from scan.caching_data.total_accounts_count import CachingTotalAccountsCount
+from celery import shared_task
 
 logger = logging.getLogger(__name__)
-
-from java_wallet.models import Transaction
-
 
 ######################################
 # These tasks run on a regular       #
