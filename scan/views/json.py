@@ -28,11 +28,13 @@ def TopAccountsJson(request, results=10):
     bal = list(AccountBalance.objects.all().filter(latest=True,balance__gte=10000000000000).exclude(id=0).order_by('-balance').values('id', 'balance')[:results])
     return JsonResponse(bal, safe=False)
 
+@cache_memoize(10)
 @require_http_methods(["GET"])
 def getStatejson(request, address):
     state = PeerMonitor.objects.only('state').get(real_ip=address).state
     return JsonResponse(state, safe=False)
 
+@cache_memoize(300)
 @require_http_methods(["GET"])
 def getSNRjson(request):
     snrraw = list(PeerMonitor.objects.all().values_list('announced_address', 'real_ip', 'reward_state', 'reward_time'))
