@@ -34,7 +34,7 @@ def getStatejson(request, address):
     state = PeerMonitor.objects.only('state').get(real_ip=address).state
     return JsonResponse(state, safe=False)
 
-@cache_memoize(21600)
+@cache_memoize(300)
 @require_http_methods(["GET"])
 def getSNRjson(request):
     snrraw = list(PeerMonitor.objects.all().values_list('announced_address', 'real_ip', 'reward_state', 'reward_time'))
