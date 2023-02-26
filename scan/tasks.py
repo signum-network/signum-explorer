@@ -5,7 +5,6 @@ import requests, json
 from time import sleep
 from django.conf import settings
 from config.settings import TASKS_SCAN_DELAY, SNR_MASTER_EXPLORER
-from django.db.models import Q
 
 from scan.models import PeerMonitor
 from scan.caching_data.exchange import CachingExchangeData
@@ -46,7 +45,7 @@ def task_cmd():
         logger.info("TASK - Update Peer SNR data")
         snr_master = list(requests.get(url=SNR_MASTER_EXPLORER + "/json/SNRinfo").json())
         for node in snr_master:
-            PeerMonitor.objects.filter(Q(announced_address=node[0])).update(reward_state=node[2], reward_time=node[3])
+            PeerMonitor.objects.filter(announced_address=node[0]).update(reward_state=node[2], reward_time=node[3])
         if snr_master :
             logger.info("SNR Master Data Received")
 
