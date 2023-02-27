@@ -273,7 +273,6 @@ BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 
 PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "60"))
 TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "60"))
-TASKS_SNR_DELAY = int(os.environ.get("TASKS_SNR_DELAY", "21600"))
 SNR_MASTER_EXPLORER = os.environ.get("SNR_MASTER_EXPLORER", "")
 
 SITE_HOSTING = os.environ.get("SITE_HOSTING", " ")

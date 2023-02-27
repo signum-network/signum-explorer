@@ -5,7 +5,6 @@ from django.conf import settings
 
 from config.settings import (
     TASKS_SCAN_DELAY, 
-    TASKS_SNR_DELAY,
 )
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -35,6 +34,6 @@ app.conf.beat_schedule = {
     },
     'runner-MasterSNR': {
         'task': 'scan.tasks.update_MasterSNR',  
-        'schedule': TASKS_SNR_DELAY,
+        'schedule': crontab(minute=0, hour='*/6'),
     },
 }

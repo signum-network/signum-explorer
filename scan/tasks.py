@@ -40,8 +40,12 @@ def runner_Circulating():
 
 @app.task
 def update_MasterSNR():
-    try: snr_master = list(requests.get(url=SNR_MASTER_EXPLORER + "/json/SNRinfo").json())
-    except: snr_master = []
+    try: 
+        snr_master = list(requests.get(url=SNR_MASTER_EXPLORER + "/json/SNRinfo").json())
+        logger.info(f"TASK - SNR Response Received")
+    except: 
+        snr_master = []
+        logger.warning("TASK - No SNR Received!")
     for node in snr_master:
         PeerMonitor.objects.filter(announced_address=node[0]).update(reward_state=node[2], reward_time=node[3])
     logger.info("TASK - Updated MasterExplorer data")
