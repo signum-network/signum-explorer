@@ -95,7 +95,6 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    import debug_toolbar
-
-    urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
-    urlpatterns = [path('django_query_profiler/', include('django_query_profiler.client.urls'))] + urlpatterns
+    urlpatterns += [
+        path("silk/", include("silk.urls", namespace="silk")),
+    ]

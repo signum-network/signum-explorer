@@ -140,7 +140,7 @@ def get_asset_details_owner(asset_id: int) -> (str, int, int, bool, int):
     asset_details = (
         Asset.objects.filter(id=asset_id)
         .prefetch_related("name__decimals__quantity__mintable__account_id")
-        #.values_list("name", "decimals", "quantity", "mintable", "account_id")
+        .values_list("name", "decimals", "quantity", "mintable", "account_id")
         .first()
         )
     return asset_details
