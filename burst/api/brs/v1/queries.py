@@ -327,3 +327,8 @@ class GetUnconfirmedTransactions(QueryBase):
     }
     # TODO: validate each
     # {"type":0,"subtype":0,"timestamp":154715780,"deadline":1000,"senderPublicKey":"447db598ab0b8b128516b3a70b9d87ea4cdb460fb4c550167cbfceda865fb03d","recipient":"13493329130306648054","amountNQT":10000000,"feeNQT":735000,"ecBlockHeight":639673,"ecBlockId":"3483458127310479448","signature":"9de1f780425b7bc95d63982196ab3349dcfb4fb1297a1ab88db411693eb14b02d1046a048aba0210294448d21d9978ce9b69b4bf27faefbba4c93c49a2ff3a4a","attachment":{},"version":1}
+
+class GetAccountsWithRewardRecipient(QueryBase):
+    _request_type = "getAccountsWithRewardRecipient"
+    _http_method = "GET"
+    _required_params = {"account"}

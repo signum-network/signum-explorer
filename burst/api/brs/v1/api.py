@@ -103,3 +103,6 @@ class BrsApi(BrsApiBase):
         return self._request(queries.GetUnconfirmedTransactions())[
             "unconfirmedTransactions"
         ]
+
+    def get_accounts_with_reward_recipient(self, account_id: int):
+        return self._request(queries.GetAccountsWithRewardRecipient({"account": account_id}))['accounts']

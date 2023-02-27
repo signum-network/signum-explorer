@@ -45,7 +45,7 @@ from scan.views.peers import (
 from scan.views.json import (
     getSNRjson,
     getStatejson,
-    TopAccountsJson,
+    topAccountsJson,
 )
 
 from scan.views.pending_transactions import pending_transactions
@@ -89,13 +89,12 @@ urlpatterns = [
     path("SNRinfo/", getSNRjson, name="snr-info"),
     path("json/SNRinfo/", getSNRjson, name="snr-info"),
     path("json/state/<str:address>", getStatejson, name="state"),
-    path("json/accounts/", TopAccountsJson, name="json-account"),
-    path("json/accounts/<int:results>", TopAccountsJson),
+    path("json/top-accounts/", topAccountsJson, name="json-account"),
+    path("json/top-accounts/<int:results>", topAccountsJson),
     # path("admin/", admin.site.urls),
 ]
 
 if settings.DEBUG:
-    import debug_toolbar
-
-    urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
-    urlpatterns = [path('django_query_profiler/', include('django_query_profiler.client.urls'))] + urlpatterns
+    urlpatterns += [
+        path("silk/", include("silk.urls", namespace="silk")),
+    ]

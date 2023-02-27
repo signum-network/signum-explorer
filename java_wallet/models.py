@@ -428,6 +428,9 @@ class Transaction(models.Model):
     class Meta:
         managed = True
         db_table = 'transaction'
+        indexes = [
+            models.Index(fields=['sender_id', 'recipient_id', 'cash_back_id', 'height']),
+        ]
 
 class IndirecIncoming(models.Model):
     db_id = models.BigAutoField(primary_key=True)

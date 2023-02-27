@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, F, Count
 from django.views.generic import ListView
 
 from java_wallet.models import (
@@ -29,6 +29,12 @@ from scan.views.base import IntSlugDetailView
 from scan.views.transactions import fill_data_transaction
 from scan.templatetags.burst_tags import cashback_amount
 
+from config.settings import DEBUG
+if DEBUG:
+    from silk.profiling.profiler import silk_profile
+
+#from scan.views.miners import get_miners
+
 class AccountsListView(ListView):
     model = Account
     queryset = (
@@ -58,193 +64,159 @@ class AddressDetailView(IntSlugDetailView):
     slug_field = "id"
     slug_url_kwarg = "id"
 
+    #@silk_profile(name='Detailed Account View')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
-
+        
         # To also show contract names when checking as an account
         if not obj.name:
             obj.name = get_account_name(obj.id)
 
         obj.is_contract = check_is_contract(obj.id)
+        
+        # Transactions p1
+        txs_db = (
+            Transaction.objects
+            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
+            .prefetch_related("sender_id__recipient_id__cash_back_id__height__id")
+        )
 
-        # transactions
+        # cashback ##Calling QuerySet.filter() after union() is not supported##
+        if obj.id == 0:
+            cbs = 0
+            cbs_cnt = 0
+            total_cashback = 0 
+        else:
+            cash_query = txs_db.filter(Q(cash_back_id=obj.id))
+            cbs_cnt = cash_query.count()
+            cbs = cash_query.order_by("-height")[:min(cbs_cnt, 15)]
+            total_cashback = 0 
+            for cb in cash_query:
+                total_cashback += cashback_amount(cb.fee)
+        context["total_cashback"] = total_cashback
+        context["cbs"] = cbs
+        context["cbs_cnt"] = cbs_cnt
+
+        # Transactions p2
         indirects_query = (
             IndirecIncoming.objects.using("java_wallet")
             .values_list('transaction_id', flat=True)
             .filter(account_id=obj.id)
         )
         indirects_count = indirects_query.count()
-
-        txs_query = (
-            Transaction.objects.using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-        )
-        txs_cnt = txs_query.count() + indirects_count
-
         if indirects_count > 0:
-            txs_indirects = (
-                Transaction.objects.using("java_wallet")
-                .filter(id__in=indirects_query)
-            )
-            txs_query = txs_query.union(txs_indirects)
-
-        txs = txs_query.order_by("-height")[:min(txs_cnt, 15)]
-
+            txs_indirects = txs_db.filter(id__in=indirects_query)
+            txs_db = txs_db.union(txs_indirects)
+        txs_cnt = txs_db.count()# + indirects_count
+        txs = txs_db.order_by("-height")[:min(txs_cnt, 15)]
         for t in txs:
             fill_data_transaction(t, list_page=True)
-
         context["txs"] = txs
         context["txs_cnt"] = txs_cnt
-        
-        # cashback
-        if obj.id == 0:
-            cbs =0
-            cbs_cnt = 0
-            total_cashback = 0 
-        else:
-            cash_query = (
-                Transaction.objects.using("java_wallet")
-                .filter(Q(cash_back_id=obj.id)))
-            
-            cbs_cnt = cash_query.count()
-            cbs = cash_query.order_by("-height")[:min(cbs_cnt, 15)]
-            total_cashback = 0 
-            for cb in cash_query:
-                total_cashback += cashback_amount(cb.fee)
-        
-        context["total_cashback"]=total_cashback
-        context["cbs"] = cbs
-        context["cbs_cnt"] = cbs_cnt
 
         # aliases
-
         alias_query = (
             Alias.objects.using("java_wallet")
             .filter(account_id=obj.id, latest=True)
             .order_by("alias_name")
         )
-            
         alias_cnt = alias_query.count()
         aliases = alias_query
-        
-        context["aliases"] = aliases[:25]
+        context["aliases"] = aliases[:min(alias_cnt, 25)]
         context["alias_cnt"] = alias_cnt
 
         # subscriptions
-
         subscription_query = (
             Subscription.objects.using("java_wallet")
             .filter(sender_id=obj.id, latest=True)
             .order_by("-height")
         )
-            
         subscription_cnt = subscription_query.count()
         subscriptions = subscription_query
-        
-        context["subscriptions"] = subscriptions[:25]
+        context["subscriptions"] = subscriptions[:min(subscription_cnt, 25)]
         context["subscription_cnt"] = subscription_cnt
 
         # assets
-
-        assets_cnt = (
-            AccountAsset.objects.using("java_wallet")
+        asset_database = (
+            AccountAsset.objects
             .filter(account_id=obj.id, latest=True)
-            .count()
+            .prefetch_related("account_id__db_id")
         )
-        assets = (
-            AccountAsset.objects.using("java_wallet")
-            .filter(account_id=obj.id, latest=True)
-            .order_by("-db_id")[:assets_cnt]
-        )
-
+        assets_cnt = asset_database.count()
+        assets = asset_database.order_by("-db_id")[:min(assets_cnt, 15)]
         for asset in assets:
             asset.name, asset.decimals, asset.total_quantity, asset.mintable, asset.owner_id = get_asset_details_owner(asset.asset_id)
         context["assets"] = assets
         context["assets_cnt"] = assets_cnt
 
         # assets transfer
-
-        assets_transfers_cnt = (
+        asset_transfer_db = (
             AssetTransfer.objects.using("java_wallet")
             .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-            .count()
+            .prefetch_related("sender_id__recipient_id__height")
         )
-        assets_transfers = (
-            AssetTransfer.objects.using("java_wallet")
-            .using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-            .order_by("-height")[:min(assets_transfers_cnt, 15)]
-        )
-
+        assets_transfers_cnt= asset_transfer_db.count()
+        assets_transfers = asset_transfer_db.order_by("-height")[:min(assets_transfers_cnt, 15)]
         for transfer in assets_transfers:
             fill_data_asset_transfer(transfer)
-
         context["assets_transfers"] = assets_transfers
         context["assets_transfers_cnt"] = assets_transfers_cnt
 
         # assets trades
-
-        assets_trades_cnt = (
+        trades_db = (
             Trade.objects.using("java_wallet")
             .filter(Q(buyer_id=obj.id) | Q(seller_id=obj.id))
-            .count()
+            .prefetch_related("buyer_id__seller_id__height")
         )
-        assets_trades = (
-            Trade.objects.using("java_wallet")
-            .using("java_wallet")
-            .filter(Q(buyer_id=obj.id) | Q(seller_id=obj.id))
-            .order_by("-height")[:min(assets_trades_cnt, 15)]
-        )
-
+        assets_trades_cnt = trades_db.count()
+        assets_trades = trades_db.order_by("-height")[:min(assets_trades_cnt, 15)]
         for trade in assets_trades:
             fill_data_asset_trade(trade)
-
         context["assets_trades"] = assets_trades
         context["assets_trades_cnt"] = assets_trades_cnt
-
+        
         # pool info
-
         pool_id = get_pool_id_for_account(obj.id)
         if pool_id:
             obj.pool_id = pool_id
             obj.pool_name = get_account_name(pool_id)
 
-
         # ats
-
-        ats = (
+        ats_db = (
             At.objects.using("java_wallet")
             .filter(creator_id=obj.id)
-            .order_by("-height")[:15]
+            .prefetch_related("creator_id__height__creator_name")
         )
-
+        ats_cnt = ats_db.count()
+        ats = ats_db.order_by("-height")[:min(ats_cnt, 15)]
         for at in ats:
             at.creator_name = get_account_name(obj.id)
-
         context["ats"] = ats
-        context["ats_cnt"] = (
-            At.objects.using("java_wallet").filter(creator_id=obj.id).count()
-        )
-
-
+        context["ats_cnt"] = ats_cnt
+        
         # blocks
-
-        mined_blocks = (
+        
+        blocks_db = (
             Block.objects.using("java_wallet")
             .filter(generator_id=obj.id)
-            .order_by("-height")[:15]
+            .prefetch_related("generator_id__height")
         )
-
+        mined_blocks_cnt = blocks_db.count()
+        mined_blocks = blocks_db.order_by("-height")[:min(mined_blocks_cnt, 15)]
         for block in mined_blocks:
             pool_id = get_pool_id_for_block(block)
             if pool_id:
                 block.pool_id = pool_id
                 block.pool_name = get_account_name(pool_id)
-
         context["mined_blocks"] = mined_blocks
-        context["mined_blocks_cnt"] = (
-            Block.objects.using("java_wallet").filter(generator_id=obj.id).count()
-        )
+        context["mined_blocks_cnt"] = mined_blocks_cnt
+        
+        # miners
+        #miners = get_miners(obj.id)
+        #context["miners"] = miners
+
+        #miners_cnt = len(miners)
+        #context["miners_cnt"] = miners_cnt
 
         return context

@@ -24,7 +24,7 @@ from java_wallet.models import (
 
 @cache_memoize(300)
 @require_http_methods(["GET"])
-def TopAccountsJson(request, results=10):
+def topAccountsJson(request, results=10):
     bal = list(AccountBalance.objects.all().filter(latest=True,balance__gte=10000000000000).exclude(id=0).order_by('-balance').values('id', 'balance')[:results])
     return JsonResponse(bal, safe=False)
 

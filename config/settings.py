@@ -29,16 +29,15 @@ SECRET_KEY = os.environ.get(
     "SECRET_KEY", "changeme"
 )
 
+APP_ENV=os.environ.get("APP_ENV")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "off") == "on"
-
-INTERNAL_IPS = os.environ.get("DEBUG_TOOLBAR_INTERNAL_IPS", "[]")
 
 ALLOWED_HOSTS = ["*"]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-AUTH_USER_MODEL = "cabinet.User"
+AUTH_USER_MODEL = "auth.User"
 
 # Application definition
 
@@ -58,18 +57,14 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "django_filters",
     "rest_framework",
+    "django_extensions",
+    'django_celery_beat',
 ]
 
-if DEBUG:
-    THIRD_PARTY_APPS += ["debug_toolbar", "django_query_profiler"]
-
 LOCAL_APPS = [
-    "cabinet",
     "scan",
     "java_wallet",
 ]
-
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -84,12 +79,13 @@ MIDDLEWARE = [
 ]
 
 if DEBUG:
-    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+    MIDDLEWARE += ["silk.middleware.SilkyMiddleware"]
+    SILKY_PYTHON_PROFILER = True
     MIDDLEWARE += ["django_cprofile_middleware.middleware.ProfilerMiddleware"]
     DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
+    THIRD_PARTY_APPS += ["silk"]
 
-    from django_query_profiler.settings import *
-    MIDDLEWARE += ["django_query_profiler.client.middleware.QueryProfilerMiddleware"]
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 ROOT_URLCONF = "config.urls"
 
@@ -221,17 +217,14 @@ LOGGING = {
 }
 
 # Celery
-#
-#CELERY_BROKER_URL = (
-#    f'redis://{os.environ.get("CELERY_BROKER_HOST")}:'
-#    f'{os.environ.get("CELERY_BROKER_PORT")}/'
-#    f'{os.environ.get("CELERY_BROKER_DB")}'
-#)
-#CELERY_RESULT_BACKEND = None
-#CELERY_ACCEPT_CONTENT = ["json"]
-#CELERY_TASK_SERIALIZER = "json"
-#CELERY_RESULT_SERIALIZER = "json"
-#CELERYD_TASK_TIME_LIMIT = 600
+if APP_ENV == "production":
+    CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+    CELERY_BROKER_URL = (f'redis://{os.environ.get("CELERY_BROKER_HOST")}:{os.environ.get("CELERY_BROKER_PORT")}/{os.environ.get("CELERY_BROKER_DB")}')
+    CELERY_RESULT_BACKEND = (f'redis://{os.environ.get("CELERY_BROKER_HOST")}:{os.environ.get("CELERY_BROKER_PORT")}/{os.environ.get("CELERY_BROKER_RES")}')
+    CELERY_ACCEPT_CONTENT = ["application/json"]
+    CELERY_TASK_SERIALIZER = "json"
+    CELERY_RESULT_SERIALIZER = "json"
+    DJANGO_CELERY_BEAT_TZ_AWARE = False
 
 # Sentry
 
@@ -239,10 +232,11 @@ SENTRY_DSN = os.environ.get("SENTRY_DSN")
 
 if SENTRY_DSN:
     from sentry_sdk import init
-#    from sentry_sdk.integrations.celery import CeleryIntegration
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.logging import LoggingIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
+    if APP_ENV == "production":
+        from sentry_sdk.integrations.celery import CeleryIntegration
 
     init(
         dsn=SENTRY_DSN,
@@ -277,8 +271,9 @@ PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 
-PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "0"))
-TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "0"))
+PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "60"))
+TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "60"))
+SNR_MASTER_EXPLORER = os.environ.get("SNR_MASTER_EXPLORER", "")
 
 SITE_HOSTING = os.environ.get("SITE_HOSTING", " ")
 

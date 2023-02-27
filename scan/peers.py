@@ -231,7 +231,7 @@ def get_count_nodes_online() -> int:
     return PeerMonitor.objects.filter(state=PeerMonitor.State.ONLINE).count()
 
 
-@lock_decorator(key="peer_monitor", auto_renewal=True)
+#@lock_decorator(key="peer_monitor", auto_renewal=True)
 @transaction.atomic
 def peer_cmd():
     logger.info("Start the scan")

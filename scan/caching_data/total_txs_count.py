@@ -9,4 +9,4 @@ class CachingTotalTxsCount(CachingDataBase):
     default_data_if_empty = 0
 
     def _get_live_data(self):
-        return Transaction.objects.using("java_wallet").count()
+        return Transaction.objects.count()
