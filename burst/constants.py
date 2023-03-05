@@ -44,6 +44,7 @@ class TxSubtypeMessaging:
     ACCOUNT_INFO = 5
     ALIAS_SELL = 6
     ALIAS_BUY = 7
+    TLD_ASSIGNMENT = 8
 
 
 class TxSubtypeColoredCoins:

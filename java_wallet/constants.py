@@ -21,6 +21,7 @@ TX_TYPES = {
     (TxType.MESSAGING, TxSubtypeMessaging.ACCOUNT_INFO): _("Account Update"),
     (TxType.MESSAGING, TxSubtypeMessaging.ALIAS_SELL): _("Alias Sell"),
     (TxType.MESSAGING, TxSubtypeMessaging.ALIAS_BUY): _("Alias Buy"),
+    (TxType.MESSAGING, TxSubtypeMessaging.TLD_ASSIGNMENT): _("STLD Assignment"),
     (TxType.COLORED_COINS, TxSubtypeColoredCoins.ASSET_ISSUANCE): _("Token Issuance"),
     (TxType.COLORED_COINS, TxSubtypeColoredCoins.ASSET_TRANSFER): _("Token Transfer"),
     (TxType.COLORED_COINS, TxSubtypeColoredCoins.ASK_ORDER_PLACEMENT): _(
