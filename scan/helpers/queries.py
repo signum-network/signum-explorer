@@ -13,7 +13,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, AccountBalance, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirecIncoming
+from java_wallet.models import Account, AccountBalance, Alias, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirecIncoming
 
 
 @cache_memoize(3600)
@@ -47,6 +47,27 @@ def get_account_balance(account_id: int) -> str:
         return account_balance
     else :
         return 0
+    
+@cache_memoize(240)
+def get_tld_name(tld_id: int) -> str:
+    tld_name= (
+        Alias.objects.using("java_wallet")
+        .filter(id=tld_id, latest=True)
+        .first()
+    )
+    if tld_name.alias_name == 'signum':
+        return 'without STLD'
+    else :
+        return tld_name.alias_name
+
+@cache_memoize(240)
+def get_tld_name_default(tld_id: int) -> str:
+    tld_name= (
+        Alias.objects.using("java_wallet")
+        .filter(id=tld_id, latest=True)
+        .first()
+    )
+    return tld_name.alias_name
 
 @cache_memoize(200)
 def get_account_unconfirmed_balance(account_id: int) -> str:

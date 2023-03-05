@@ -19,8 +19,8 @@ from scan.caching_data.total_circulating import CachingTotalCirculating
 import struct
 import os
 
-from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price,  get_account_balance,get_account_unconfirmed_balance,get_total_circulating, query_asset_treasury_acc
-
+from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price,  get_account_balance,get_account_unconfirmed_balance,get_total_circulating, query_asset_treasury_acc, get_tld_name
+from scan.helpers.queries import get_tld_name_default
 register = template.Library()
 
 @register.filter
@@ -30,7 +30,6 @@ def hours_ago(time, hours):
 @register.filter
 def block_reward(block: Block) -> int:
     return calc_block_reward(block.height)
-
 
 @register.filter
 def block_reward_with_fee(block: Block) -> float:
@@ -44,6 +43,13 @@ def block_reward_with_fee_burnt(block: Block) -> float:
 def block_fee_miner(block: Block) -> float:
     return block.total_fee -block.total_fee_cash_back - block.total_fee_burnt
 
+@register.filter
+def stld_name(tld_id):
+    return get_tld_name(tld_id)
+
+@register.filter
+def stld_name_default(tld_id):
+    return get_tld_name_default(tld_id)
 
 @cache_memoize(240)
 @register.filter
