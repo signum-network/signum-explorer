@@ -19,8 +19,13 @@
         <td><a href="{% url 'tx-detail' alias.id %}">{{ alias.id|truncatechars:10 }}</a></td>
         <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' alias.height %}">{{ alias.height }}</a></td>
         <td>{{ alias.alias_name }}</td>
+        {% if alias.tld is None %}
+        <td></td>
+        <td></td>
+        {% else %}
         <td>{{ alias.tld|stld_name}}</td>
         <td>{{ alias.alias_name }}.{{ alias.tld|stld_name_default}}</td>
+        {% endif %}
         <td>{{ alias.timestamp|naturaltime }}</td>
 
       </tr>
