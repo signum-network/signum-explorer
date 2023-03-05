@@ -19,6 +19,7 @@ class AliasListView(ListView):
 
     def get_queryset(self):
         qs = self.queryset
+        qs = qs.filter(latest=True)
         if 'a' in self.request.GET:
             qs = qs.filter(account_id=self.request.GET['a'], latest=True)
 
