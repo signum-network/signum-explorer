@@ -286,3 +286,6 @@ SITE_HOSTING = os.environ.get("SITE_HOSTING", " ")
 AGGR_STORE_BLOCK_SIGNATURE = 3600 * 24 * 7
 
 TEST_NET = os.environ.get("TEST_NET")
+
+# for syncing peer SNR status
+SNR_MASTER_EXPLORER = os.environ.get("SNR_MASTER_EXPLORER")
