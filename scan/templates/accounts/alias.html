@@ -7,9 +7,9 @@
     <tr>
       <th scope="col">Transaction ID</th>
       <th scope="col" class="d-none d-sm-table-cell">Block</th>
-      <th scope="col">Alias</th>
+      <th scope="col">Registered Alias</th>
       <th scope="col">STLD</th>
-      <th scope="col">Alias Name</th>
+      <th scope="col">Resolvable Alias</th>
       <th scope="col">Last Modified</th>
     </tr>
     </thead>
@@ -18,13 +18,14 @@
       <tr>
         <td><a href="{% url 'tx-detail' alias.id %}">{{ alias.id|truncatechars:10 }}</a></td>
         <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' alias.height %}">{{ alias.height }}</a></td>
+        {% if alias.tld == 0 %}
         <td>{{ alias.alias_name }}</td>
-        {% if alias.tld is None %}
         <td></td>
-        <td></td>
+        <td>{{ alias.alias_name }}.{{ alias.tld|stld_name}}</td>
         {% else %}
+        <td>{{ alias.alias_name }}.{{ alias.tld|stld_name}}</td>
         <td>{{ alias.tld|stld_name}}</td>
-        <td>{{ alias.alias_name }}.{{ alias.tld|stld_name_default}}</td>
+        <td>{{ alias.alias_name }}.{{ alias.tld|stld_name}}</td>
         {% endif %}
         <td>{{ alias.timestamp|naturaltime }}</td>
 

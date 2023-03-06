@@ -19,8 +19,8 @@ from scan.caching_data.total_circulating import CachingTotalCirculating
 import struct
 import os
 
-from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price,  get_account_balance,get_account_unconfirmed_balance,get_total_circulating, query_asset_treasury_acc, get_tld_name
-from scan.helpers.queries import get_tld_name_default
+from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price,  get_account_balance,get_account_unconfirmed_balance,get_total_circulating, query_asset_treasury_acc
+from scan.helpers.queries import get_registered_tld_name,get_tld_reciever_id,get_subscription_recipient_id,get_subscription_alias
 register = template.Library()
 
 @register.filter
@@ -45,11 +45,22 @@ def block_fee_miner(block: Block) -> float:
 
 @register.filter
 def stld_name(tld_id):
-    return get_tld_name(tld_id)
+    return get_registered_tld_name(tld_id)
 
 @register.filter
-def stld_name_default(tld_id):
-    return get_tld_name_default(tld_id)
+def subscription_recipient_aliascheck(sub_id):
+    return get_tld_reciever_id(sub_id)
+
+@cache_memoize(240)
+@register.filter
+def subscription_attachment(sub_id):
+    sub_recipient_id = get_subscription_recipient_id(sub_id)
+    check = get_tld_reciever_id(sub_id)
+    if sub_recipient_id != check:
+        alias_name, alias_tld_id = get_subscription_alias(sub_id)
+        tld_name = get_registered_tld_name(alias_tld_id)
+        return 'Quarterly Payment for '+alias_name+' with STLD '+tld_name
+    return ''
 
 @cache_memoize(240)
 @register.filter
