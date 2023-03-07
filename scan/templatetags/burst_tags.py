@@ -59,7 +59,10 @@ def subscription_attachment(sub_id):
     if sub_recipient_id != check:
         alias_name, alias_tld_id = get_subscription_alias(sub_id)
         tld_name = get_registered_tld_name(alias_tld_id)
-        return 'Quarterly Payment for '+alias_name+' with STLD '+tld_name
+        if tld_name == 'signum':
+            return 'Quarterly Payment for Alias: '+alias_name 
+        else:
+            return 'Quarterly Payment for Alias: '+alias_name+'.'+tld_name
     return ''
 
 @cache_memoize(240)
