@@ -10,6 +10,7 @@
       <th scope="col">Registered Alias</th>
       <th scope="col">STLD</th>
       <th scope="col">Resolvable Alias</th>
+      <th scope="col">Owner</th>
       <th scope="col">Last Modified</th>
     </tr>
     </thead>
@@ -27,6 +28,7 @@
         <td>{{ alias.tld|stld_name}}</td>
         <td>{{ alias.alias_name }}.{{ alias.tld|stld_name}}</td>
         {% endif %}
+        <td>{% include "account_link.html" with account_id=alias.account_id account_name=alias.account_id|account_name_string %}</td>
         <td>{{ alias.timestamp|naturaltime }}</td>
 
       </tr>
