@@ -94,9 +94,9 @@ class AddressDetailView(IntSlugDetailView):
         )
         indirects_count = len(indirects_query)
         if indirects_count > 0:
-            #txs_indirects = (Transaction.objects.filter(id__in=indirects_query))
             txs_db = (
                 Transaction.objects
+                .using("java_wallet")
                 .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
                 .union(Transaction.objects.filter(id__in=indirects_query))
                 .order_by("-height")
@@ -104,6 +104,7 @@ class AddressDetailView(IntSlugDetailView):
         else:
             txs_db = (
                 Transaction.objects
+                .using("java_wallet")
                 .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
                 .order_by("-height")
             )
@@ -157,8 +158,7 @@ class AddressDetailView(IntSlugDetailView):
         # assets
         asset_database = (
             AccountAsset.objects
-        asset_database = (
-            AccountAsset.objects
+            .using("java_wallet")
             .filter(account_id=obj.id, latest=True)
             .prefetch_related("account_id__db_id")
             .order_by("-db_id")
@@ -171,7 +171,6 @@ class AddressDetailView(IntSlugDetailView):
         context["assets_cnt"] = assets_cnt
 
         # assets transfer
-        asset_transfer_db = (
         asset_transfer_db = (
             AssetTransfer.objects.using("java_wallet")
             .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
@@ -186,7 +185,6 @@ class AddressDetailView(IntSlugDetailView):
         context["assets_transfers_cnt"] = assets_transfers_cnt
 
         # assets trades
-        trades_db = (
         trades_db = (
             Trade.objects.using("java_wallet")
             .filter(Q(buyer_id=obj.id) | Q(seller_id=obj.id))
@@ -208,7 +206,6 @@ class AddressDetailView(IntSlugDetailView):
             obj.pool_name = get_account_name(pool_id)
 
         # ats
-        ats_db = (
         ats_db = (
             At.objects.using("java_wallet")
             .filter(creator_id=obj.id)
