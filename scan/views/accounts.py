@@ -1,4 +1,5 @@
 from django.db.models import Q, F, Count
+from django.db.models import Q, F, Count
 from django.views.generic import ListView
 
 from java_wallet.models import (
@@ -37,6 +38,12 @@ if DEBUG:
 
 #from scan.views.miners import get_miners
 
+from config.settings import DEBUG
+if DEBUG:
+    from silk.profiling.profiler import silk_profile
+
+#from scan.views.miners import get_miners
+
 class AccountsListView(ListView):
     model = Account
     queryset = (
@@ -67,9 +74,11 @@ class AddressDetailView(IntSlugDetailView):
     slug_url_kwarg = "id"
 
     #@silk_profile(name='Detailed Account View')
+    #@silk_profile(name='Detailed Account View')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
+        
         
         # To also show contract names when checking as an account
         if not obj.name:
@@ -148,6 +157,8 @@ class AddressDetailView(IntSlugDetailView):
         # assets
         asset_database = (
             AccountAsset.objects
+        asset_database = (
+            AccountAsset.objects
             .filter(account_id=obj.id, latest=True)
             .prefetch_related("account_id__db_id")
             .order_by("-db_id")
@@ -160,6 +171,7 @@ class AddressDetailView(IntSlugDetailView):
         context["assets_cnt"] = assets_cnt
 
         # assets transfer
+        asset_transfer_db = (
         asset_transfer_db = (
             AssetTransfer.objects.using("java_wallet")
             .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
@@ -175,6 +187,7 @@ class AddressDetailView(IntSlugDetailView):
 
         # assets trades
         trades_db = (
+        trades_db = (
             Trade.objects.using("java_wallet")
             .filter(Q(buyer_id=obj.id) | Q(seller_id=obj.id))
             .prefetch_related("buyer_id__seller_id__height")
@@ -187,6 +200,7 @@ class AddressDetailView(IntSlugDetailView):
         context["assets_trades"] = assets_trades
         context["assets_trades_cnt"] = assets_trades_cnt
         
+        
         # pool info
         pool_id = get_pool_id_for_account(obj.id)
         if pool_id:
@@ -194,6 +208,7 @@ class AddressDetailView(IntSlugDetailView):
             obj.pool_name = get_account_name(pool_id)
 
         # ats
+        ats_db = (
         ats_db = (
             At.objects.using("java_wallet")
             .filter(creator_id=obj.id)
@@ -205,6 +220,8 @@ class AddressDetailView(IntSlugDetailView):
         for at in ats:
             at.creator_name = get_account_name(obj.id)
         context["ats"] = ats
+        context["ats_cnt"] = ats_cnt
+        
         context["ats_cnt"] = ats_cnt
         
         # blocks

@@ -28,5 +28,12 @@ Werkzeug
 django-silk
 django-cprofile-middleware
 django-live-profiler
+django-celery-beatcelery
+fontawesomefree
+django-extensions
+Werkzeug
+django-silk
+django-cprofile-middleware
+django-live-profiler
 django-celery-beat
 django-debug-toolbar
