@@ -2,16 +2,12 @@
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 import os
 from django.db import models
-from requests import delete
 from .fields import PositiveBigIntegerField, TimestampField
-
-
-
 class Account(models.Model):
     db_id = models.BigAutoField(primary_key=True)
     id = PositiveBigIntegerField()
@@ -25,6 +21,7 @@ class Account(models.Model):
     class Meta:
         managed = True
         db_table = 'account'
+        ordering = ['-height']
         unique_together = (('id', 'height'),)
 
 class AccountBalance(models.Model):
@@ -38,6 +35,7 @@ class AccountBalance(models.Model):
     class Meta:
         managed = True
         db_table = 'account_balance'
+        ordering = ['-height']
         unique_together = (('id', 'height'),)
 
 class AccountAsset(models.Model):
@@ -157,6 +155,20 @@ class At(models.Model):
         unique_together = (('id', 'height'),)
 
 
+class AtMap(models.Model):
+    db_id = models.BigAutoField(primary_key=True)
+    at_id = PositiveBigIntegerField()
+    key1 = PositiveBigIntegerField()
+    key2 = PositiveBigIntegerField(blank=True, null=True)
+    value = PositiveBigIntegerField(blank=True, null=True)
+    height = models.IntegerField()
+    latest = models.IntegerField()
+
+    class Meta:
+        managed = True
+        db_table = 'at_map'
+
+
 class AtState(models.Model):
     db_id = models.BigAutoField(primary_key=True)
     at_id = PositiveBigIntegerField()
@@ -211,15 +223,16 @@ class Block(models.Model):
     generation_signature = models.BinaryField(max_length=64)
     block_signature = models.CharField(max_length=64)
     payload_hash = models.CharField(max_length=32)
-    generator_id = PositiveBigIntegerField()
+    generator_id = PositiveBigIntegerField(unique=True)
     nonce = PositiveBigIntegerField()
     ats = models.TextField(blank=True, null=True)
     version = os.environ.get('BRS_P2P_VERSION')
     total_fee_cash_back = PositiveBigIntegerField()
     total_fee_burnt= PositiveBigIntegerField()
-    
+
     class Meta:
         managed = True
+        ordering = ['-height']
         db_table = 'block'
 
 
@@ -273,6 +286,21 @@ class Goods(models.Model):
         managed = True
         db_table = 'goods'
         unique_together = (('id', 'height'),)
+
+
+class IndirectIncoming(models.Model):
+    db_id = models.BigAutoField(primary_key=True)
+    account_id = PositiveBigIntegerField()
+    transaction_id = PositiveBigIntegerField()
+    height = models.IntegerField()
+    amount = PositiveBigIntegerField(null=True)
+    quantity = PositiveBigIntegerField(null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'indirect_incoming'
+        ordering = ['-height']
+        unique_together = (('account_id', 'transaction_id'),)
 
 
 class Peer(models.Model):
@@ -421,28 +449,18 @@ class Transaction(models.Model):
     ec_block_height = models.IntegerField(blank=True, null=True)
     ec_block_id = PositiveBigIntegerField(blank=True, null=True)
     has_encrypttoself_message = models.IntegerField()
+    cash_back_id = PositiveBigIntegerField(blank=True, null=True)
     recipients = None
     versionBRS = os.environ.get('BRS_P2P_VERSION')
-    cash_back_id= PositiveBigIntegerField(blank=True, null=True)
-     
+
     class Meta:
         managed = True
         db_table = 'transaction'
+        ordering = ['-height']
         indexes = [
-            models.Index(fields=['sender_id', 'recipient_id', 'cash_back_id', 'height']),
+            models.Index(fields=['sender_id', 'recipient_id', 'cash_back_id', 'height', 'id']),
         ]
 
-class IndirecIncoming(models.Model):
-    db_id = models.BigAutoField(primary_key=True)
-    account_id = PositiveBigIntegerField()
-    transaction_id = PositiveBigIntegerField()
-    height = models.IntegerField()
-    amount = PositiveBigIntegerField(null=True)
-    quantity = PositiveBigIntegerField(null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'indirect_incoming'
 
 class UnconfirmedTransaction(models.Model):
     db_id = models.BigAutoField(primary_key=True)

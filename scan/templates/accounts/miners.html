@@ -1,0 +1,23 @@
+{% load humanize %}
+{% load burst_tags %}
+
+<div class="table-responsive">
+  <table class="table table-hover small table-sm">
+    <thead>
+    <tr>
+      <th scope="col" class="d-none d-sm-table-cell">Miner</th>
+      <th scope="col">Miner Name</th>
+      <th scope="col">Mined Blocks</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for miner, blks in miners_blk.items %}
+      <tr>
+        <td class="d-none d-sm-table-cell"><a href="{% url 'address-detail' miner %}">{{ miner|num2rs }}</a></td>
+        <td>{{ miner|account_name_string }}</td>
+        <td>{{ blks }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

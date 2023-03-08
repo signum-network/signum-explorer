@@ -79,11 +79,15 @@ MIDDLEWARE = [
 ]
 
 if DEBUG:
-    MIDDLEWARE += ["silk.middleware.SilkyMiddleware"]
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        "django_cprofile_middleware.middleware.ProfilerMiddleware", 
+        "silk.middleware.SilkyMiddleware",
+    ]
     SILKY_PYTHON_PROFILER = True
-    MIDDLEWARE += ["django_cprofile_middleware.middleware.ProfilerMiddleware"]
     DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
-    THIRD_PARTY_APPS += ["silk"]
+    THIRD_PARTY_APPS += ["silk", "debug_toolbar"]
+    INTERNAL_IPS = (os.environ.get("INTERNAL_IPS", ""),)
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

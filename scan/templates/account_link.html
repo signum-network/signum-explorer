@@ -3,8 +3,8 @@
 {% if filtered_account|slugify == account_id|slugify %}
   {{ account_id|num2rs }}
 {% else %}
-  <a href="{% url 'address-detail' account_id %}">
-    {{ account_id|num2rs }}
+  <a href="{% url 'address-detail' account_id|slugify %}">
+    {{ account_id|slugify|num2rs }}
   </a>
 {% endif %}
 {% if not oneline %}

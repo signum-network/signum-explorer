@@ -13,7 +13,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, AccountBalance, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirecIncoming
+from java_wallet.models import Account, AccountBalance, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction, IndirectIncoming
 
 
 @cache_memoize(3600)
@@ -272,3 +272,18 @@ def get_unconfirmed_transactions_index():
     txs_pending.sort(key=lambda _x: _x["feeNQT"], reverse=True)
 
     return txs_pending
+
+@cache_memoize(300)
+def get_miners(account_id: int):
+    miners = BrsApi(settings.SIGNUM_NODE).get_accounts_with_reward_recipient(account_id)
+    return miners
+
+@cache_memoize(300)
+def get_miners_blocks(miners, cnt=15):
+    miners_cnt = len(miners)
+    miner_blks = {
+        miner : (Block.objects.using("java_wallet").filter(generator_id=miner).count())
+        for miner in miners
+    }
+    miner_blks = dict(sorted(miner_blks.items(), key=lambda x:x[1], reverse=True)[:min(miners_cnt, cnt)])
+    return miner_blks

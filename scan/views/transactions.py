@@ -8,7 +8,7 @@ from burst.constants import TxSubtypeBurstMining, TxType
 from scan.templatetags.burst_tags import burst_amount, num2rs, tx_load_recipients, tx_type
 
 from burst.libs.multiout import MultiOutPack
-from java_wallet.models import IndirecIncoming, Transaction
+from java_wallet.models import IndirectIncoming, Transaction
 from scan.caching_data.last_height import CachingLastHeight
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
 from scan.caching_paginator import CachingPaginator
@@ -69,7 +69,7 @@ def tx_export_csv(request, id : int):
     writer = csv.writer(response)
 
     indirects_query = (
-        IndirecIncoming.objects.using("java_wallet")
+        IndirectIncoming.objects.using("java_wallet")
         .values_list('transaction_id', flat=True)
         .filter(account_id=id)
     )
