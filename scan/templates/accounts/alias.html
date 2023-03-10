@@ -23,6 +23,10 @@
         <td>{{ alias.alias_name }}</td>
         <td></td>
         <td>{{ alias.alias_name }}.{{ alias.tld|stld_name}}</td>
+        {% elif alias.tld is None %}
+        <td>{{ alias.alias_name }}</td>
+        <td></td>
+        <td></td>
         {% else %}
         <td>{{ alias.alias_name }}.{{ alias.tld|stld_name}}</td>
         <td>{{ alias.tld|stld_name}}</td>
