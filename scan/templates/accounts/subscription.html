@@ -9,9 +9,10 @@
       <th scope="col" class="d-none d-sm-table-cell align-middle">Block</th>
       <th scope="col" class="d-none d-sm-table-cell align-middle">Frequency<br><small>( hh:mm:ss )</small></th>
       <th scope="col" class="align-middle">Next Payment</th>
+      <th scope="col" class="d-none d-sm-table-cell align-middle" >From</th>
       <th scope="col" class="align-middle" >To</th>
       <th scope="col" class="align-middle">Value</th>
-      <th scope="col" class="align-middle">Description</th>
+      <th scope="col" class="d-none d-sm-table-cell align-middle">Description</th>
     </tr>
     </thead>
     <tbody>
@@ -21,6 +22,7 @@
         <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' subscription.height %}">{{ subscription.height }}</a></td>
         <td class="d-none d-sm-table-cell">{{ subscription.frequency|sec_time }}</td>
         <td>{{ subscription.time_next|subNextsend|naturaltime }}</td>
+        <td>{% include "account_link.html" with account_id=subscription.sender_id account_name=subscription.sender_id|account_name_string  %}</td>
         <td>{% include "account_link.html" with account_id=subscription.id|subscription_recipient_aliascheck account_name=subscription.id|subscription_recipient_aliascheck|account_name_string  %}</td>
         <td>{{ subscription.amount|burst_amount }}<br>
           <span class="text-success"> {% coin_symbol %} </span>
