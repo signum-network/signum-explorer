@@ -53,8 +53,8 @@ class AssetListView(ListView):
 
         for t in obj:
             t.account_name = get_account_name(t.account_id)
-            t.name = t.name.upper()
-            if t.name in BLOCKED_ASSETS or t.name in PHISHING_ASSETS:
+            check_name = t.name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 t.name = str(t.id)[0:10]
 
         featured_assets = []

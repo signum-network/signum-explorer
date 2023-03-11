@@ -22,7 +22,7 @@
         <td class="d-none d-sm-table-cell"><a href="{% url 'tx-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
         <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' asset.height %}">{{ asset.height }}</a></td>
         <td class="text-nowrap"><a href="{% url 'tx-detail' asset.id %}">{{ asset.timestamp|naturaltime }}</a></td>
-          <td class="text-nowrap text-uppercase">
+          <td class="text-nowrap">
             <a href="{% url 'asset-detail' asset.asset_id %}">
               {% if asset|is_asset_phishing %}
                 {{ asset.asset_id|truncatechars:10 }}

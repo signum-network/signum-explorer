@@ -148,7 +148,7 @@ document.body.onresize = function() {
             -->
             <tr>
               <th>Ticker</th>
-              <td class="text-uppercase">
+              <td class="text-nowrap">
                 {% if asset|is_asset_blocked %}
                   <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold text-uppercase"><spam><i class="fas fa-exclamation-circle"></i> Name blocked</spam></span>
                 {% else %}
