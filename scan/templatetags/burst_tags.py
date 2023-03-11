@@ -342,8 +342,8 @@ def tx_symbol(tx: Transaction) -> str:
                 name, decimals, total_quantity, mintable = get_asset_details(asset_id)
             except:
                 name ='NOTKNOWN'
-            name = name.upper()
-            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            check_name = name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
 
@@ -357,8 +357,8 @@ def tx_symbol_multi(tx: Transaction,asset_number = 1) -> str:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         asset_id = int.from_bytes(tx.attachment_bytes[asset_id_offset:asset_id_offset2], byteorder=sys.byteorder)
         name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-        name = name.upper()
-        if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+        check_name = name.upper()
+        if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
             return str(asset_id)[0:10]
         return name
 @register.filter
@@ -377,15 +377,15 @@ def tx_symbol_distribution(tx: Transaction) -> str:
         if tx.subtype  == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
             asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-            name = name.upper()
-            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            check_name = name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
         elif tx.subtype == TxSubtypeColoredCoins.ASSET_MINT:
             asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-            name = name.upper()
-            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            check_name = name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
     return ''
