@@ -397,8 +397,8 @@ def tx_asset_holder(tx: Transaction) -> str:
         if tx.subtype  == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
             asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-            name = name.upper()
-            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            check_name = name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
 
@@ -424,18 +424,22 @@ def total_circulating(account_id : int) -> float:
 def total_circulating_network(account_id : int) -> float:
     return CachingTotalCirculating().cached_data - get_account_balance(0)
 
+@cache_memoize(23)
 @register.filter
 def account_balance(account_id : int) -> float:
     return get_account_balance(account_id)
 
+@cache_memoize(23)
 @register.filter
 def account_unconfirmed_balance(account_id : int) -> float:
     return get_account_unconfirmed_balance(account_id)
 
+@cache_memoize(23)
 @register.filter
 def account_locked_balance(account_id : int) -> float:
     return get_account_balance(account_id) - get_account_unconfirmed_balance(account_id)
 
+@cache_memoize(240)
 @register.filter
 def account_name_string(account_id : int) -> float:
     return get_account_name(account_id)
