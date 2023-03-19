@@ -5,8 +5,11 @@ from pycoingecko import CoinGeckoAPI
 
 from scan.caching_data.base import CachingDataBase
 import os
-import logging
-logger = logging.getLogger(__name__)
+#import logging
+#logger = logging.getLogger(__name__)
+
+from celery.utils.log import get_task_logger
+logger = get_task_logger(__name__)
 
 @dataclass
 class ExchangeData:
@@ -39,7 +42,7 @@ class CachingExchangeData(CachingDataBase):
             return self.default_data_if_empty
 
         try:
-            logger.info("Getting Exchange data from API")
+            #logger.info("Getting Exchange data from API")
             cg = CoinGeckoAPI(retries=0)
             response = cg.get_price(
                 ids=os.environ.get("COINGECKO_PRICE_ID"),
@@ -47,7 +50,7 @@ class CachingExchangeData(CachingDataBase):
                 include_market_cap="true",
                 include_24hr_change="true",
             )["signum"]
-            logger.info(response)
+            logger.info(f"Updated Exchange Data:\n{response}")
             return ExchangeData(
                 price_usd=response["usd"],
                 market_cap_usd=response["usd_market_cap"],

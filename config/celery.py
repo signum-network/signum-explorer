@@ -1,18 +1,17 @@
 import os
 from celery import Celery
+from celery.signals import worker_ready
 from celery.schedules import crontab
 from django.conf import settings
 
 from config.settings import (
-    TASKS_SCAN_DELAY, 
+    TASKS_SCAN_DELAY,
 )
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 app = Celery("config")
-
 app.config_from_object("django.conf:settings", namespace="CELERY")
-
 app.autodiscover_tasks()
 
 @app.task(bind=True)
@@ -36,4 +35,14 @@ app.conf.beat_schedule = {
         'task': 'scan.tasks.update_MasterSNR',  
         'schedule': crontab(minute=0, hour='*/6'),
     },
+    'runner-PeerMonitor': {
+        'task': 'scan.tasks.peer_cmd',
+        'schedule': crontab(minute=0, hour='*/1'),
+    }
 }
+
+@worker_ready.connect
+def at_start(sender, **k):
+    with sender.app.connection() as conn:
+         sender.app.send_task('scan.tasks.update_MasterSNR', connection=conn)
+         sender.app.send_task('scan.tasks.peer_cmd', connection=conn)

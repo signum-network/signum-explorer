@@ -241,16 +241,24 @@ if SENTRY_DSN:
     from sentry_sdk.integrations.redis import RedisIntegration
     if APP_ENV == "production":
         from sentry_sdk.integrations.celery import CeleryIntegration
-
-    init(
-        dsn=SENTRY_DSN,
-        integrations=[
-            DjangoIntegration(),
-#            CeleryIntegration(),
-            LoggingIntegration(event_level=logging.WARNING),
-            RedisIntegration(),
-        ],
-    )
+        init(
+            dsn=SENTRY_DSN,
+            integrations=[
+                DjangoIntegration(),
+                CeleryIntegration(),
+                LoggingIntegration(event_level=logging.WARNING),
+                RedisIntegration(),
+            ],
+        )
+    else:
+        init(
+            dsn=SENTRY_DSN,
+            integrations=[
+                DjangoIntegration(),
+                LoggingIntegration(event_level=logging.WARNING),
+                RedisIntegration(),
+            ],
+        )
 
 # UA-XXXXXXXXX-X
 GOOGLE_TRACKING_ID = os.environ.get("GOOGLE_TRACKING_ID")
@@ -275,7 +283,7 @@ PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 
-PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "60"))
+PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "600"))
 TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "60"))
 SNR_MASTER_EXPLORER = os.environ.get("SNR_MASTER_EXPLORER", "")
 
