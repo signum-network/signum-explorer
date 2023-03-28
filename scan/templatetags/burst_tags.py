@@ -18,6 +18,7 @@ from scan.caching_data.exchange import CachingExchangeData
 from scan.caching_data.total_circulating import CachingTotalCirculating
 import struct
 import os
+from ctypes import c_ulonglong, c_longlong
 
 from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price,  get_account_balance,get_account_unconfirmed_balance,get_total_circulating, query_asset_treasury_acc
 from scan.helpers.queries import get_registered_tld_name,get_tld_reciever_id,get_subscription_recipient_id,get_subscription_alias
@@ -458,12 +459,18 @@ def is_asset_phishing(asset) -> bool:
 
 @register.filter
 def is_asset_treasury(asset, account_id) -> bool:
+    print(account_id)
+    print(c_longlong(account_id).value)
+    print('-------------')
     if not account_id:
         return False
-    fullh,resultt= query_asset_treasury_acc(asset, account_id)
+    fullh,resultt= query_asset_treasury_acc(asset, c_longlong(account_id).value)
     #print(fullh,resultt)
     for i in resultt:
         if fullh == i[0]:
+            print(i[0])
+            print(fullh)
+            print ('xxxxxxxxxxxxx')
             return True
     return False
 

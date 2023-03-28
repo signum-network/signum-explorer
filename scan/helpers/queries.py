@@ -144,10 +144,10 @@ def query_asset_treasury_acc(asset, account_id) -> (str, str):
         .filter(id=asset.asset_id).first()
     )
     add_treasury = (Transaction.objects.using("java_wallet")
-        .values_list('referenced_transaction_fullhash', flat=True)
+        .values_list('referenced_transaction_fullhash')
         .filter(type=TxType.COLORED_COINS,
             subtype=TxSubtypeColoredCoins.ADD_TREASURY_ACCOUNT,
-            recipient_id=account_id ).all()
+            recipient_id=account_id).all()
     )
     
     return full_hash, add_treasury
