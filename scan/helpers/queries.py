@@ -138,19 +138,21 @@ def check_is_contract(account_id: int) -> bool:
     return at_id != None
 
 @cache_memoize(None)
-def query_asset_treasury_acc(asset, account_id) -> (str, str):
+
+def query_asset_fullhash(asset) ->(str):
     full_hash = (Transaction.objects.using("java_wallet")
         .values_list('full_hash', flat=True)
         .filter(id=asset.asset_id).first()
     )
+    return full_hash
+def query_asset_treasury_acc(asset, account_id) -> (str):
     add_treasury = (Transaction.objects.using("java_wallet")
         .values_list('referenced_transaction_fullhash', flat=True)
         .filter(type=TxType.COLORED_COINS,
             subtype=TxSubtypeColoredCoins.ADD_TREASURY_ACCOUNT,
             recipient_id=account_id).all()
     )
-    
-    return full_hash, add_treasury
+    return add_treasury
 
 @cache_memoize(None)
 def get_asset_details(asset_id: int) -> (str, int, int, bool):
