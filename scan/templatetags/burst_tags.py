@@ -459,22 +459,16 @@ def is_asset_phishing(asset) -> bool:
 
 @register.filter
 def is_asset_treasury(asset, account_id) -> bool:
-    print(account_id)
-    print(c_longlong(account_id).value)
-    print(c_ulonglong(account_id).value)
-    print('-------------')
     if not account_id:
         return False
+    #use fullhash from asset
     fullh = query_asset_fullhash(asset)
-    print(fullh)
     resultt= query_asset_treasury_acc(asset, c_longlong(account_id).value)
     for i in resultt:
-        print(i)
         if fullh == i:
             return True
     resultt= query_asset_treasury_acc(asset,c_ulonglong(account_id).value)
     for i in resultt:
-        print(i)
         if fullh == i:
             return True
     return False
