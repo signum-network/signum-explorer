@@ -471,7 +471,7 @@ def is_asset_treasury(asset, account_id) -> bool:
             print(fullh)
             print ('xxxxxxxxxxxxx')
             return True
-    fullh,resultt= query_asset_treasury_acc(asset, account_id)
+    fullh,resultt= query_asset_treasury_acc(asset,c_ulonglong(account_id).value)
     for i in resultt:
         if fullh == i[0]:
             print(i[0])
