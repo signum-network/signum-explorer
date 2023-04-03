@@ -30,3 +30,5 @@ django-cprofile-middleware
 django-live-profiler
 django-celery-beat
 django-debug-toolbar
+ipapi
+geoip2

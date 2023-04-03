@@ -1,4 +1,3 @@
-import logging
 import random
 import socket
 from concurrent.futures import ThreadPoolExecutor
@@ -9,6 +8,9 @@ from urllib.parse import urlparse
 from time import sleep
 
 import requests
+import ipapi
+import geoip2.database
+
 from cache_memoize import cache_memoize
 from django import forms
 from django.conf import settings
@@ -24,12 +26,15 @@ from config.settings import PEERS_SCAN_DELAY
 from java_wallet.models import Block
 from scan.helpers.decorators import lock_decorator
 from scan.models import PeerMonitor
+from scan.helpers.decorators import skip_if_running
 
-logger = logging.getLogger(__name__)
+from celery import Celery, shared_task
+from config.celery import app
+from celery.utils.log import get_task_logger
+logger = get_task_logger(__name__)
 
-if PEERS_SCAN_DELAY > 0:
-    logger.info(f"Peers sleeping for {PEERS_SCAN_DELAY} seconds...")
-sleep(PEERS_SCAN_DELAY)
+# https://github.com/P3TERX/GeoLite.mmdb
+_reader = geoip2.database.Reader('static/ip_database/GeoLite2-Country.mmdb')
 
 def get_ip_by_domain(peer: str) -> str or None:
     # truncating port if exists
@@ -52,18 +57,20 @@ def get_ip_by_domain(peer: str) -> str or None:
 
 
 @cache_memoize(60 * 60 * 24 * 7)
-def get_country_by_ip(ip: str) -> str:
+def get_country_by_ip(ipa: str) -> str:
+    """geoip2"""
     try:
-        response = requests.get(f"https://ipwho.is/{ip}")
-        response.raise_for_status()
-        json_response = response.json()
-        georesponse = json_response["continent"] or "??"
-        logger.info("Geo lookup, found peer from: %s", georesponse)
-        return json_response["country_code"] or "??"
-    except (RequestException, ValueError, KeyError):
-        logger.warning("Geo lookup ERROR!")
-        return "??"
-
+        cc = _reader.country(ipa).country.iso_code
+        logger.debug(f"Geo lookup 1 - {ipa} country code: {cc}")
+    except Exception as e:
+        """Limits: 1k/day 30k/mo"""
+        logger.debug(f"Geo lookup 1 failed - {e}\n")
+        try:
+            cc = ipapi.location(ip=ipa, output='country_code')
+            logger.debug(f"Geo lookup 2 - {ipa} country code: {cc}")
+        except(RequestException, ValueError, KeyError):
+            logger.debug("Geo lookup 2 ERROR!")
+    return cc or "??"
 
 class PeerMonitorForm(forms.ModelForm):
     class Meta:
@@ -140,11 +147,12 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
         return
 
     ip = get_ip_by_domain(address)
+    cc = get_country_by_ip(ip)
 
     updates[address] = {
         "announced_address": peer_info["announcedAddress"],
         "real_ip": ip,
-        "country_code": get_country_by_ip(ip) if ip else "??",
+        "country_code": cc,
         "application": peer_info["application"],
         "platform": peer_info["platform"],
         "version": peer_info["version"],
@@ -232,16 +240,18 @@ def get_count_nodes_online() -> int:
 
 
 #@lock_decorator(key="peer_monitor", auto_renewal=True)
+@shared_task(bind=True)
+@skip_if_running
 @transaction.atomic
-def peer_cmd():
-    logger.info("Start the scan")
+def peer_cmd(self):
+    logger.debug("Start the scan")
 
     local_difficulty = get_local_difficulty()
     logger.info(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
 
     addresses = get_nodes_list()
-    #logger.info("The list of peers:") #enable to troubleshoot peers list
-    #logger.info(addresses)            #enable to troubleshoot peers list
+    logger.debug(f"The list of peers:\n{addresses}") #enable to troubleshoot peers list
+    #logger.debug(addresses)            #enable to troubleshoot peers list
     # explore every peer and collect updates
     updates = {}
     if settings.TEST_NET:
@@ -269,7 +279,7 @@ def peer_cmd():
             announced_address=update["announced_address"]
         ).first()
         if not peer_obj:
-            logger.info("Found new peer: %s", update["announced_address"])
+            logger.debug("Found new peer: %s", update["announced_address"])
 
         update["state"] = check_state(local_difficulty, update, peer_obj)
 
@@ -278,7 +288,7 @@ def peer_cmd():
         if form.is_valid():
             form.save()
         else:
-            logger.info("Not valid data: %r - %r", form.errors, update)
+            logger.debug("Not valid data: %r - %r", form.errors, update)
 
     PeerMonitor.objects.update(lifetime=F("lifetime") + 1)
 
@@ -297,4 +307,4 @@ def peer_cmd():
         modified_at=timezone.now(),
     )
 
-    logger.info("Done")
+    logger.debug("Done")
