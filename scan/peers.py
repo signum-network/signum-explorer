@@ -62,6 +62,8 @@ def get_country_by_ip(ipa: str) -> str:
     try:
         cc = _reader.country(ipa).country.iso_code
         logger.debug(f"Geo lookup 1 - {ipa} country code: {cc}")
+        if not cc or cc == "Undefined":
+            raise Exception(f"{ipa} not in local database")
     except Exception as e:
         """Limits: 1k/day 30k/mo"""
         logger.debug(f"Geo lookup 1 failed - {e}\n")
@@ -148,11 +150,14 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
 
     ip = get_ip_by_domain(address)
     cc = get_country_by_ip(ip)
+    if cc == "??" or cc == "Undefined":
+        cc = get_country_by_ip(ip, _refresh=True)
+        logger.debug(f"Force refresh of {ip} - New country: {cc}")
 
     updates[address] = {
         "announced_address": peer_info["announcedAddress"],
         "real_ip": ip,
-        "country_code": cc,
+        "country_code": str(cc),
         "application": peer_info["application"],
         "platform": peer_info["platform"],
         "version": peer_info["version"],
@@ -238,8 +243,67 @@ def check_state(local_difficulty: dict, update: dict, peer_obj: PeerMonitor or N
 def get_count_nodes_online() -> int:
     return PeerMonitor.objects.filter(state=PeerMonitor.State.ONLINE).count()
 
+@shared_task(bind=True)
+@skip_if_running
+def peer_cleanup(*args):
+    """
+    Testing mostly, can be used manually to clean up junk peers by
+    python manage.py peer_rescan
+    """
+    peers = PeerMonitor.objects.annotate(
+            duration=ExpressionWrapper(
+                Now() - F("last_online_at"), output_field=DurationField()
+            )
+        ).filter(Q(duration__gte=timedelta(days=3)) | Q(availability=0)).all()
+    for peer in peers:
+        logger.info(f"{peer} is stale and being deleted")
+        peer.delete()
 
-#@lock_decorator(key="peer_monitor", auto_renewal=True)
+@shared_task(bind=True)
+@skip_if_running
+@transaction.atomic
+def check_offline(*args):
+    """
+    Full scans can take some time, this scans offline peers only
+    since the list can be much shorter and runs quickly
+    """
+    local_difficulty = get_local_difficulty()
+    updates = {}
+    peers = PeerMonitor.objects.filter(state=2).all()
+    logger.debug(f"{len(peers)} are not 'considered' online. Starting update\n(This might take a few minutes...)")
+    with ThreadPoolExecutor(max_workers=20) as executor:
+        executor.map(lambda peer: explore_peer(local_difficulty, peer.announced_address, updates), peers)
+    updates_with_data = tuple(filter(lambda x: x is not None, updates.values()))
+    logger.debug(f"{len(updates_with_data)} peers can be updated")
+    for update in updates_with_data:
+        peer_obj = PeerMonitor.objects.filter(
+            announced_address=update["announced_address"]
+        ).first()
+        update["state"] = check_state(local_difficulty, update, peer_obj)
+        logger.debug(f"{update['announced_address']} is now {update['state']}")
+        form = PeerMonitorForm(update, instance=peer_obj)
+        if form.is_valid():
+            form.save(commit=True)
+            logger.debug(f"{update['announced_address']} should have been saved")
+        elif peer_obj is not None:
+            peer_obj.delete()
+            logger.debug(f"Not valid data for:{update['announced_address']}\n{form.errors}\npeer being deleted")
+        else:
+            logger.debug(f"Not valid data for:{update['announced_address']}\n{form.errors}\npeer cannot be deleted")
+        PeerMonitor.objects.update(lifetime=F("lifetime") + 1)
+        PeerMonitor.objects.filter(
+            state__in=[PeerMonitor.State.UNREACHABLE, PeerMonitor.State.STUCK, PeerMonitor.State.FORKED]
+        ).update(downtime=F("downtime") + 1)
+        PeerMonitor.objects.annotate(
+            duration=ExpressionWrapper(
+                Now() - F("last_online_at"), output_field=DurationField()
+            )
+        ).filter(duration__gte=timedelta(days=5)).delete()
+        PeerMonitor.objects.update(
+            availability=100 - (F("downtime") / F("lifetime") * 100),
+            modified_at=timezone.now(),
+        )
+
 @shared_task(bind=True)
 @skip_if_running
 @transaction.atomic

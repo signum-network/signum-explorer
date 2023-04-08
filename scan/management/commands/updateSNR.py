@@ -1,11 +1,10 @@
 from django.core.management import BaseCommand
 from celery import Celery, shared_task
 
-from scan.peers import peer_cmd
-
+from scan.tasks import update_MasterSNR
 
 class Command(BaseCommand):
-    help = "Peers monitor"
+    help = "Manually update SNR database"
 
     def handle(self, *args, **options):
-        peer_cmd.delay()
+        update_MasterSNR.delay()

@@ -37,6 +37,10 @@ app.conf.beat_schedule = {
     'runner-PeerMonitor': {
         'task': 'scan.peers.peer_cmd',
         'schedule': crontab(minute='*/15'),
+    },
+    'runner-CheckOffline': {
+        'task': 'scan.peers.check_offline',
+        'schedule': crontab(minute='*/1'),
     }
 }
 
