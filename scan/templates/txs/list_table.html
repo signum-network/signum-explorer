@@ -55,8 +55,12 @@
              Burning Address
           {% elif  tx.recipient_id == Null and tx.type == 20 %}
             {% include "recipient_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
+          {% elif tx.recipient_id is None and tx.type == 21 %}
+             Burning Address 
+          {% elif tx.type == 1  and tx.subtype == 8 and tx.amount >= 10000000000000 %}
+             Burning Address 
           {% else %}
-            {{ tx|tx_type }}
+            {{ tx|tx_type}}
           {% endif %}
         </td>
           <td class="text-nowrap">

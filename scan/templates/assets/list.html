@@ -30,7 +30,7 @@ Total: {{ paginator.count|intcomma }}
 
             {% for asset in featured_assets %}
               <tr>
-                <td class="text-nowrap text-uppercase">
+                <td class="text-nowrap">
                   <a href="{% url 'asset-detail' asset.id %}">{{ asset.name }}</a>
                 </td>
                 <td><a href="{% url 'asset-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>
@@ -83,7 +83,7 @@ Total: {{ paginator.count|intcomma }}
             <tbody>
             {% for asset in assets %}
               <tr>
-                <td class="text-nowrap text-uppercase">
+                <td class="text-nowrap">
                   <a href="{% url 'asset-detail' asset.id %}">{{ asset.name }}</a>
                 </td>
                 <td><a href="{% url 'asset-detail' asset.id %}">{{ asset.id|truncatechars:10 }}</a></td>

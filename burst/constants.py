@@ -44,6 +44,7 @@ class TxSubtypeMessaging:
     ACCOUNT_INFO = 5
     ALIAS_SELL = 6
     ALIAS_BUY = 7
+    TLD_ASSIGNMENT = 8
 
 
 class TxSubtypeColoredCoins:
@@ -57,6 +58,7 @@ class TxSubtypeColoredCoins:
     ADD_TREASURY_ACCOUNT = 7
     DISTRIBUTE_TO_HOLDERS = 8
     ASSET_TRANSFER_MULTI = 9
+    ASSET_TRANSFER_OWNERSHIP = 10
 
 
 class TxSubtypeDigitalGoods:

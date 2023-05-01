@@ -18,9 +18,10 @@ from scan.caching_data.exchange import CachingExchangeData
 from scan.caching_data.total_circulating import CachingTotalCirculating
 import struct
 import os
+from ctypes import c_ulonglong, c_longlong
 
 from scan.helpers.queries import get_account_name,get_asset_details, get_asset_price,  get_account_balance,get_account_unconfirmed_balance,get_total_circulating, query_asset_treasury_acc
-
+from scan.helpers.queries import get_registered_tld_name,get_tld_reciever_id,get_subscription_recipient_id,get_subscription_alias,query_asset_fullhash
 register = template.Library()
 
 @register.filter
@@ -30,7 +31,6 @@ def hours_ago(time, hours):
 @register.filter
 def block_reward(block: Block) -> int:
     return calc_block_reward(block.height)
-
 
 @register.filter
 def block_reward_with_fee(block: Block) -> float:
@@ -44,6 +44,27 @@ def block_reward_with_fee_burnt(block: Block) -> float:
 def block_fee_miner(block: Block) -> float:
     return block.total_fee -block.total_fee_cash_back - block.total_fee_burnt
 
+@register.filter
+def stld_name(tld_id):
+    return get_registered_tld_name(tld_id)
+
+@register.filter
+def subscription_recipient_aliascheck(sub_id):
+    return get_tld_reciever_id(sub_id)
+
+@cache_memoize(240)
+@register.filter
+def subscription_attachment(sub_id):
+    sub_recipient_id = get_subscription_recipient_id(sub_id)
+    check = get_tld_reciever_id(sub_id)
+    if sub_recipient_id != check:
+        alias_name, alias_tld_id = get_subscription_alias(sub_id)
+        tld_name = get_registered_tld_name(alias_tld_id)
+        if tld_name == 'signum':
+            return 'Quarterly Payment for Alias: '+alias_name 
+        else:
+            return 'Quarterly Payment for Alias: '+alias_name+'.'+tld_name
+    return ''
 
 @cache_memoize(240)
 @register.filter
@@ -322,8 +343,8 @@ def tx_symbol(tx: Transaction) -> str:
                 name, decimals, total_quantity, mintable = get_asset_details(asset_id)
             except:
                 name ='NOTKNOWN'
-            name = name.upper()
-            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            check_name = name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
 
@@ -337,8 +358,8 @@ def tx_symbol_multi(tx: Transaction,asset_number = 1) -> str:
     if tx.type == TxType.COLORED_COINS and tx.attachment_bytes:
         asset_id = int.from_bytes(tx.attachment_bytes[asset_id_offset:asset_id_offset2], byteorder=sys.byteorder)
         name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-        name = name.upper()
-        if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+        check_name = name.upper()
+        if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
             return str(asset_id)[0:10]
         return name
 @register.filter
@@ -357,15 +378,15 @@ def tx_symbol_distribution(tx: Transaction) -> str:
         if tx.subtype  == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
             asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-            name = name.upper()
-            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            check_name = name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
         elif tx.subtype == TxSubtypeColoredCoins.ASSET_MINT:
             asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-            name = name.upper()
-            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            check_name = name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
     return ''
@@ -377,8 +398,8 @@ def tx_asset_holder(tx: Transaction) -> str:
         if tx.subtype  == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS:
             asset_id = int.from_bytes(tx.attachment_bytes[offset:offset+8], byteorder=sys.byteorder)
             name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-            name = name.upper()
-            if name in BLOCKED_ASSETS or name in PHISHING_ASSETS:
+            check_name = name.upper()
+            if check_name in BLOCKED_ASSETS or check_name in PHISHING_ASSETS:
                 return str(asset_id)[0:10]
             return name
 
@@ -404,18 +425,22 @@ def total_circulating(account_id : int) -> float:
 def total_circulating_network(account_id : int) -> float:
     return CachingTotalCirculating().cached_data - get_account_balance(0)
 
+@cache_memoize(23)
 @register.filter
 def account_balance(account_id : int) -> float:
     return get_account_balance(account_id)
 
+@cache_memoize(23)
 @register.filter
 def account_unconfirmed_balance(account_id : int) -> float:
     return get_account_unconfirmed_balance(account_id)
 
+@cache_memoize(23)
 @register.filter
 def account_locked_balance(account_id : int) -> float:
     return get_account_balance(account_id) - get_account_unconfirmed_balance(account_id)
 
+@cache_memoize(240)
 @register.filter
 def account_name_string(account_id : int) -> float:
     return get_account_name(account_id)
@@ -436,9 +461,15 @@ def is_asset_phishing(asset) -> bool:
 def is_asset_treasury(asset, account_id) -> bool:
     if not account_id:
         return False
-    fullh,resultt= query_asset_treasury_acc(asset, account_id)
+    #use fullhash from asset
+    fullh = query_asset_fullhash(asset)
+    resultt= query_asset_treasury_acc(asset, c_longlong(account_id).value)
     for i in resultt:
-        if fullh == i[0]:
+        if fullh == i:
+            return True
+    resultt= query_asset_treasury_acc(asset,c_ulonglong(account_id).value)
+    for i in resultt:
+        if fullh == i:
             return True
     return False
 

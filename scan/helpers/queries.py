@@ -13,7 +13,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, AccountBalance, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction, IndirectIncoming
+from java_wallet.models import Account, AccountBalance, Alias, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction, IndirectIncoming, Subscription
 
 
 @cache_memoize(3600)
@@ -47,6 +47,33 @@ def get_account_balance(account_id: int) -> str:
         return account_balance
     else :
         return 0
+    
+@cache_memoize(240)
+def get_registered_tld_name(tld_id: int) -> str:
+    tld_name= (
+        Alias.objects.using("java_wallet")
+        .filter(id=tld_id, latest=True)
+        .first()
+    )
+    return tld_name.alias_name
+
+@cache_memoize(240)
+def get_tld_reciever_id(sub_id: int) -> str:
+    check_sub = Subscription.objects.using("java_wallet").filter(id=sub_id, latest=True).first()
+    check_alias = Alias.objects.using("java_wallet").filter(id = check_sub.id, latest=True).first()
+    if check_alias:
+        check_tld = Alias.objects.using("java_wallet").filter(id = check_alias.tld, latest=True).first()
+        return check_tld.account_id
+    return check_sub.recipient_id
+
+@cache_memoize(240)
+def get_subscription_recipient_id(sub_id:int):
+    check_sub = Subscription.objects.using("java_wallet").filter(id=sub_id, latest=True).first()
+    return check_sub.recipient_id
+
+def get_subscription_alias(sub_id:int):
+    check_alias = Alias.objects.using("java_wallet").filter(id = sub_id, latest=True).first()
+    return check_alias.alias_name,check_alias.tld
 
 @cache_memoize(200)
 def get_account_unconfirmed_balance(account_id: int) -> str:
@@ -111,19 +138,21 @@ def check_is_contract(account_id: int) -> bool:
     return at_id != None
 
 @cache_memoize(None)
-def query_asset_treasury_acc(asset, account_id) -> (str, str):
+
+def query_asset_fullhash(asset) ->(str):
     full_hash = (Transaction.objects.using("java_wallet")
         .values_list('full_hash', flat=True)
         .filter(id=asset.asset_id).first()
     )
+    return full_hash
+def query_asset_treasury_acc(asset, account_id) -> (str):
     add_treasury = (Transaction.objects.using("java_wallet")
-        .values_list('referenced_transaction_fullhash')
-        .filter(sender_id=asset.owner_id, type=TxType.COLORED_COINS,
+        .values_list('referenced_transaction_fullhash', flat=True)
+        .filter(type=TxType.COLORED_COINS,
             subtype=TxSubtypeColoredCoins.ADD_TREASURY_ACCOUNT,
-            recipient_id=account_id ).all()
+            recipient_id=account_id).all()
     )
-    
-    return full_hash, add_treasury
+    return add_treasury
 
 @cache_memoize(60)
 def get_asset_details(asset_id: int) -> (str, int, int, bool):

@@ -63,6 +63,7 @@ class Alias(models.Model):
     timestamp = TimestampField()
     height = models.IntegerField()
     latest = models.IntegerField()
+    tld = models.IntegerField()
 
     class Meta:
         managed = True
