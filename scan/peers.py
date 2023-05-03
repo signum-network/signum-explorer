@@ -1,39 +1,28 @@
-import random
-import socket
-from concurrent.futures import ThreadPoolExecutor
-from datetime import timedelta
-from distutils.version import LooseVersion
-from functools import lru_cache
-from urllib.parse import urlparse
-from time import sleep
-
-import requests
-import ipapi
-import geoip2.database
-
-from cache_memoize import cache_memoize
-from django import forms
-from django.conf import settings
-from django.db import transaction
-from django.db.models import DurationField, ExpressionWrapper, F
-from django.db.models.functions import Now
-from django.utils import timezone
-from requests.exceptions import RequestException
+import geoip2.database, ipapi, random, requests, socket
 
 from burst.api.brs.p2p import P2PApi
 from burst.api.exceptions import BurstException
-from config.settings import PEERS_SCAN_DELAY
-from java_wallet.models import Block
-from scan.helpers.decorators import lock_decorator
-from scan.models import PeerMonitor
-from scan.helpers.decorators import skip_if_running
-
-from celery import Celery, shared_task
-from config.celery import app
+from cache_memoize import cache_memoize
+from celery import shared_task
 from celery.utils.log import get_task_logger
+from concurrent.futures import ThreadPoolExecutor
+from datetime import timedelta
+from distutils.version import LooseVersion
+from django import forms
+from django.conf import settings
+from django.db import transaction
+from django.db.models import DurationField, ExpressionWrapper, F, Q
+from django.db.models.functions import Now
+from django.utils import timezone
+from functools import lru_cache
+from java_wallet.models import Block
+from requests.exceptions import RequestException
+from scan.helpers.decorators import skip_if_running
+from scan.models import PeerMonitor
+from urllib.parse import urlparse
+
 logger = get_task_logger(__name__)
 
-# https://github.com/P3TERX/GeoLite.mmdb
 _reader = geoip2.database.Reader('static/ip_database/GeoLite2-Country.mmdb')
 
 def get_ip_by_domain(peer: str) -> str or None:
@@ -87,7 +76,10 @@ def is_good_version(version: str) -> bool:
         version = version[1:]
 
     try:
-        return LooseVersion(version) >= LooseVersion(settings.MIN_PEER_VERSION)
+        if LooseVersion(version) >= LooseVersion(settings.MIN_PEER_VERSION) and LooseVersion(version) <= LooseVersion(settings.BRS_P2P_VERSION):
+            return True
+        else: 
+            return False
     except TypeError:
         return False
 
@@ -269,8 +261,8 @@ def check_offline(*args):
     """
     local_difficulty = get_local_difficulty()
     updates = {}
-    peers = PeerMonitor.objects.filter(state=2).all()
-    logger.debug(f"{len(peers)} are not 'considered' online. Starting update\n(This might take a few minutes...)")
+    peers = PeerMonitor.objects.filter(Q(state=2) | Q(state=4) | Q(state=5)).all()
+    logger.debug(f"{len(peers)} are not 'considered' online. Starting scan")
     with ThreadPoolExecutor(max_workers=20) as executor:
         executor.map(lambda peer: explore_peer(local_difficulty, peer.announced_address, updates), peers)
     updates_with_data = tuple(filter(lambda x: x is not None, updates.values()))
@@ -311,7 +303,7 @@ def peer_cmd(self):
     logger.debug("Start the scan")
 
     local_difficulty = get_local_difficulty()
-    logger.info(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
+    logger.debug(f"Checking for height: {local_difficulty['height']}, id: {local_difficulty['id']}, prev id: {local_difficulty['previous_block_id']}")
 
     addresses = get_nodes_list()
     logger.debug(f"The list of peers:\n{addresses}") #enable to troubleshoot peers list
@@ -364,7 +356,7 @@ def peer_cmd(self):
         duration=ExpressionWrapper(
             Now() - F("last_online_at"), output_field=DurationField()
         )
-    ).filter(duration__gte=timedelta(days=5)).delete()
+    ).filter(duration__gte=timedelta(days=3)).delete()
 
     PeerMonitor.objects.update(
         availability=100 - (F("downtime") / F("lifetime") * 100),

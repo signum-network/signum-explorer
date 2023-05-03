@@ -2,11 +2,13 @@
 # apt install python3-dev default-libmysqlclient-dev build-essential redis-server supervisor
 
 # required packages  to use 'pip install -r requirements.txt'
-django
+django==4.2
 django-cache-memoize
 django-cors-headers
 django-filter
 django-redis
+redis
+hiredis
 djangorestframework
 gunicorn
 jsonschema
@@ -32,3 +34,7 @@ django-celery-beat
 django-debug-toolbar
 ipapi
 geoip2
+eventlet
+oracledb
+cx_Oracle
+coverage

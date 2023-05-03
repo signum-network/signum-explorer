@@ -1,33 +1,24 @@
-name: tests
+name: Pylint
 
 on: [push]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
       with:
-        python-version: 3.8
-    - name: set up env
-      run: cp .env.default .env
-    - name: docker-compose pull
-      run: docker-compose pull
-    - uses: satackey/action-docker-layer-caching@v0.0.8
-    - name: docker-compose build
-      run: docker-compose build --build-arg UID="$UID"
-    - name: docker-compose up services
-      run: docker-compose up -d redis
-    - name: tests with coverage
-      run: docker-compose run service python -m pytest --cov=.
-    - name: Send coverage to Codacy
-      env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
       run: |
-        pip install codacy-coverage==1.3.11
-        python-codacy-coverage -r ./coverage.xml
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pylint
+    - name: Analysing the code with pylint
+      run: |
+        pylint $(git ls-files '*.py')

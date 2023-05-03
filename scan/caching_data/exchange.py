@@ -50,7 +50,7 @@ class CachingExchangeData(CachingDataBase):
                 include_market_cap="true",
                 include_24hr_change="true",
             )["signum"]
-            logger.info(f"Updated Exchange Data:\n{response}")
+            logger.debug(f"Updated Exchange Data:\n{response}")
             return ExchangeData(
                 price_usd=response["usd"],
                 market_cap_usd=response["usd_market_cap"],

@@ -23,26 +23,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "changeme"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY", "changeme")
 
 APP_ENV=os.environ.get("APP_ENV")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "off") == "on"
-
-ALLOWED_HOSTS = ["*"]
-
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", ["*"])
 CORS_ORIGIN_ALLOW_ALL = True
-
 AUTH_USER_MODEL = "auth.User"
 
 # Application definition
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -52,20 +44,18 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
 ]
-
 THIRD_PARTY_APPS = [
     "corsheaders",
     "django_filters",
     "rest_framework",
     "django_extensions",
     'django_celery_beat',
+    "coverage",
 ]
-
 LOCAL_APPS = [
     "scan",
     "java_wallet",
 ]
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -112,10 +102,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("DB_DEFAULT_ENGINE"),
@@ -134,13 +122,10 @@ DATABASES = {
         "OPTIONS": json.loads(os.environ.get("DB_JAVA_WALLET_OPTIONS", "{}")),
     },
 }
-
 DATABASE_ROUTERS = ["java_wallet.db_router.DBRouter", "scan.db_router.DBRouter"]
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
@@ -150,37 +135,34 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+# Caching
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f'redis://{os.environ.get("CACHE_DEFAULT_HOST")}:'
+        "LOCATION": f'{os.environ.get("CACHE_DEFAULT_PROTO")}://{os.environ.get("CACHE_DEFAULT_HOST")}:'
         f'{os.environ.get("CACHE_DEFAULT_PORT")}/'
         f'{os.environ.get("CACHE_DEFAULT_DB")}',
         "TIMEOUT": None,
-        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
     }
 }
+
+DJANGO_CELERY_BEAT_TZ_AWARE = False
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
@@ -220,18 +202,7 @@ LOGGING = {
     },
 }
 
-# Celery
-if APP_ENV == "production":
-    CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-    CELERY_BROKER_URL = (f'redis://{os.environ.get("CELERY_BROKER_HOST")}:{os.environ.get("CELERY_BROKER_PORT")}/{os.environ.get("CELERY_BROKER_DB")}')
-    CELERY_RESULT_BACKEND = (f'redis://{os.environ.get("CELERY_BROKER_HOST")}:{os.environ.get("CELERY_BROKER_PORT")}/{os.environ.get("CELERY_BROKER_RES")}')
-    CELERY_ACCEPT_CONTENT = ["application/json"]
-    CELERY_TASK_SERIALIZER = "json"
-    CELERY_RESULT_SERIALIZER = "json"
-    DJANGO_CELERY_BEAT_TZ_AWARE = False
-
 # Sentry
-
 SENTRY_DSN = os.environ.get("SENTRY_DSN")
 
 if SENTRY_DSN:
@@ -285,7 +256,6 @@ BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 
 PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "600"))
 TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "60"))
-SNR_MASTER_EXPLORER = os.environ.get("SNR_MASTER_EXPLORER", "")
 
 SITE_HOSTING = os.environ.get("SITE_HOSTING", " ")
 
