@@ -22,11 +22,9 @@ class SubscriptionListView(ListView):
         qs = qs.filter(latest=True)
         if 'a' in self.request.GET:
             qs = qs.filter(sender_id=self.request.GET['a'], latest=True)
-
         return qs.order_by(self.ordering)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         return context
 

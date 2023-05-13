@@ -23,7 +23,7 @@
         {% for asset in assets_distribution_tx %}
         <tr>
           {% if not asset_specific %}
-            <td class="text-nowrap text-uppercase">
+            <td class="text-nowrap">
               <a href="{% url 'asset-detail' asset.asset_id %}">
                 {% if asset|is_asset_phishing %}
                   {{ asset.asset_id|truncatechars:10 }}

@@ -2,6 +2,8 @@
 
 {% if filtered_account|slugify == account_id|slugify %}
   {{ account_id|num2rs }}
+{% elif account_id == 0 %}
+  🔥
 {% else %}
   <a href="{% url 'address-detail' account_id %}">
     {{ account_id|num2rs }}

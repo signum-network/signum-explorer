@@ -16,7 +16,7 @@
     {% for asset in assets %}
       <tr>
         <td class="d-none d-sm-table-cell"><a href="{% url 'asset-detail' asset.asset_id %}">{{ asset.asset_id|truncatechars:10 }}</a></td>
-        <td class="text-nowrap text-uppercase">
+        <td class="text-nowrap">
           {% if asset|is_asset_blocked %}
             <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold text-uppercase"><spam><i class="fas fa-exclamation-circle"></i> Name blocked</spam></span>
           {% else %}

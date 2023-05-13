@@ -19,9 +19,10 @@ class AliasListView(ListView):
 
     def get_queryset(self):
         qs = self.queryset
+        # Excluding the STLDs
+        qs = qs.filter(latest=True).exclude(tld=None)
         if 'a' in self.request.GET:
-            qs = qs.filter(account_id=self.request.GET['a'], latest=True)
-
+            qs = qs.filter(account_id=self.request.GET['a'], latest=True).exclude(tld=None)
         return qs.order_by(self.ordering)
 
     def get_context_data(self, **kwargs):

@@ -148,7 +148,7 @@ document.body.onresize = function() {
             -->
             <tr>
               <th>Ticker</th>
-              <td class="text-uppercase">
+              <td class="text-nowrap">
                 {% if asset|is_asset_blocked %}
                   <span class="border m-2 pl-1 pr-1 rounded border-warning bg-warning font-weight-bold text-uppercase"><spam><i class="fas fa-exclamation-circle"></i> Name blocked</spam></span>
                 {% else %}
@@ -190,7 +190,13 @@ document.body.onresize = function() {
             <tr>
               <th>Issuer</th>
               <td>
-                {% include "account_link.html" with account_id=asset.account_id account_name=asset.account_name oneline=True %}
+                {% include "account_link.html" with account_id=asset.id|asset_issuer account_name=asset.id|asset_issuer|account_name_string oneline=True %}
+              </td>
+            </tr>
+            <tr>
+              <th>Current Owner</th>
+              <td>
+                {% include "account_link.html" with account_id=asset.id|asset_owner account_name=asset.id|asset_owner|account_name_string oneline=True %}
               </td>
             </tr>
             <tr>

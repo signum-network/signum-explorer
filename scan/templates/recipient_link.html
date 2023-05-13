@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load burst_tags %}
 
-{% if account_id %}
+{% if account_id or account_id == 0 %}
   {% include "account_link.html" with account_id=account_id account_name=account_name oneline=oneline %}
 {% elif tx.recipient_id %}
   {% include "account_link.html" with account_id=tx.recipient_id account_name=tx.recipient_name oneline=oneline %}
