@@ -458,7 +458,7 @@ class UnconfirmedTransaction(models.Model):
 
 
 class Version(models.Model):
-    next_update = models.IntegerField()
+    next_update = models.IntegerField(primary_key=True)
 
     class Meta:
         managed = True
