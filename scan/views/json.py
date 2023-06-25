@@ -17,7 +17,7 @@ from java_wallet.models import (
     AssetTransfer,
     At,
     Block,
-    IndirecIncoming,
+    IndirectIncoming,
     Trade,
     Transaction,
 )

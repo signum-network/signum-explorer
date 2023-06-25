@@ -13,7 +13,7 @@ from burst.api.brs.v1.api import BrsApi
 from burst.constants import BLOCK_CHAIN_START_AT, TxSubtypeBurstMining, TxSubtypeColoredCoins, TxType
 from java_wallet.fields import get_desc_tx_type
 
-from java_wallet.models import Account, AccountBalance, Alias, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirecIncoming, Subscription
+from java_wallet.models import Account, AccountBalance, Alias, Asset, At, AtState, Block, RewardRecipAssign, Trade, Transaction,IndirectIncoming, Subscription
 
 
 @cache_memoize(3600)

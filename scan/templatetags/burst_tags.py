@@ -13,7 +13,7 @@ from burst.libs.transactions import get_message, get_message_sub, get_message_to
 from burst.api.brs.v1.api import BrsApi
 from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS
 from java_wallet.fields import get_desc_tx_type
-from java_wallet.models import Block, IndirecIncoming, IndirectRecipient, Trade, Transaction
+from java_wallet.models import Block, IndirectIncoming, IndirectRecipient, Trade, Transaction
 from scan.caching_data.exchange import CachingExchangeData
 from scan.caching_data.total_circulating import CachingTotalCirculating
 import struct
@@ -255,7 +255,7 @@ def tx_amount(tx: Transaction, filtered_account = None) -> float:
             return burst_amount(quantity*price)
 
         elif tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and account_id:
-            indirect = (IndirecIncoming.objects.using("java_wallet")
+            indirect = (IndirectIncoming.objects.using("java_wallet")
                 .filter(account_id=account_id, transaction_id=tx.id)
                 .order_by("-height").first()
             )
@@ -278,7 +278,7 @@ def tx_quantity(tx: Transaction, filtered_account = None) -> float:
     elif tx.subtype == TxSubtypeColoredCoins.DISTRIBUTE_TO_HOLDERS and account_id:
         asset_id = int.from_bytes(tx.attachment_bytes[offset+16:offset+24], byteorder=sys.byteorder)
         name, decimals, total_quantity, mintable = get_asset_details(asset_id)
-        indirect = (IndirecIncoming.objects.using("java_wallet")
+        indirect = (IndirectIncoming.objects.using("java_wallet")
                 .filter(account_id=account_id, transaction_id=tx.id)
                 .order_by("-height").first()
         )
