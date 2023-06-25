@@ -10,7 +10,7 @@ from java_wallet.models import (
     AssetTransfer,
     At,
     Block,
-    IndirecIncoming,
+    IndirectIncoming,
     Trade,
     Transaction,
 )
@@ -70,7 +70,7 @@ class AddressDetailView(IntSlugDetailView):
 
         # transactions
         indirects_query = (
-            IndirecIncoming.objects.using("java_wallet")
+            IndirectIncoming.objects.using("java_wallet")
             .values_list('transaction_id', flat=True)
             .filter(account_id=obj.id)
         )

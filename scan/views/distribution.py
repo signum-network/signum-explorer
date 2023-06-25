@@ -1,7 +1,7 @@
 import gzip
 from django.views.generic import ListView
 
-from java_wallet.models import IndirecIncoming
+from java_wallet.models import IndirectIncoming
 from scan.caching_paginator import CachingPaginator
 
 
@@ -20,8 +20,8 @@ def fill_data_indirect(obj, list_page=True):
 
 
 class DistributionListView(ListView):
-    model = IndirecIncoming
-    queryset = IndirecIncoming.objects.using("java_wallet").all().order_by("-amount","-quantity")
+    model = IndirectIncoming
+    queryset = IndirectIncoming.objects.using("java_wallet").all().order_by("-amount","-quantity")
     template_name = "distribution/list.html"
     context_object_name = "distribution"
     paginator_class = CachingPaginator

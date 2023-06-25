@@ -430,7 +430,7 @@ class Transaction(models.Model):
         managed = True
         db_table = 'transaction'
 
-class IndirecIncoming(models.Model):
+class IndirectIncoming(models.Model):
     db_id = models.BigAutoField(primary_key=True)
     account_id = PositiveBigIntegerField()
     transaction_id = PositiveBigIntegerField()
