@@ -65,7 +65,7 @@ class Alias(models.Model):
     timestamp = TimestampField()
     height = models.IntegerField()
     latest = models.IntegerField()
-    tld = models.IntegerField()
+    tld = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -113,7 +113,7 @@ class Asset(models.Model):
     quantity = PositiveBigIntegerField()
     decimals = models.IntegerField()
     height = models.IntegerField()
-    mintable = models.BooleanField()
+    mintable = models.BooleanField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -150,7 +150,7 @@ class At(models.Model):
     ap_code = models.BinaryField()
     height = models.IntegerField()
     latest = models.IntegerField()
-    ap_code_hash_id = PositiveBigIntegerField()
+    ap_code_hash_id = PositiveBigIntegerField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -216,8 +216,8 @@ class Block(models.Model):
     nonce = PositiveBigIntegerField()
     ats = models.TextField(blank=True, null=True)
     version = os.environ.get('BRS_P2P_VERSION')
-    total_fee_cash_back = PositiveBigIntegerField()
-    total_fee_burnt= PositiveBigIntegerField()
+    total_fee_cash_back = PositiveBigIntegerField(blank=True, null=True)
+    total_fee_burnt= PositiveBigIntegerField(blank=True, null=True)
     
     class Meta:
         managed = True
@@ -458,7 +458,7 @@ class UnconfirmedTransaction(models.Model):
 
 
 class Version(models.Model):
-    next_update = models.IntegerField()
+    next_update = models.IntegerField(primary_key=True)
 
     class Meta:
         managed = True
