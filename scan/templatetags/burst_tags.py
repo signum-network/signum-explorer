@@ -34,7 +34,7 @@ def block_reward(block: Block) -> int:
 
 @register.filter
 def block_reward_with_fee(block: Block) -> float:
-    return calc_block_reward(block.height) + block.total_fee / 10 ** 8
+    return calc_block_reward(block.height) + (block.total_fee -block.total_fee_cash_back - block.total_fee_burnt) / 10 ** 8
 
 @register.filter
 def block_reward_with_fee_burnt(block: Block) -> float:
