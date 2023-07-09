@@ -69,6 +69,12 @@ Block #{{ blk.id }}
               <th>Total Fee</th>
               <td>{{ blk.total_fee|burst_amount|intcomma|append_symbol }} <span class="text-info">(${{ blk.total_fee|burst_amount|in_usd|rounding:5|intcomma }})</span></td>
             </tr>
+            {% if blk.total_fee_burnt %}
+              <tr>
+                <th>Burnt Fees</th>
+                <td>-{{ blk.total_fee_burnt|burst_amount|intcomma|append_symbol }}</td>
+              </tr>
+            {% endif %}
             <tr>
               <th>Mined by</th>
               <td>
@@ -104,12 +110,6 @@ Block #{{ blk.id }}
                <tr>
                 <th>Miner Fees</th>
                 <td>{{ blk|block_fee_miner|burst_amount|intcomma|append_symbol }}</td>
-              </tr>
-            {% endif %}
-            {% if blk.total_fee_burnt %}
-              <tr>
-                <th>Burnt Fees</th>
-                <td>{{ blk.total_fee_burnt|burst_amount|intcomma|append_symbol }}</td>
               </tr>
             {% endif %}
             {% if blk.total_fee_cash_back %}            
