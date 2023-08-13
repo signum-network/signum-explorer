@@ -105,29 +105,31 @@
               <th>Value</th>
               <td>
                 {% if tx.quantity and tx.amount <= 0 %}
-                  <span></span><br>
+                  <span></span>
                   <span></span><br>
                 {% elif tx.type == 2 and tx.subtype == 2  %}
-                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span>
                   <span class="text-success"> {{ tx|tx_symbol }} </span>
                 {% elif tx.type == 2 and  tx.subtype == 3  %}
-                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span>
                   <span class="text-success"> {{ tx|tx_symbol }} </span>
                 {% elif tx.type == 2 and  tx.subtype == 6 %}
-                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span>
                   <span class="text-success"> {{ tx|tx_symbol }} </span>
                 {%elif tx.type == 20 or tx.type == 22 %}        
                   <span>{{ tx|tx_amount|rounding:5|intcomma }}</span>
                   <span> {% coin_symbol %} {% if coin_symbol == SIGNA %}<span class="text-info"> (${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span>{% endif %}</span>
                 {% elif tx.type == 2 and tx.subtype == 1 %}
-                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span>
                   <span class="text-success">  {{ tx|tx_symbol }} </span><br> 
+                  <span>{% if tx.amount > 0 %} {{ tx|tx_amount|rounding:5|intcomma }}</span>
+                  <span> {% coin_symbol %} {% if coin_symbol == SIGNA %}<span class="text-info"> (${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span>{% endif %}</span> {% endif %}
                 {% elif tx.type == 2 and tx.subtype == 8 and tx|tx_quantity:filtered_account  > 0 %}
-                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span><br>
+                  <span>{{ tx|tx_quantity|rounding:5|intcomma }}</span>
                   <span class="text-success"> {{ tx|tx_symbol_distribution}} </span><br>
                 {% elif tx.amount > 0 %}        
                   <span>{{ tx|tx_amount|rounding:5|intcomma }}</span>
-                  <span> {% coin_symbol %} {% if coin_symbol == SIGNA %}<span class="text-info"> (${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span>{% endif %}</span>
+                  <span> {% coin_symbol %} {% if coin_symbol == SIGNA %}<span class="text-info"> (${{ tx.amount|burst_amount|in_usd|rounding:4|intcomma }})</span>{% endif %}</span><br>
                 {% endif %}
                 {% if tx.type == 2 and tx.subtype == 9 %}       
                    <span>{{ tx|tx_quantity_multi:1|rounding:8|intcomma }}</span>
