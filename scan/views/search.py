@@ -21,7 +21,7 @@ REED_SOLOMON_LENS = {17, 20, 26}
 
 @require_http_methods(["GET"])
 def search_view(request):
-    query = request.GET.get("q", "").strip()
+    query = request.GET.get("q", "").strip().upper()
 
     redirect_url = None
 
