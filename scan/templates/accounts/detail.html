@@ -48,9 +48,12 @@ const template = `
             web: obj.hp ?? '',
             avatar: ''
          }
+       if (!obj.ds) {
+         return
+       }
        if (obj.av) {
            avatar = Object.keys(obj.av)[0] ?? ''
-           item.avatar = '<img src="https://ipfs.io/ipfs/' + avatar + '" style="width:50px; border-radius: 50%;"><br>';
+           item.avatar = '<img src="https://cloudflare-ipfs.com/ipfs/' + avatar + '" style="width:50px; border-radius: 50%;"><br>';
        }
          out = template
            .replace('%avatar%', item.avatar)
