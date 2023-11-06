@@ -443,7 +443,8 @@ def account_locked_balance(account_id : int) -> float:
 @cache_memoize(240)
 @register.filter
 def account_name_string(account_id : int) -> float:
-    return get_account_name(account_id)
+    account_name = get_account_name(account_id)
+    return account_name if account_name else ''
 
 @register.filter
 def asset_price(asset_id : int) -> float:

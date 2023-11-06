@@ -1,60 +1,39 @@
-"""explorer URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.conf import settings
-from django.contrib import admin
 from django.urls import include, path
 
 from scan.views.accounts import AccountsListView, AddressDetailView
+from scan.views.aliases import AliasListView
 from scan.views.assets import (
     AssetDetailView,
-    AssetMintingDetailView,
     AssetDistributionDetailView,
     AssetHoldersListView,
     AssetListView,
+    AssetMintingDetailView,
     AssetTradesListView,
     AssetTransfersListView,
-    
 )
 from scan.views.ats import AtDetailView, AtListView
 from scan.views.blocks import BlockDetailView, BlockListView
+from scan.views.cashbacks import CBListView
+from scan.views.distribution import DistributionListView
 from scan.views.index import index
+from scan.views.json import TopAccountsJson, getSNRjson, getStatejson
 from scan.views.marketplace import (
     MarketPlaceDetailView,
     MarketPlaceListView,
     MarketPlacePurchasesListView,
 )
+from scan.views.miners import MinerListView
 from scan.views.peers import (
     PeerMonitorDetailView,
     PeerMonitorListView,
     peers_charts_view,
 )
-
-from scan.views.json import (
-    getSNRjson,
-    getStatejson,
-    TopAccountsJson,
-)
-
 from scan.views.pending_transactions import pending_transactions
+from scan.views.pools import PoolDetailView, PoolListView
 from scan.views.search import search_view
-from scan.views.transactions import TxDetailView, TxListView, tx_export_csv
-from scan.views.cashbacks import CBListView
-from scan.views.aliases import AliasListView
 from scan.views.subscriptions import SubscriptionListView
-from scan.views.distribution import DistributionListView
+from scan.views.transactions import TxDetailView, TxListView, tx_export_csv
 
 urlpatterns = [
     path("", index, name="index"),
@@ -91,6 +70,9 @@ urlpatterns = [
     path("json/state/<str:address>", getStatejson, name="state"),
     path("json/accounts/", TopAccountsJson, name="json-account"),
     path("json/accounts/<int:results>", TopAccountsJson),
+    path("pools/", PoolListView.as_view(), name="pools"),
+    path("pool/<str:id>", PoolDetailView.as_view(), name="pool-detail"),
+    path("miner/", MinerListView.as_view(), name="miner"),
     # path("admin/", admin.site.urls),
 ]
 
