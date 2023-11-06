@@ -9,6 +9,7 @@ Add indexes in your wallet DB for speedups:
 ``` sql
 CREATE INDEX transaction_height_timestamp ON transaction(height, timestamp);
 CREATE INDEX asset_height ON asset(height);
+CREATE INDEX account_latest ON account(latest);
 ```
 
 ## Development
