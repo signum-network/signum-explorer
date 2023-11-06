@@ -29,7 +29,7 @@
             </tr>
             {% if progress and concensus %}<tr>
               <th>Sync Progress</th>
-              <td>%{{ progress }}</td>
+              <td>{{ progress|floatformat:2 }}%</td>
             </tr>{% endif %}
             <tr>
               <th>Availability</th>
