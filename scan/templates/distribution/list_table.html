@@ -35,7 +35,7 @@
             IN</span>
           </td>
           <td class="text-nowrap d-none d-sm-table-cell">
-          {% include "account_link.html" with account_id=dist.account_id account_name=dist.reciever_name %}
+          {% include "account_link.html" with account_id=dist.account_id account_name=dist.recipient_name %}
           </td>
           <td class="text-nowrap">
               <span>{{ dist.amount|burst_amount|rounding:5|intcomma }}</span><br>
