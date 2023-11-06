@@ -87,4 +87,19 @@ class PeerMonitorDetailView(DetailView):
     context_object_name = "peer"
     slug_field = "announced_address"
     slug_url_kwarg = "address"
-    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        obj = context[self.context_object_name]
+
+        if obj.state == 3 or 4: # 4 could be removed if we only want sync
+            featured_peers = []
+            for peer in BRS_BOOTSTRAP_PEERS:
+                featured_peer = PeerMonitor.objects.filter(announced_address=peer).values("height").first()
+                if featured_peer:
+                    featured_peers.append(featured_peer["height"])
+
+            context["concensus"] = round(sum(featured_peers)/len(featured_peers))
+            context["progress"] = round((obj.height / context["concensus"]) * 100, 2)
+
+        return context

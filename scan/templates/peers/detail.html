@@ -27,6 +27,10 @@
               <th>Height</th>
               <td>{{ peer.height }}</td>
             </tr>
+            {% if progress and concensus %}<tr>
+              <th>Sync Progress</th>
+              <td>%{{ progress }}</td>
+            </tr>{% endif %}
             <tr>
               <th>Availability</th>
               <td>{{ peer.availability|floatformat:2 }}%</td>
