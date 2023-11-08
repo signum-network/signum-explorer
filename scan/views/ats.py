@@ -16,9 +16,12 @@ def fill_at_data(obj):
     state, obj.activation = get_at_state(obj.id)
     # skip the internal state, balances, etc.
     obj.state = gzip.decompress(state)[106:]
-    description_dict = json.loads(obj.description)
-    description_dict["name"] = obj.name
-    obj.description = str(description_dict)
+    try:
+        description_dict = json.loads(obj.description)
+        description_dict["name"] = obj.name
+        obj.description = str(description_dict)
+    except json.JSONDecodeError:
+        pass
 
 
 class AtListView(ListView):
