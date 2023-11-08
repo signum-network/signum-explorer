@@ -1,4 +1,5 @@
 import gzip
+import json
 from django.views.generic import ListView
 
 from java_wallet.models import At
@@ -15,6 +16,9 @@ def fill_at_data(obj):
     state, obj.activation = get_at_state(obj.id)
     # skip the internal state, balances, etc.
     obj.state = gzip.decompress(state)[106:]
+    description_dict = json.loads(obj.description)
+    description_dict["name"] = obj.name
+    obj.description = str(description_dict)
 
 
 class AtListView(ListView):
