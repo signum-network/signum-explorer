@@ -30,22 +30,24 @@ Total: {{ paginator.count|intcomma }}
           <table class="table table-hover small table-sm">
             <thead>
             <tr>
+              <th scope="col">Last forged block</th>
+              <th scope="col">Timestamp</th>
               <th scope="col">Pool</th>
               <th scope="col">Name</th>
-              <th scope="col">Last forged block</th>
               <th scope="col">Registered miners</th>
             </tr>
             </thead>
             <tbody>
             {% for pool in pools %}
               <tr>
+                <td><a href="{% url 'block-detail' pool.height %}">{{ pool.height }}</a></td>
+                <td class="text-nowrap d-none d-sm-table-cell">{{ pool.block_timestamp|naturaltime }}</td>
                 <td><a href="{% url 'pool-detail' pool.pool_id %}">{{ pool.pool_id|num2rs }}</a></td>
                 {% if pool.url %}
                   <td><a href="{{ pool.url }}">{{ pool.pool_id|account_name_string }}</a></td>
                 {% else %}
                   <td style="word-wrap: break-word; max-width: 250px">{{ pool.pool_id|account_name_string }}</td>
                 {% endif %}
-                <td><a href="{% url 'block-detail' pool.height %}">{{ pool.height }}</a></td>
                 <td><a href="{% url 'miner' %}?a={{ pool.pool_id }}">{{ pool.miners_cnt }}</a></td>
               </tr>
             {% endfor %}
