@@ -26,6 +26,7 @@ def get_description_url(pool_id):
         Account.objects.using("java_wallet")
         .filter(id=pool_id)
         .values_list("description", flat=True)
+        .filter(latest=1)
         .first()
     )
     try:
