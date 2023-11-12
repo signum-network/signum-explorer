@@ -38,6 +38,6 @@ class ForgedBlocksListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = context[self.context_object_name]
-        for forget_block in obj:
-            forget_block["block_timestamp"] = get_timestamp_of_block(forget_block["block"])
+        for forged_block in obj:
+            forged_block["block_timestamp"] = get_timestamp_of_block(forged_block["block"])
         return context

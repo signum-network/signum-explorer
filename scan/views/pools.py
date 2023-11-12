@@ -171,17 +171,24 @@ class PoolDetailView(IntSlugDetailView):
 
         miners_query = (
             RewardRecipAssign.objects.using("java_wallet")
-            .filter(recip_id=obj.id, latest=1)
+            .filter(~Q(recip_id=F('account_id')))
+            .filter(recip_id=obj.id)
+            .filter(latest=1)
+            .values("recip_id", "account_id", "height")
         )
 
         miners = miners_query.order_by('-height')
 
-        context["miners"] = miners[:25]
+        miners = miners[:25]
+        for miner in miners:
+            miner["block_timestamp"] = get_timestamp_of_block(miner["height"])
+
+        context["miners"] = miners
         context["miners_cnt"] = get_count_of_miners(obj.id)
 
         # Forged blocks
 
-        forget_blocks = (
+        forged_blocks = (
             RewardRecipAssign.objects.using("java_wallet")
             .filter(~Q(recip_id=F('account_id')))
             .annotate(
@@ -199,10 +206,12 @@ class PoolDetailView(IntSlugDetailView):
             .filter(recip_id=obj.id)
         )
 
-        for forget_block in forget_blocks:
-            forget_block["block_timestamp"] = get_timestamp_of_block(forget_block["block"])
+        forged_blocks_cnt = forged_blocks.count()
+        forged_blocks = forged_blocks[:25]
+        for forged_block in forged_blocks:
+            forged_block["block_timestamp"] = get_timestamp_of_block(forged_block["block"])
 
-        context["forged_blocks"] = forget_blocks[:25]
-        context["forged_blocks_cnt"] = forget_blocks.count()
+        context["forged_blocks"] = forged_blocks
+        context["forged_blocks_cnt"] = forged_blocks_cnt
 
         return context
