@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+{% load burst_tags %}
+
+{% block title %} - Pools{% endblock %}
+{% block description %}
+Signum Pools
+Total: {{ paginator.count|intcomma }}
+{% endblock %}
+{% block content %}
+
+  <h5 class="p-2">Pools
+    {% if 'a' in request.GET %}
+    <br class="d-md-none" />
+    <small class="text-muted">for address <a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
+    {% endif %}
+  </h5>
+
+  <div class="card-deck mb-3">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+
+        <div class="d-flex flex-column flex-md-row align-items-center">
+          <small class="my-0 mr-md-auto text-muted">{{ paginator.count|intcomma }} Pools found</small>
+          {% include "paginator.html" %}
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover small table-sm">
+            <thead>
+            <tr>
+              <th scope="col">Last forged block</th>
+              <th scope="col">Timestamp</th>
+              <th scope="col">Pool</th>
+              <th scope="col">Name</th>
+              <th scope="col">Registered miners</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for pool in pools %}
+              <tr>
+                <td><a href="{% url 'block-detail' pool.height %}">{{ pool.height }}</a></td>
+                <td class="text-nowrap d-none d-sm-table-cell">{{ pool.block_timestamp|naturaltime }}</td>
+                <td><a href="{% url 'pool-detail' pool.pool_id %}">{{ pool.pool_id|num2rs }}</a></td>
+                {% if pool.url %}
+                  <td><a href="{{ pool.url }}">{{ pool.pool_id|account_name_string }}</a></td>
+                {% else %}
+                  <td style="word-wrap: break-word; max-width: 250px">{{ pool.pool_id|account_name_string }}</td>
+                {% endif %}
+                <td><a href="{% url 'miner' %}?a={{ pool.pool_id }}">{{ pool.miners_cnt }}</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {% include "paginator.html" %}
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

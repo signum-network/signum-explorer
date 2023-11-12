@@ -1,12 +1,13 @@
 import time
 import os
+import json
 
 from ctypes import c_ulonglong, c_longlong
 from datetime import datetime
 from MySQLdb import Timestamp
 from django.conf import settings
 
-from django.db.models import Sum
+from django.db.models import F, OuterRef, Q, Sum
 
 from cache_memoize import cache_memoize
 from burst.api.brs.v1.api import BrsApi
@@ -274,3 +275,52 @@ def get_unconfirmed_transactions():
     txs_pending.sort(key=lambda _x: _x["feeNQT"], reverse=True)
 
     return txs_pending
+
+
+def get_description_url(pool_id: int) -> str:
+    description = (
+        Account.objects.using("java_wallet")
+        .filter(id=pool_id)
+        .values_list("description", flat=True)
+        .filter(latest=1)
+        .first()
+    )
+    try:
+        return json.loads(description)["hp"]
+    except (json.JSONDecodeError, TypeError, KeyError):
+        return ''
+
+
+def get_count_of_miners(pool_id: int) -> int:
+    return (
+        RewardRecipAssign.objects.using("java_wallet")
+        .filter(recip_id=pool_id)
+        .filter(latest=1)
+    ).count()
+
+
+def get_timestamp_of_block(height: int) -> datetime:
+    return (
+        Block.objects.using("java_wallet")
+        .filter(height=height)
+        .values_list("timestamp", flat=True)
+        .first()
+    )
+
+
+def get_forged_blocks_of_pool(pool_id):
+    miners = (
+        RewardRecipAssign.objects.using("java_wallet")
+        .filter(~Q(recip_id=F('account_id')))
+        .filter(height__lte=OuterRef("height"))
+        .filter(recip_id=pool_id)
+        .filter(latest=1)
+        .values_list("account_id", flat=True)
+    )
+    return (
+        Block.objects.using("java_wallet")
+        .filter(generator_id__in=miners)
+        .annotate(block=F("height"))
+        .order_by("-block")
+        .values("generator_id", "block")
+    )

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load burst_tags %}
+
+{% block title %} - Forged blocks {% endblock %}
+{% block description %}
+{% if 'a' in request.GET %}Forged blocks on pool {{ request.GET.a|num2rs }}{% endif %}
+{{ paginator.count|intcomma }} Forged blocks
+{% endblock %}
+{% block content %}
+  <h5 class="p-2">Forged blocks 
+    <br class="d-md-none" />
+      {% if 'a' in request.GET %}
+      <small class="text-muted">on pool <a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
+      {% endif %}
+  </h5>
+ 
+  <div class="card-deck mb-3">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+      
+        <div class="d-flex flex-column flex-md-row align-items-center">
+          <small class="my-0 mr-md-auto text-muted">
+            {% if 'block' not in request.GET and 'a' not in request.GET %}
+              More than {{ paginator.count|intcomma }} forged blocks found<br>
+              <small>(Showing the lastest 10k records)</small>
+            {% else %}
+              A total of 
+              {% if forged_blocks %}
+                {{ paginator.count|intcomma }}
+              {% else %}
+                0
+              {% endif %}
+              forged blocks found
+              {% if 'a' in request.GET %}
+              {% endif %}
+            {% endif %}
+          </small>
+          {% include "paginator.html" %}
+        </div>
+
+        {% include "pools/forged_blocks.html" with filtered_account=request.GET.a %}
+
+        {% include "paginator.html" %}
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
