@@ -3,7 +3,7 @@ from django.views.generic import ListView
 
 from java_wallet.models import RewardRecipAssign
 from scan.caching_paginator import CachingPaginator
-from scan.views.pools import get_timestamp_of_block
+from scan.helpers.queries import get_timestamp_of_block
 
 
 class MinerListView(ListView):
