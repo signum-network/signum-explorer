@@ -192,6 +192,9 @@ const template = `
               {% if miners_cnt > 0 %}
               <a class="nav-item nav-link" id="nav-miners-tab" data-toggle="tab" href="#nav-miners" role="tab" aria-controls="nav-miners" aria-selected="false">{{ miners_cnt|intcomma }} Registered miners</a>
               {% endif %}
+              {% if forged_blocks_cnt > 0 %}
+              <a class="nav-item nav-link" id="nav-blocks-tab" data-toggle="tab" href="#nav-blocks" role="tab" aria-controls="nav-blocks" aria-selected="false">{{ forged_blocks_cnt|intcomma }} Forged blocks</a>
+              {% endif %}
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
@@ -228,6 +231,23 @@ const template = `
               {% endif %}
                   <div class="float-right  small p-1">
                     <a href="{% url 'miner' %}?a={{ address.id }}">View all registered miners</a>
+                  </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-blocks" role="tabpanel" aria-labelledby="nav-blocks-tab">
+              {% if forged_blocks_cnt > 0 %}
+                <p class=style="margin-top: 10px">
+                  <div class="float-left small p-1">Pool has {{ forged_blocks_cnt }} forged blocks</div>
+                  <div class="float-right  small p-1">
+                    <a href="{% url 'forged-blocks' %}?a={{ address.id }}">View all forged blocks</a>
+                  </div>
+                </p>
+                {% include "pools/forged_blocks.html" %}
+              {% else %}
+                <p class="small p-1" style="margin-top: 10px">No forged blocks found</p>
+              {% endif %}
+                  <div class="float-right  small p-1">
+                    <a href="{% url 'forged-blocks' %}?a={{ address.id }}">View all forged blocks</a>
                   </div>
             </div>
 

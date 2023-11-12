@@ -16,6 +16,7 @@ from scan.views.ats import AtDetailView, AtListView
 from scan.views.blocks import BlockDetailView, BlockListView
 from scan.views.cashbacks import CBListView
 from scan.views.distribution import DistributionListView
+from scan.views.forged_blocks import ForgedBlocksListView
 from scan.views.index import index
 from scan.views.json import TopAccountsJson, getSNRjson, getStatejson
 from scan.views.marketplace import (
@@ -73,6 +74,7 @@ urlpatterns = [
     path("pools/", PoolListView.as_view(), name="pools"),
     path("pool/<str:id>", PoolDetailView.as_view(), name="pool-detail"),
     path("miner/", MinerListView.as_view(), name="miner"),
+    path("forged-blocks/", ForgedBlocksListView.as_view(), name="forged-blocks"),
     # path("admin/", admin.site.urls),
 ]
 

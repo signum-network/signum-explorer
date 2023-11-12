@@ -41,6 +41,15 @@ def get_count_of_miners(pool_id):
     ).count()
 
 
+def get_timestamp_of_block(height):
+    return (
+        Block.objects.using("java_wallet")
+        .filter(height=height)
+        .values_list("timestamp", flat=True)
+        .first()
+    )
+
+
 class PoolListView(ListView):
     model = RewardRecipAssign
     queryset = (
@@ -169,5 +178,31 @@ class PoolDetailView(IntSlugDetailView):
 
         context["miners"] = miners[:25]
         context["miners_cnt"] = get_count_of_miners(obj.id)
+
+        # Forged blocks
+
+        forget_blocks = (
+            RewardRecipAssign.objects.using("java_wallet")
+            .filter(~Q(recip_id=F('account_id')))
+            .annotate(
+                block=Block.objects.using("java_wallet")
+                .filter(generator_id=OuterRef("account_id"))
+                .order_by("-height")
+                .values("height")
+                [:1]
+            )
+            .order_by("-block")
+            .values("recip_id", "account_id", "block")
+            .exclude(block__isnull=True)
+            .exclude(recip_id__isnull=True)
+            .filter(latest=1)
+            .filter(recip_id=obj.id)
+        )
+
+        for forget_block in forget_blocks:
+            forget_block["block_timestamp"] = get_timestamp_of_block(forget_block["block"])
+
+        context["forged_blocks"] = forget_blocks[:25]
+        context["forged_blocks_cnt"] = forget_blocks.count()
 
         return context
