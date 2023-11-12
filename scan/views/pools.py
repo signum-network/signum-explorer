@@ -11,9 +11,9 @@ from java_wallet.models import (
 from scan.caching_paginator import CachingPaginator
 from scan.helpers.queries import (
     get_account_name,
-    get_count_forged_blocks_of_pool,
     get_count_of_miners,
     get_description_url,
+    get_forged_blocks_of_pool,
     get_timestamp_of_block,
 )
 from scan.views.base import IntSlugDetailView
@@ -23,7 +23,6 @@ from scan.views.transactions import fill_data_transaction
 def fill_data_pool(pool):
     pool["url"] = get_description_url(pool["pool_id"])
     pool["miners_cnt"] = get_count_of_miners(pool["pool_id"])
-    pool["forged_block_cnt"] = get_count_forged_blocks_of_pool(pool["pool_id"])
     pool["block_timestamp"] = get_timestamp_of_block(pool["height"])
 
 
@@ -165,24 +164,7 @@ class PoolDetailView(IntSlugDetailView):
 
         # Forged blocks
 
-        forged_blocks = (
-            RewardRecipAssign.objects.using("java_wallet")
-            .filter(~Q(recip_id=F('account_id')))
-            .annotate(
-                block=Block.objects.using("java_wallet")
-                .filter(generator_id=OuterRef("account_id"))
-                .order_by("-height")
-                .values("height")
-                [:1]
-            )
-            .order_by("-block")
-            .values("recip_id", "account_id", "block")
-            .exclude(block__isnull=True)
-            .exclude(recip_id__isnull=True)
-            .filter(latest=1)
-            .filter(recip_id=obj.id)
-        )
-
+        forged_blocks = get_forged_blocks_of_pool(obj.id)
         forged_blocks_cnt = forged_blocks.count()
         forged_blocks = forged_blocks[:25]
         for forged_block in forged_blocks:

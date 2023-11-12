@@ -308,21 +308,19 @@ def get_timestamp_of_block(height: int) -> datetime:
     )
 
 
-def get_count_forged_blocks_of_pool(pool_id: int) -> int:
-    return (
+def get_forged_blocks_of_pool(pool_id):
+    miners = (
         RewardRecipAssign.objects.using("java_wallet")
         .filter(~Q(recip_id=F('account_id')))
-        .annotate(
-            block=Block.objects.using("java_wallet")
-            .filter(generator_id=OuterRef("account_id"))
-            .order_by("-height")
-            .values("height")
-            [:1]
-        )
-        .order_by("-block")
-        .values("recip_id", "account_id", "block")
-        .exclude(block__isnull=True)
-        .exclude(recip_id__isnull=True)
-        .filter(latest=1)
+        .filter(height__lte=OuterRef("height"))
         .filter(recip_id=pool_id)
-    ).count()
+        .filter(latest=1)
+        .values_list("account_id", flat=True)
+    )
+    return (
+        Block.objects.using("java_wallet")
+        .filter(generator_id__in=miners)
+        .annotate(block=F("height"))
+        .order_by("-block")
+        .values("generator_id", "block")
+    )

@@ -16,7 +16,7 @@
         <td><a href="{% url 'block-detail' forged_block.block %}">{{ forged_block.block }}</a></td>
         <td class="text-nowrap d-none d-sm-table-cell">{{ forged_block.block_timestamp|naturaltime }}</td>
         <td class="text-nowrap d-none d-sm-table-cell">
-            {% include "account_link.html" with account_id=forged_block.account_id account_name=forged_block.account_id|account_name_string %}
+            {% include "account_link.html" with account_id=forged_block.generator_id account_name=forged_block.generator_id|account_name_string %}
         </td>  
       </tr>
     {% endfor %}

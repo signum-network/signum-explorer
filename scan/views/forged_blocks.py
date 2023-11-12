@@ -7,21 +7,24 @@ from scan.helpers.queries import get_timestamp_of_block
 
 
 class ForgedBlocksListView(ListView):
-    model = RewardRecipAssign
+    model = Block
     queryset = (
-        RewardRecipAssign.objects.using("java_wallet")
-        .filter(~Q(recip_id=F('account_id')))
+        Block.objects.using("java_wallet")
         .annotate(
-            block=Block.objects.using("java_wallet")
-            .filter(generator_id=OuterRef("account_id"))
+            pool_id=RewardRecipAssign.objects.using("java_wallet")
+            .filter(~Q(recip_id=F('account_id')))
+            .filter(height__lte=OuterRef("height"))
+            .filter(account_id=OuterRef("generator_id"))
             .order_by("-height")
-            .values("height")
+            .values("recip_id")
             [:1]
         )
-        .values("recip_id", "account_id", "block")
-        .exclude(block__isnull=True)
-        .exclude(recip_id__isnull=True)
-        )
+        .annotate(block=F("height"))
+        .values("generator_id", "block", "pool_id")
+        .exclude(height__isnull=True)
+        .exclude(pool_id__isnull=True)
+        .order_by("-block")
+    )
     template_name = "forged_blocks/list.html"
     context_object_name = "forged_blocks"
     paginator_class = CachingPaginator
@@ -30,9 +33,8 @@ class ForgedBlocksListView(ListView):
 
     def get_queryset(self):
         qs = self.queryset
-        qs = qs.filter(latest=True)
         if 'a' in self.request.GET:
-            qs = qs.filter(recip_id=self.request.GET['a'], latest=1)
+            qs = qs.filter(pool_id=self.request.GET['a'])
         return qs.order_by(self.ordering)
 
     def get_context_data(self, **kwargs):
