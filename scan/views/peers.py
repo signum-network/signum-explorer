@@ -70,7 +70,7 @@ class PeerMonitorListView(ListView):
 
         featured_peers = []
         bootstrap_peers = BRS_BOOTSTRAP_PEERS
-        if AUTO_BOOTSTRAP_PEERS.upper() == ('ON' or 'TRUE'):
+        if AUTO_BOOTSTRAP_PEERS:
             bootstrap_peers = (
                 PeerMonitor.objects
                 .filter(announced_address__contains='.signum.network')
