@@ -2,7 +2,7 @@ from django.db.models import Count
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
-from config.settings import BRS_BOOTSTRAP_PEERS
+from config.settings import BRS_BOOTSTRAP_PEERS, AUTO_BOOTSTRAP_PEERS
 from django.http import HttpResponse
 from scan.models import PeerMonitor
 import json
@@ -69,7 +69,15 @@ class PeerMonitorListView(ListView):
         context = super().get_context_data(**kwargs)
 
         featured_peers = []
-        for peer in BRS_BOOTSTRAP_PEERS:
+        bootstrap_peers = BRS_BOOTSTRAP_PEERS
+        if AUTO_BOOTSTRAP_PEERS.upper() == ('ON' or 'TRUE'):
+            bootstrap_peers = (
+                PeerMonitor.objects
+                .filter(announced_address__contains='.signum.network')
+                .exclude(state__gt=1)
+                .values_list(flat=True)
+            )
+        for peer in bootstrap_peers:
             featured_peer = (PeerMonitor.objects.filter(announced_address=peer)
                 .order_by("-availability").first())
             if featured_peer:

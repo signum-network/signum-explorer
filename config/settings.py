@@ -260,8 +260,8 @@ GOOGLE_TRACKING_ID = os.environ.get("GOOGLE_TRACKING_ID")
 DEFAULT_P2P_PORT = int(os.environ.get("DEFAULT_P2P_PORT", 8123))
 DEFAULT_API_V1_PORT = int(os.environ.get("DEFAULT_API_V1_PORT", 8125))
 
-BRS_P2P_VERSION = os.environ.get("BRS_P2P_VERSION", "3.2.1")
-MIN_PEER_VERSION = os.environ.get("MIN_PEER_VERSION", "3.2.0")
+BRS_P2P_VERSION = os.environ.get("BRS_P2P_VERSION", "3.7.2")
+MIN_PEER_VERSION = os.environ.get("MIN_PEER_VERSION", "3.6.0")
 
 SIGNUM_NODE = os.environ.get("SIGNUM_NODE")
 
@@ -276,6 +276,7 @@ BLOCKED_ASSETS = json.loads(os.environ.get("BLOCKED_ASSETS", "[]"))
 PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
+AUTO_BOOTSTRAP_PEERS = str(os.environ.get("AUTO_BOOTSTRAP_PEERS", "on"))
 
 PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "0"))
 TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "0"))
