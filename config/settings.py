@@ -276,7 +276,7 @@ BLOCKED_ASSETS = json.loads(os.environ.get("BLOCKED_ASSETS", "[]"))
 PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 
 BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
-AUTO_BOOTSTRAP_PEERS = str(os.environ.get("AUTO_BOOTSTRAP_PEERS", "on"))
+AUTO_BOOTSTRAP_PEERS = os.environ.get("AUTO_BOOTSTRAP_PEERS", "False").lower() in ("true", "1", "on")
 
 PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "0"))
 TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "0"))
