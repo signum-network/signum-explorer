@@ -71,12 +71,16 @@ class PeerMonitorListView(ListView):
         featured_peers = []
         bootstrap_peers = BRS_BOOTSTRAP_PEERS
         if AUTO_BOOTSTRAP_PEERS:
-            bootstrap_peers = (
+            auto_bootstrap_peers = (
                 PeerMonitor.objects
                 .filter(announced_address__contains='.signum.network')
                 .exclude(state__gt=1)
                 .values_list(flat=True)
             )
+            auto_peers = list(auto_bootstrap_peers)
+            brs_peers = list(bootstrap_peers)
+            combine_bootstrap_peers = auto_peers + brs_peers
+            bootstrap_peers = list(set(combine_bootstrap_peers))
         for peer in bootstrap_peers:
             featured_peer = (PeerMonitor.objects.filter(announced_address=peer)
                 .order_by("-availability").first())
