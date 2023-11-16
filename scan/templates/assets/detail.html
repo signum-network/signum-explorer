@@ -14,96 +14,36 @@
 
 
 {% block scripts %}
-  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-  <script>
 
-var container = document.getElementById('chartDiv');
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
 
-var width = container.clientWidth;
-var height = 240;
+<script>
+(async () => {
 
-var data = {{ price_history|safe }} ;
+    const data = {{ price_history|safe }};
 
-var chart = window.tvchart  = LightweightCharts.createChart(container, {
-  width: width,
-	height: height,
-	rightPriceScale: {
-		scaleMargins: {
-			top: 0.35,
-			bottom: 0.2,
-		},
-		borderVisible: false,
-	},
-	timeScale: {
-		borderVisible: false,
-	},
-	grid: {
-		horzLines: {
-			color: '#eee',
-      visible: false,
-		},
-		vertLines: {
-			color: '#ffffff',
-		},
-	},
-  crosshair: {
-  		horzLine: {
-      	visible: false,
-        labelVisible: false
-      },
-      vertLine: {
-      	visible: false,
-        style: 0,
-        width: 2,
-        color: 'rgba(32, 38, 46, 0.1)',
-        labelVisible: false,
-      }
-  },
-});
+    // Create the chart
+    Highcharts.stockChart('chartDiv', {
+        rangeSelector: {
+            selected: 1
+        },
 
-var series = chart.addAreaSeries({
-	topColor: 'rgba(19, 68, 193, 0.4)',
-  bottomColor: 'rgba(0, 120, 255, 0.0)',
-	lineColor: 'rgba(19, 40, 153, 1.0)',
-	lineWidth: 3
-});
+        title: {
+            text: '{% if asset|is_asset_blocked %} Name Blocked {% else %} {{ asset.name }} {% endif %}'
+        },
 
-series.setData(data);
-chart.timeScale().fitContent();
-// Start with latest 30 days?
-// chart.timeScale().setVisibleLogicalRange({ from: new Date().setDate(Date.now()-30) / 1000, to: Date.now() / 1000 });
-
-function businessDayToString(businessDay) {
-	return new Date(Date.UTC(businessDay.year, businessDay.month - 1, businessDay.day, 0, 0, 0)).toLocaleDateString();
-}
-
-var toolTipMargin = 10;
-var priceScaleWidth = 50;
-var toolTip = document.createElement('div');
-toolTip.className = 'chart-legend';
-container.appendChild(toolTip);
-toolTip.style.display = 'block';
-toolTip.style.left = 3 + 'px';
-toolTip.style.top = 3 - height + 'px';
-
-function setToolTipData(curTime, price) {
-	var dateStr = curTime.year + '-' + curTime.month + '-' + curTime.day;
-  var priceStr = price + " {% coin_symbol %}"
-	 toolTip.innerHTML =	'<div style="font-size: 24px; margin: 4px 0px; color: #20262E; display:inline;">{% if asset|is_asset_blocked %} Name Blocked {% else %} {{ asset.name }} {% endif %} </div>'+
-    '<div style="white-space:nowrap; font-size: 16px; margin: 4px 0px; color: #20262E; display:inline;"> ' + priceStr + ' </div>';
-}
-
-setToolTipData(data[data.length - 1].time, data[data.length - 1].value);
-
-
-var timerID;
-document.body.onresize = function() {
-  if (timerID) clearTimeout(timerID);
-  timerID = setTimeout(function() {
-    width = container.clientWidth
-    chart.resize(width, height);
-    }, 200);
-}
+        series: [{
+            name: '{% coin_symbol %}',
+            data: data,
+            tooltip: {
+                valueDecimals: 8
+            }
+        }]
+    });
+})();
 
   </script>
   <script>
@@ -163,7 +103,7 @@ const template = `
 <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
        {% if assets_trades_cnt > 0 %}
-         <div class="mt-2" style="height: 240px;" id="chartDiv">
+         <div class="mt-2" style="height: 340px;" id="chartDiv">
          </div>
        {% endif %}
       <div class="card-body">
