@@ -277,22 +277,22 @@ class AssetDetailView(IntSlugDetailView):
             .order_by("-height")[:2000]
         )
 
-        price_history = "[\n"
+        price_history = "["
         old_time = None
         last_price = None
-        now = datetime.now().strftime("%Y-%m-%d")
+        now = datetime.now().strftime("%s")
         for trade in reversed(price_query):
             price = burst_amount(mul_decimals(trade.price, decimals))
-            time = trade.timestamp.strftime("%Y-%m-%d")
+            time = trade.timestamp.strftime("%s")
             last_price = price
             if time != old_time and time != now:
                 # one per day
-                price_history += "{ time: '" + time + "', value: " + str(price) + " },\n"
+                price_history += "[" + time + "000," + str(price) + "],"
                 old_time = time
         
         # add now as latest price
         if last_price:
-            price_history += "{ time: '" + now + "', value: " + str(last_price) + " },\n"
+            price_history += "[" + now + "000," + str(price) + "],"
 
         price_history += "]"
 
