@@ -1,11 +1,12 @@
-import logging
-import os
-import requests, json
-
+import json, logging, os, requests
 from time import sleep
 from django.conf import settings
-from config.settings import TASKS_SCAN_DELAY, SNR_MASTER_EXPLORER
-
+from config.settings import (
+    TASKS_SCAN_DELAY, 
+    SNR_MASTER_EXPLORER,
+    BRS_BOOTSTRAP_PEERS,
+    AUTO_BOOTSTRAP_PEERS,
+)
 from scan.models import PeerMonitor
 from scan.caching_data.exchange import CachingExchangeData
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
@@ -49,7 +50,23 @@ def task_cmd():
         if snr_master :
             logger.info("SNR Master Data Received")
 
-
+    """
+    ######### Update Bootstrap Peers ###########
+        Best to run this task instead of having the page load it each time it's opened. 
+        Also exports to env for peer scan use. 
+    """
+    if AUTO_BOOTSTRAP_PEERS:
+        bootstrap_peers = BRS_BOOTSTRAP_PEERS
+        auto_bootstrap_peers = (
+            PeerMonitor.objects
+            .filter(announced_address__contains='.signum.network')
+            .exclude(state__gt=1)
+            .values_list(flat=True)
+        )
+        bootstrap_peers = list(set(list(auto_bootstrap_peers) + list(bootstrap_peers)))
+        if bootstrap_peers:
+            logger.info(f"Bootstrap Peers Updated: {bootstrap_peers}")
+        os.environ["BRS_BOOTSTRAP_PEERS"] = json.dumps(bootstrap_peers)
 
 #    def update_cache_total_accounts_count():
 #        logger.info("TASK - Update Total Accounts data")
