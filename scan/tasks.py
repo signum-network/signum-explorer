@@ -7,12 +7,15 @@ from config.settings import (
     BRS_BOOTSTRAP_PEERS,
     AUTO_BOOTSTRAP_PEERS,
 )
+from scan.caching_data.bootstrap_nodes import CachingBootstrapNodes
 from scan.models import PeerMonitor
 from scan.caching_data.exchange import CachingExchangeData
 from scan.caching_data.total_txs_count import CachingTotalTxsCount
 from scan.caching_data.total_circulating import CachingTotalCirculating
 #from scan.caching_data.total_accounts_count import CachingTotalAccountsCount
 
+from dotenv import load_dotenv
+load_dotenv()
 logger = logging.getLogger(__name__)
 
 ######################################
@@ -57,16 +60,29 @@ def task_cmd():
     """
     if AUTO_BOOTSTRAP_PEERS:
         bootstrap_peers = BRS_BOOTSTRAP_PEERS
-        auto_bootstrap_peers = (
-            PeerMonitor.objects
-            .filter(announced_address__contains='.signum.network')
-            .exclude(state__gt=1)
-            .values_list(flat=True)
-        )
+        caching_peers = CachingBootstrapNodes()
+        bootstrap_network = os.environ.get("BRS_BOOTSTRAP_NETWORK", ".signum.network")
+        if bootstrap_network is "": bootstrap_network = ".signum.network"
+        try:
+            auto_bootstrap_peers = (
+                PeerMonitor.objects
+                .filter(announced_address__endswith=bootstrap_network)
+                .exclude(state__gt=1)
+                .values_list(flat=True)
+            )
+        except:
+            auto_bootstrap_peers = []
         bootstrap_peers = list(set(list(auto_bootstrap_peers) + list(bootstrap_peers)))
         if bootstrap_peers:
-            logger.info(f"Bootstrap Peers Updated: {bootstrap_peers}")
-        os.environ["BRS_BOOTSTRAP_PEERS"] = json.dumps(bootstrap_peers)
+            try:
+                caching_peers.set_bootstrap_peers(bootstrap_peers)
+            except Exception as e:
+                logger.error(f"Failed to update Bootstrap Peers: {e}")
+            else:
+                logger.info(f"Bootstrap Peers Updated: {bootstrap_peers}")
+        else:
+            logger.error("No Bootstrap Peers Found")
+
 
 #    def update_cache_total_accounts_count():
 #        logger.info("TASK - Update Total Accounts data")

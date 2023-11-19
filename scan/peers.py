@@ -24,6 +24,7 @@ from config.settings import PEERS_SCAN_DELAY
 from java_wallet.models import Block
 from scan.helpers.decorators import lock_decorator
 from scan.models import PeerMonitor
+from scan.caching_data.bootstrap_nodes import CachingBootstrapNodes
 
 logger = logging.getLogger(__name__)
 
@@ -185,18 +186,9 @@ def get_nodes_list() -> list:
         or []
     )
 
-    # get other addresses exclude UNREACHABLE
-    addresses_other = (
-        list(
-            PeerMonitor.objects.values_list("announced_address", flat=True)
-            .exclude(state=PeerMonitor.State.UNREACHABLE)
-            .distinct()
-        )
-        or []
-    )
-
     # add well-known peers
-    addresses_other.extend(settings.BRS_BOOTSTRAP_PEERS)
+    caching_peers = CachingBootstrapNodes()
+    addresses_other = caching_peers.get_bootstrap_peers()
 
     # mix it
     random.shuffle(addresses_offline)

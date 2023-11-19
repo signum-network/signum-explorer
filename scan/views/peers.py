@@ -2,9 +2,11 @@ from django.db.models import Count
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView
-from config.settings import BRS_BOOTSTRAP_PEERS, AUTO_BOOTSTRAP_PEERS
+from scan.caching_data.bootstrap_nodes import CachingBootstrapNodes
 from django.http import HttpResponse
 from scan.models import PeerMonitor
+
+caching_peers = CachingBootstrapNodes()
 
 @require_http_methods(["GET"])
 def peers_charts_view(request):
@@ -68,7 +70,7 @@ class PeerMonitorListView(ListView):
         context = super().get_context_data(**kwargs)
 
         featured_peers = []
-        bootstrap_peers = list(BRS_BOOTSTRAP_PEERS)
+        bootstrap_peers = caching_peers.get_bootstrap_peers()
         for peer in bootstrap_peers:
             featured_peer = (PeerMonitor.objects.filter(announced_address=peer)
                 .order_by("-availability").first())
@@ -94,7 +96,8 @@ class PeerMonitorDetailView(DetailView):
 
         if obj.state == 3 or obj.state == 4: # 4 could be removed if we only want sync
             featured_peers = []
-            for peer in BRS_BOOTSTRAP_PEERS:
+            bootstrap_peers = caching_peers.get_bootstrap_peers()
+            for peer in bootstrap_peers:
                 featured_peer = PeerMonitor.objects.filter(announced_address=peer).exclude(state__gt=1).values("height").first()
                 if featured_peer:
                     featured_peers.append(featured_peer["height"])
