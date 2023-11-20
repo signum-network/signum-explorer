@@ -11,15 +11,72 @@
 {% endblock %}
 
 {% block scripts %}
- <script>
-    var qrcode = new QRCode(document.getElementById("qr_code"), {
-        text: "{{ at.id|num2rs }}",
-        dotScale: .7,
-        backgroundImage: "/static/Signum_Logomark_blue_filled.svg",
-        backgroundImageAlpha: .3,
-        logoBackgroundTransparent: true,
-        correctLevel: QRCode.CorrectLevel.H,
-    }); 
+<script>
+  var qrcode = new QRCode(document.getElementById("qr_code"), {
+      text: "{{ at.id|num2rs }}",
+      dotScale: .7,
+      backgroundImage: "/static/Signum_Logomark_blue_filled.svg",
+      backgroundImageAlpha: .3,
+      logoBackgroundTransparent: true,
+      correctLevel: QRCode.CorrectLevel.H,
+  }); 
+</script>
+<script type="module">
+  import decompiler from 'https://cdn.jsdelivr.net/npm/smartc-signum-decompiler/dist/index.js';
+
+  function ClickDecompile() {
+      let codeString = document.getElementById("ap_code").value;
+      let outputMAP  = document.getElementById("map_obj").value;
+      let mapObj = {}
+      try {
+          if (outputMAP.length > 5) {
+              mapObj = JSON.parse(outputMAP);
+          }
+      } catch (e) {
+          document.getElementById("decompiled_assembly").innerHTML  = e.message;
+          return;
+      }
+
+      const Options = {
+          machineCode: codeString.trim(),
+          variables: mapObj.Memory,
+          labels: mapObj.Labels
+      }
+
+      try {
+          const decomp = new decompiler(Options);
+          const decomp_output = decomp.decompile();
+          document.getElementById("decompiled_assembly").innerText  = decomp_output.assemblyProgram;
+          document.getElementById("map_obj").value = JSON.stringify({
+              Memory: decomp_output.variables,
+              Labels: decomp_output.labels
+          }, null, 2);
+      } catch(err) {
+          document.getElementById("decompiled_assembly").innerHTML  = "Error in decompilation process: " + err.message;
+      }
+  }
+  
+  function showDecompile() {
+    var x = document.getElementById("codeBlock0").style;
+    var y = document.getElementById("codeBlock1").style;
+    var z = document.getElementById("codeBlock2").style;
+    if (x.display == "none" || y.display == "none" || z.display == "none") {
+      x.display = "table-row";
+      y.display = "table-row";
+      z.display = "table-row";
+      ClickDecompile();
+    } else {
+      x.display = "none";
+      y.display = "none";
+      z.display = "none";
+    }
+  }
+
+  $(document).ready(function () {
+    document.getElementById('codeDecompile').addEventListener('click', function() {
+      showDecompile();
+    });
+  });
 </script>
 {% endblock %}
 
@@ -44,16 +101,16 @@
   <h5 class="p-2">Contract<br class="d-md-none" /> {{ at.id|num2rs }}
     <a class="btn btn-sm btn-icon btn-light rounded-circle copy-btn" href="#" data-clipboard-text="{{ at.id|num2rs }}"><i class="far fa-copy"></i></a>
     <a class="btn btn-sm btn-icon btn-light rounded-circle" href="#" data-toggle="modal" data-target="#QRModal" title="Click to view QR Code"><i class="fa fa-qrcode"></i></a>
-    <a class="btn btn-sm btn-icon btn-light rounded-circle copy-btn" title="" href="https://signum-contract-inspector.vercel.app/?address={{ at.id|num2rs }}" target="_blank" data-original-title="Click to view contract data"><i class="far fa-file-code"></i></a>
+    <a class="btn btn-sm btn-icon btn-light rounded-circle copy-btn" title="" href="https://signum-contract-inspector.vercel.app/?address={{ at.id|num2rs }}" target="_blank" data-original-title="View on external contract inspector"><i class="far fa-file-code"></i></a>
+    <a class="btn btn-sm btn-icon btn-light rounded-circle copy-btn" title="" id="codeDecompile" data-original-title="Click to view contract data"><i class="far fa-file-code"></i></a>
   </h5>
 
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
-
-          <div class="table-responsive">
-            <table class="table small table-sm">
-              <tbody>
+        <div class="table-responsive">
+          <table class="table small table-sm">
+            <tbody>
               <tr>
                 <th>Address</th>
                 <th>
@@ -138,12 +195,35 @@
                   <label for="ap_code"></label>
                 </td>
               </tr>
-              </tbody>
-            </table>
-          </div>
-
+              <tr id="codeBlock0" style="display: none;">
+                <th>Map</th>
+                <td class="text-monospace">
+                  <textarea id="map_obj" class="form-control" spellcheck="false" rows="5" disabled></textarea>
+                  <label for="map_obj"></label>
+                </td>
+              </tr>
+              <tr id="codeBlock1" style="display: none;">
+                <th>Assembly</th>
+                <td class="text-monospace">
+                  <pre id="decompiled_assembly"></pre>
+                </td>
+                <!--<td class="text-monospace">
+                  <textarea id="decompiled_assembly" class="form-control" spellcheck="false" rows="5" disabled></textarea>
+                  <label for="decompiled_assembly"></label>
+                </td>-->
+              </tr>
+              <tr id="codeBlock2" style="display: none;">
+                <th></th>
+                <td>
+                  <a href="https://github.com/deleterium/SmartC">SmartC Compiler</a></br>
+                  <a href="https://github.com/deleterium/smartc-signum-decompiler">SmartC Decompiler</a></br>
+                  Credits to Deleterium • S-DKVF-VE8K-KUXB-DELET</br>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
   </div>
-
 {% endblock %}
