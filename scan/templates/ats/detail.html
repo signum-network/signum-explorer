@@ -46,10 +46,10 @@
       try {
           const decomp = new decompiler(Options);
           const decomp_output = decomp.decompile();
-          document.getElementById("decompiled_assembly").innerText  = decomp_output.assemblyProgram;
+          document.getElementById("decompiled_assembly").value = decomp_output.assemblyProgram;
           document.getElementById("map_obj").value = JSON.stringify({
-              Memory: decomp_output.variables,
-              Labels: decomp_output.labels
+            Memory: decomp_output.variables,
+            Labels: decomp_output.labels
           }, null, 2);
       } catch(err) {
           document.getElementById("decompiled_assembly").innerHTML  = "Error in decompilation process: " + err.message;
@@ -198,19 +198,16 @@
               <tr id="codeBlock0" style="display: none;">
                 <th>Map</th>
                 <td class="text-monospace">
-                  <textarea id="map_obj" class="form-control" spellcheck="false" rows="5" disabled></textarea>
+                  <textarea id="map_obj" class="form-control" spellcheck="false" rows="6" disabled style="overflow: auto;"></textarea>
                   <label for="map_obj"></label>
                 </td>
               </tr>
               <tr id="codeBlock1" style="display: none;">
                 <th>Assembly</th>
                 <td class="text-monospace">
-                  <pre id="decompiled_assembly"></pre>
-                </td>
-                <!--<td class="text-monospace">
-                  <textarea id="decompiled_assembly" class="form-control" spellcheck="false" rows="5" disabled></textarea>
+                  <textarea id="decompiled_assembly" class="form-control" spellcheck="false" rows="10" disabled style="overflow: auto;"></textarea>
                   <label for="decompiled_assembly"></label>
-                </td>-->
+                </td>
               </tr>
               <tr id="codeBlock2" style="display: none;">
                 <th></th>
