@@ -290,3 +290,5 @@ TEST_NET = os.environ.get("TEST_NET")
 
 # for syncing peer SNR status
 SNR_MASTER_EXPLORER = os.environ.get("SNR_MASTER_EXPLORER")
+
+ADDRESS_PREFIX = os.environ.get("ADDRESS_PREFIX", "S-")
