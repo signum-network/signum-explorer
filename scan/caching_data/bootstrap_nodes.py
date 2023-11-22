@@ -4,6 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 from config.settings import (
     SIGNUM_NODE,
     BRS_BOOTSTRAP_NETWORK,
+    BRS_BOOTSTRAP_PEERS,
+    DEFAULT_P2P_PORT,
 )
 from dotenv import (
     load_dotenv,
@@ -31,12 +33,16 @@ class CachingBootstrapNodes:
 
     def explore_peer(self, peer, address, bootstrap):
         try:
-            announced = (
+            url = (
                 urlparse(
                     requests.get(f"{address}/burst?requestType=getPeer&peer={peer}").json()['announcedAddress']
-                ).scheme # apparently node returns address in scheme instead of http/https
+                ) #.scheme # apparently node returns address in scheme instead of http/https
             )
-            if not announced: raise Exception("No Announced Address") # Debug info only
+            if not url: raise Exception("No URL Found") # Debug info only
+            if int(url.path) == DEFAULT_P2P_PORT: announced = url.scheme
+            elif url.path: announced = f"{url.scheme}:{url.path}"
+            else: raise Exception("No Announced Address")
+            #if not announced: raise Exception("No Announced Address") # Debug info only
         except: 
             return
         else:
@@ -62,7 +68,7 @@ class CachingBootstrapNodes:
             #peers = P2PApi(str(f'{host}:8125')).get_peers() ## API doesn't work if using cloudflare direct request required
             peers = list(set(requests.get(f"{address}/burst?requestType=getPeers").json()['peers']))
             
-            bootstrap = set()
+            bootstrap = set(BRS_BOOTSTRAP_PEERS)
 
             with ThreadPoolExecutor(max_workers=10) as executor:
                 executor.map(lambda peer: self.explore_peer(peer, address, bootstrap), peers)
