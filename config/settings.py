@@ -275,8 +275,11 @@ FEATURED_ASSETS = json.loads(os.environ.get("FEATURED_ASSETS", "[]"))
 BLOCKED_ASSETS = json.loads(os.environ.get("BLOCKED_ASSETS", "[]"))
 PHISHING_ASSETS = json.loads(os.environ.get("PHISHING_ASSETS", "[]"))
 
-BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
 AUTO_BOOTSTRAP_PEERS = os.environ.get("AUTO_BOOTSTRAP_PEERS", "False").lower() in ("true", "1", "on")
+BRS_BOOTSTRAP_PEERS = json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
+BRS_FULL_BOOTSTRAP = os.environ.get("BRS_FULL_BOOTSTRAP", "true").lower() in ("true", "1", "on")
+BRS_BOOTSTRAP_NETWORK = tuple(json.loads(os.environ.get("BRS_BOOTSTRAP_NETWORK", '[".signum.network"]')))
+# tuple for multipul network lookup options, **Cloudflare Note: Since IP's are shared, your node may not be found
 
 PEERS_SCAN_DELAY = int(os.environ.get("PEERS_SCAN_DELAY", "0"))
 TASKS_SCAN_DELAY = int(os.environ.get("TASKS_SCAN_DELAY", "0"))
