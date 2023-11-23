@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% load humanize %}
 {% load burst_tags %}
 
@@ -22,7 +22,7 @@
   }); 
 </script>
 <script type="module">
-  import decompiler from 'https://cdn.jsdelivr.net/npm/smartc-signum-decompiler/dist/index.js';
+  import decompiler from "{% static 'js/smartc-signum-decompiler/index.js' %}";
 
   function ClickDecompile() {
       let codeString = document.getElementById("ap_code").value;
