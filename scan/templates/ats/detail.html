@@ -35,7 +35,7 @@
           </button>
         </div>
         <div class="modal-body text-center">
-          <div id="qr_code" title="S-{{ at.id|num2rs }}"></div>
+          <div id="qr_code" title="{{ 'ADDRESS_PREFIX'|env }}{{ at.id|num2rs }}"></div>
         </div>
       </div>
     </div>

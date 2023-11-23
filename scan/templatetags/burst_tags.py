@@ -11,7 +11,7 @@ from burst.libs.multiout import MultiOutPack
 from burst.libs.reed_solomon import ReedSolomon
 from burst.libs.transactions import get_message, get_message_sub, get_message_token
 from burst.api.brs.v1.api import BrsApi
-from config.settings import BLOCKED_ASSETS, PHISHING_ASSETS
+from config.settings import ADDRESS_PREFIX, BLOCKED_ASSETS, PHISHING_ASSETS
 from java_wallet.fields import get_desc_tx_type
 from java_wallet.models import Block, IndirectIncoming, IndirectRecipient, Trade, Transaction
 from scan.caching_data.exchange import CachingExchangeData
@@ -507,7 +507,7 @@ def tx_load_recipients(tx: Transaction) -> Transaction:
 
 @register.filter
 def num2rs(value: str or int) -> str:
-    return os.environ.get("ADDRESS_PREFIX") + ReedSolomon().encode(str(value))
+    return ADDRESS_PREFIX + ReedSolomon().encode(str(value))
 
 @register.filter
 def subNextsend(value):

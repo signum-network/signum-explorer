@@ -80,7 +80,7 @@ const template = `
           </button>
         </div>
         <div class="modal-body text-center">
-          <div id="qr_code" title="S-{{ address.id|num2rs }}"></div>
+          <div id="qr_code" title="{{ 'ADDRESS_PREFIX'|env }}{{ address.id|num2rs }}"></div>
         </div>
       </div>
     </div>
