@@ -2,7 +2,7 @@
 # apt install python3-dev default-libmysqlclient-dev build-essential redis-server supervisor
 
 # required packages  to use 'pip install -r requirements.txt'
-#python
+python
 django
 django-cache-memoize
 django-cors-headers
