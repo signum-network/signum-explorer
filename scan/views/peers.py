@@ -69,14 +69,13 @@ class PeerMonitorListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        featured_peers = []
-        bootstrap_peers = caching_peers.get_bootstrap_peers()
-        for peer in bootstrap_peers:
-            featured_peer = (PeerMonitor.objects.filter(announced_address=peer)
-                .order_by("-availability").first())
-            if featured_peer:
-                featured_peers.append(featured_peer)
-        
+        featured_peers = (
+            PeerMonitor.objects
+            .filter(announced_address__in=caching_peers.get_bootstrap_peers())
+            .filter(state=1)
+            .order_by("-version", "-availability")
+        )
+
         context["featured_peers"] = featured_peers
 
         return context
