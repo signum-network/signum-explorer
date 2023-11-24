@@ -61,18 +61,18 @@ def task_cmd():
     if AUTO_BOOTSTRAP_PEERS:
         bootstrap_peers = BRS_BOOTSTRAP_PEERS
         caching_peers = CachingBootstrapNodes()
-        bootstrap_network = os.environ.get("BRS_BOOTSTRAP_NETWORK", ".signum.network")
-        if bootstrap_network is "": bootstrap_network = ".signum.network"
-        try:
-            auto_bootstrap_peers = (
+        bootstrap_networks = caching_peers.get_bootstrap_networks()
+        logger.info(f"Checking bootstrap network(s): {bootstrap_networks}")
+        auto_bootstrap_peers = []
+        for network in bootstrap_networks:
+            try: auto_bootstrap_peers = (
                 PeerMonitor.objects
-                .filter(announced_address__endswith=bootstrap_network)
-                .exclude(state__gt=1)
+                .filter(announced_address__endswith=network)
                 .values_list(flat=True)
             )
-        except:
-            auto_bootstrap_peers = []
-        bootstrap_peers = list(set(list(auto_bootstrap_peers) + list(bootstrap_peers)))
+            except: pass
+            else: bootstrap_peers.extend(list(auto_bootstrap_peers))
+        bootstrap_peers = list(set(bootstrap_peers))
         if bootstrap_peers:
             try:
                 caching_peers.set_bootstrap_peers(bootstrap_peers)

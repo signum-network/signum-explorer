@@ -187,8 +187,7 @@ def get_nodes_list() -> list:
     )
 
     # add well-known peers
-    caching_peers = CachingBootstrapNodes()
-    addresses_other = caching_peers.get_bootstrap_peers()
+    addresses_other = CachingBootstrapNodes().get_bootstrap_peers()
 
     # mix it
     random.shuffle(addresses_offline)

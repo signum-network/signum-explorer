@@ -1,10 +1,8 @@
-import os, json, socket, requests
-#from burst.api.brs.p2p import P2PApi
+import os, json
+from burst.api.brs.v1.api import BrsApi
 from concurrent.futures import ThreadPoolExecutor
 from config.settings import (
     SIGNUM_NODE,
-    BRS_BOOTSTRAP_NETWORK,
-    BRS_BOOTSTRAP_PEERS,
     DEFAULT_P2P_PORT,
 )
 from dotenv import (
@@ -27,51 +25,42 @@ class CachingBootstrapNodes:
     def get_bootstrap_peers(self):
         load_dotenv(override=True)        
         return json.loads(os.environ.get("BRS_BOOTSTRAP_PEERS", "[]"))
+    
+    def get_bootstrap_networks(self):
+        load_dotenv(override=True)
+        return tuple(json.loads(os.environ.get("BRS_BOOTSTRAP_NETWORK", '[".signum.network"]')))
 
     def set_bootstrap_peers(self, peers):
         set_key(dotenv_path=find_dotenv(), key_to_set="BRS_BOOTSTRAP_PEERS", value_to_set=(json.dumps(peers)), export=False, quote_mode="never")
 
-    def explore_peer(self, peer, address, bootstrap):
+    def explore_peer(self, peer, bootstrap, networks):
         try:
-            url = (
-                urlparse(
-                    requests.get(f"{address}/burst?requestType=getPeer&peer={peer}").json()['announcedAddress']
-                ) #.scheme # apparently node returns address in scheme instead of http/https
-            )
+            url = urlparse(BrsApi(SIGNUM_NODE).get_peer(peer)['announcedAddress'])
             if not url: raise Exception("No URL Found") # Debug info only
             if int(url.path) == DEFAULT_P2P_PORT: announced = url.scheme
             elif url.path: announced = f"{url.scheme}:{url.path}"
             else: raise Exception("No Announced Address")
-            #if not announced: raise Exception("No Announced Address") # Debug info only
         except: 
             return
         else:
-            if announced.endswith((BRS_BOOTSTRAP_NETWORK)):
-                bootstrap.add(announced)
+            for network in networks:
+                if announced.endswith(network):
+                    bootstrap.add(announced)
+                    break
             return
 
     ## VERY SLOW, AND HARD ON NODE ##
     # ONLY RUN ONCE AT FIRST STARTUP #
     def node_bootstrap(self):
         print("Running First Time Node Bootstrap...\nThis will take a while and is a blocking function.\nIf this is not needed restart the node with BRS_FULL_BOOTSTRAP=False")
-        """
-            Requests doesn't have docker/container lookup  
-            use urlparse to get the node url(hostname)  
-            followed by socket to get the IP address  
-            then find the bootstrap network peers to use
-        """
 
         try:
-            local_node = urlparse(SIGNUM_NODE)
-            host = socket.gethostbyname(f'{local_node.hostname}')
-            address = f'{local_node.scheme}://{host}:{local_node.port}'
-            #peers = P2PApi(str(f'{host}:8125')).get_peers() ## API doesn't work if using cloudflare direct request required
-            peers = list(set(requests.get(f"{address}/burst?requestType=getPeers").json()['peers']))
-            
-            bootstrap = set(BRS_BOOTSTRAP_PEERS)
+            peers = BrsApi(SIGNUM_NODE).get_peers()
+            bootstrap = set(self.get_bootstrap_peers()) # your own node won't be in the list so load prespecified peers
+            networks = self.get_bootstrap_networks()
 
             with ThreadPoolExecutor(max_workers=10) as executor:
-                executor.map(lambda peer: self.explore_peer(peer, address, bootstrap), peers)
+                executor.map(lambda peer: self.explore_peer(peer, bootstrap, networks), peers)
                 
         except Exception as e:
             print(f"Failed to get bootstrap peers from node: {e}")
