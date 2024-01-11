@@ -28,6 +28,12 @@ python = "^3.11"
 line-length = 120
 target-version =  ['py37', 'py38', 'py39', 'py310', 'py311']
 include = '\.pyi?$'
+exclude = '''
+/(
+  | migrations
+)/
+
+'''
 
 [tool.isort]
 profile = "black"
