@@ -40,6 +40,8 @@ profile = "black"
 src_paths = ["burst", "cabinet", "config", "db", "java_wallet", "scan"]
 line_length = 120
 skip_gitignore = true
+skip_glob = "*/migrations/*"
+filter_files = true
 
 [build-system]
 requires = ["poetry-core"]
