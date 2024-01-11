@@ -19,17 +19,9 @@ from scan.views.distribution import DistributionListView
 from scan.views.forged_blocks import ForgedBlocksListView
 from scan.views.index import index
 from scan.views.json import TopAccountsJson, getSNRjson, getStatejson
-from scan.views.marketplace import (
-    MarketPlaceDetailView,
-    MarketPlaceListView,
-    MarketPlacePurchasesListView,
-)
+from scan.views.marketplace import MarketPlaceDetailView, MarketPlaceListView, MarketPlacePurchasesListView
 from scan.views.miners import MinerListView
-from scan.views.peers import (
-    PeerMonitorDetailView,
-    PeerMonitorListView,
-    peers_charts_view,
-)
+from scan.views.peers import PeerMonitorDetailView, PeerMonitorListView, peers_charts_view
 from scan.views.pending_transactions import pending_transactions
 from scan.views.pools import PoolDetailView, PoolListView
 from scan.views.search import search_view
@@ -82,4 +74,4 @@ if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
-    urlpatterns = [path('django_query_profiler/', include('django_query_profiler.client.urls'))] + urlpatterns
+    urlpatterns = [path("django_query_profiler/", include("django_query_profiler.client.urls"))] + urlpatterns
