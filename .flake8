@@ -1,0 +1,4 @@
+[flake8]
+max-line-length = 120
+application-import-names = burst, cabinet, config, db, java_wallet, scan
+import-order-style = pep8
