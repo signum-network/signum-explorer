@@ -18,7 +18,7 @@ from scan.views.cashbacks import CBListView
 from scan.views.distribution import DistributionListView
 from scan.views.forged_blocks import ForgedBlocksListView
 from scan.views.index import index
-from scan.views.json import top_accounts_json, get_snr_json, get_state_json
+from scan.views.json import get_snr_json, get_state_json, top_accounts_json
 from scan.views.marketplace import MarketPlaceDetailView, MarketPlaceListView, MarketPlacePurchasesListView
 from scan.views.miners import MinerListView
 from scan.views.peers import PeerMonitorDetailView, PeerMonitorListView, peers_charts_view
