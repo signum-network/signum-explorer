@@ -18,7 +18,7 @@ from scan.views.cashbacks import CBListView
 from scan.views.distribution import DistributionListView
 from scan.views.forged_blocks import ForgedBlocksListView
 from scan.views.index import index
-from scan.views.json import TopAccountsJson, getSNRjson, getStatejson
+from scan.views.json import top_accounts_json, get_snr_json, get_state_json
 from scan.views.marketplace import MarketPlaceDetailView, MarketPlaceListView, MarketPlacePurchasesListView
 from scan.views.miners import MinerListView
 from scan.views.peers import PeerMonitorDetailView, PeerMonitorListView, peers_charts_view
@@ -58,11 +58,11 @@ urlpatterns = [
     path("peer/<str:address>", PeerMonitorDetailView.as_view(), name="peer-detail"),
     path("alias/", AliasListView.as_view(), name="alias"),
     path("sub/", SubscriptionListView.as_view(), name="subscription"),
-    path("SNRinfo/", getSNRjson, name="snr-info"),
-    path("json/SNRinfo/", getSNRjson, name="snr-info"),
-    path("json/state/<str:address>", getStatejson, name="state"),
-    path("json/accounts/", TopAccountsJson, name="json-account"),
-    path("json/accounts/<int:results>", TopAccountsJson),
+    path("SNRinfo/", get_snr_json, name="snr-info"),
+    path("json/SNRinfo/", get_snr_json, name="snr-info"),
+    path("json/state/<str:address>", get_state_json, name="state"),
+    path("json/accounts/", top_accounts_json, name="json-account"),
+    path("json/accounts/<int:results>", top_accounts_json),
     path("pools/", PoolListView.as_view(), name="pools"),
     path("pool/<str:id>", PoolDetailView.as_view(), name="pool-detail"),
     path("miner/", MinerListView.as_view(), name="miner"),
