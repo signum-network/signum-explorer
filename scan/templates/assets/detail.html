@@ -77,7 +77,7 @@ const template = `
        }
        if (obj.av) {
            avatar = Object.keys(obj.av)[0] ?? ''
-           item.avatar = '<img src="https://cloudflare-ipfs.com/ipfs/' + avatar + '" style="border-radius: 50%; height: 50px; width: 50px; object-fit: cover; object-position: center;"><br>';
+           item.avatar = '<img src="https://cloudflare-ipfs.com/ipfs/' + avatar + '" style="border-radius: 50%; height: 65px; width: 65px; object-fit: cover; object-position: center;"><br>';
        }
          out = template
            .replace('%avatar%', item.avatar)
