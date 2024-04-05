@@ -229,19 +229,13 @@ class AssetDetailView(IntSlugDetailView):
         # asset distributions
         assets_distribution_cnt = 0
         assets_distribution_tx =[]
-        distribution_tx  = (
-            Transaction.objects.using("java_wallet")
-            .filter(type=2,subtype =8).order_by("-height")
-        )
-
-        for distrib_tx in distribution_tx:
-            fill_data_asset_distribution(distrib_tx)
+        distribution_tx_qs = Transaction.objects.using("java_wallet").filter(type=2,subtype =8).order_by("-height")           
             
-        for distrib in distribution_tx:
-            asset_id = int.from_bytes(distrib.attachment_bytes[1:9], byteorder=sys.byteorder)
+        for distrib_tx in distribution_tx_qs:
+            asset_id = int.from_bytes(distrib_tx.attachment_bytes[1:9], byteorder=sys.byteorder)
             if asset_id == obj.id:
                 assets_distribution_cnt += 1
-                assets_distribution_tx.append(distrib)
+                fill_data_asset_distribution(distrib_tx)
 
         context["assets_distribution_cnt"] = assets_distribution_cnt
         context["assets_distribution_tx"] = assets_distribution_tx[:15]
@@ -409,4 +403,3 @@ class AssetDistributionDetailView(ListView):
         context["assets_distribution_tx"] = assets_distribution_tx
 
         return context
-
