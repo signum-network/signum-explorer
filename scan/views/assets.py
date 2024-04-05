@@ -235,7 +235,7 @@ class AssetDetailView(IntSlugDetailView):
             asset_id = int.from_bytes(distrib_tx.attachment_bytes[1:9], byteorder=sys.byteorder)
             if asset_id == obj.id:
                 assets_distribution_cnt += 1
-                fill_data_asset_distribution(distrib_tx)
+                assets_distribution_tx.append(distrib_tx)
 
         context["assets_distribution_cnt"] = assets_distribution_cnt
         context["assets_distribution_tx"] = assets_distribution_tx[:15]
