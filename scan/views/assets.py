@@ -224,7 +224,7 @@ class AssetDetailView(IntSlugDetailView):
                 assets_minting_cnt += 1
                 asset_minting_tx.append(mints)
         context["assets_minting_cnt"] = assets_minting_cnt
-        context["assets_minting_tx"] = asset_minting_tx
+        context["assets_minting_tx"] = asset_minting_tx[:15]
 
         # asset distributions
         assets_distribution_cnt = 0
