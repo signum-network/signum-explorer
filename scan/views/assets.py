@@ -393,12 +393,12 @@ class AssetDistributionDetailView(ListView):
         assets_distribution_tx =[]
         distribution_tx  = (
             Transaction.objects.using("java_wallet")
-            .filter(type=2,subtype=8).order_by("-height")
+            .filter(type=2,subtype =8).order_by("-height")
         )
 
         for distrib_tx in distribution_tx:
             fill_data_asset_distribution(distrib_tx)
-
+            
         for distrib in distribution_tx:
             asset_id = int.from_bytes(distrib.attachment_bytes[1:9], byteorder=sys.byteorder)
             if asset_id == obj.id:
