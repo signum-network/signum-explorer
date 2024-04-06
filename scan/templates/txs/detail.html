@@ -184,7 +184,6 @@
               <td>{{ tx.ec_block_height }}</td>
             </tr>
             {% endif %}
-            {% if tx.height != 0 %}
             <tr class="collapse show_more_info">
               <th>Has message</th>
               <td>{{ tx.has_message|yesno }}</td>
@@ -201,7 +200,6 @@
               <th>Has Encrypttoself Message</th>
               <td>{{ tx.has_encrypttoself_message|yesno }}</td>
             </tr>
-            {% endif %}
             <tr class="collapse show_more_info">
               <th>Sender Public Key</th>
               <td class="text-monospace" style="word-wrap: break-word; max-width: 250px">{{ tx.sender_public_key|bin2hex }}</td>
@@ -222,7 +220,6 @@
               <th>Full Hash</th>
               <td class="text-monospace" style="word-wrap: break-word; max-width: 250px">{{ tx.full_hash|bin2hex }}</td>
             </tr>
-            {% if tx.height != 0 %}
             {% if tx.has_message %}
             <tr>
               <th>Message</th>
@@ -245,7 +242,6 @@
                 <label for="attachment"></label>
               </td>
             </tr>
-            {% endif %}
             </tbody>
           </table>
         </div>
