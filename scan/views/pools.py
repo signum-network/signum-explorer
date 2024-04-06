@@ -77,11 +77,11 @@ class PoolListView(ListView):
         )
 
         pool_s_last_forged_blocks = []
-        pools_list = []
+        pools_set = set()
         for query in query_from_queryset:
-            if query["recip_id"] not in pools_list:
+            if query["recip_id"] not in pools_set:
                 pool_s_last_forged_blocks.append(query["block"])
-                pools_list.append(query["recip_id"])
+                pools_set.add(query["recip_id"])
 
         return (
             query_from_query_block

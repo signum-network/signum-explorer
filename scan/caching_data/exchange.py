@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ExchangeData:
     price_usd: float = float(os.environ.get("COINGECKO_PRICE_USD"))
-    price_btc: float = float(os.environ.get("COINGECKO_PRICE_BTC"))
     market_cap_usd: float = float(os.environ.get("COINGECKO_MKT_USD"))
     percent_change_24h: float = 0
 
