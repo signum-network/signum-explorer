@@ -228,6 +228,8 @@
                 <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message_sub }}</textarea>
               {% elif tx.type == 2 and tx.subtype == 1 %}
                 <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message_token }}</textarea>
+              {% elif tx.message_pend %}
+                <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx.message_pend }}</textarea>
                 {% else %}
                 <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message }}</textarea>
                 {% endif %}
