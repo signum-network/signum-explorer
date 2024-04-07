@@ -147,8 +147,8 @@ class TxDetailView(IntSlugDetailView):
                 referenced_transaction_fullhash=None,  # TODO
                 attachment_bytes=tx["attachment_bytes"],
                 version=tx["version"],
-                has_message=False,  # TODO 'attachment': {'version.Message': 1, 'message': 'test', 'messageIsText': True}
-                has_encrypted_message=False,  # TODO 'attachment': {'version.EncryptedMessage': 1, 'encryptedMessage': {'data': '952f0ff3bff6b61dbf4bd3677598e81dc114c1f0d3000d6fd2dd522f4cfa9e5e0fa836f15d668c60ab1d1aea9d4b4a2434c21d8116a0812ddb2d4b04431a330c', 'nonce': 'da9ace93c11ea07f584a56c74964166a0209ffbb3f4fc14c7a92aa71ac663444', 'isText': True}}
+                has_message=tx["has_message"],
+                has_encrypted_message=tx["has_encrypted_message"],
                 has_public_key_announcement=False,  # TODO
                 ec_block_height=tx["ecBlockHeight"],
                 ec_block_id=tx["ecBlockId"],
@@ -156,6 +156,7 @@ class TxDetailView(IntSlugDetailView):
             )
             #obj.attachment = tx.get("attachment")
             obj.multiout = tx.get("multiout")
+            obj.message_pend=tx.get("message_pend")
 
         return obj
 
