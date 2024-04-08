@@ -16,6 +16,10 @@
         <td class="text-nowrap align-top">
           <a href="{% url 'tx-detail' tx.id %}">{{ tx.id|truncatechars:10 }}</a><br>
           <span class="small">{{ tx.block_timestamp|naturaltime }}</span>
+          {% if tx.has_message %}
+          <br>
+          <small><span class="text-black-50"></span></small>
+          {% endif %}
         </td>
         <td class="text-nowrap">
           From
