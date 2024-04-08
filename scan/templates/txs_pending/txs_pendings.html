@@ -23,7 +23,11 @@
           <a href="{% url 'tx-detail' tx.transaction %}">{{ tx.transaction|truncatechars:10 }}</a><br>
           <span class="small">{{ tx.timestamp|naturaltime }}</span>
         </td>
-        <td class="d-none d-sm-table-cell">{{ tx.tx_name }}</td>
+        <td class="d-none d-sm-table-cell">{{ tx.tx_name }}
+        {% if tx.has_message %}
+        <span class="small">Has Message</span>
+        {% endif %}
+        </td>
         <td class="text-nowrap">
           {% include "account_link.html" with account_id=tx.sender account_name=tx.sender_name %}
         </td>
