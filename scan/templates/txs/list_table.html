@@ -31,6 +31,10 @@
           {% else %}
             <span> {{ tx|tx_type }}</span>
           {% endif %}
+          {% if tx.has_message %}
+          <br>
+          <small><span class="text-black-50">Has Message</span></small>
+          {% endif %}
         </td>
         <td class="text-nowrap d-none d-sm-table-cell">
           {% include "account_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
