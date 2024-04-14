@@ -6,6 +6,7 @@ from java_wallet.models import IndirectIncoming, Transaction
 
 class TxFilter(FilterSet):
     block = NumberFilter(field_name="block__height")
+    blk = NumberFilter(field_name="block__height")
     a = NumberFilter(method="filter_by_account")
     has_message = NumberFilter(field_name="has_message")
     type = NumberFilter(field_name="type")
