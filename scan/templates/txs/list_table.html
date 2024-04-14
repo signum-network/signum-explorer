@@ -71,7 +71,7 @@
       <th scope="col"></th>
       <th scope="col"><input class="form-control" type="text" name="recipient_id"{% if request.GET.recipient_id %} value="{{ request.GET.recipient_id }}{% endif %}"></th>
       <th scope="col"><input class="form-control" type="text" name="amount" style="max-width:100px;"{% if request.GET.amount %} value="{{ request.GET.amount }}{% endif %}"></th>
-      <th scope="col" style="width: 100px"><button class="btn btn-outline-dark my-sm-0" type="submit" value="Filter" style="float: left"><i class="fas fa-filter"></i></button></form><form name="clear" method="get"><button class="btn btn-outline-dark my-sm-0" type="submit" value="Clear" style="float: right"><i class="fa-solid fa-trash"></i></button></form></th>
+      <th scope="col" class="d-flex flex-row-reverse"><button class="btn btn-outline-dark my-sm-0 ml-1" type="submit" value="Filter" style="float: left"><i class="fas fa-filter"></i></button></form><form name="clear" method="get"><button class="btn btn-outline-dark my-sm-0" type="submit" value="Clear" style="float: right"><i class="fa-solid fa-trash"></i></button></form></th>
     </tr>
     </thead>
     {% endif %}
