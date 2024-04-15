@@ -7,7 +7,7 @@
     <thead>
       <tr>
         <th scope="col">ID</th>
-        <th scope="col" class="d-none d-sm-table-cell">Type</th>
+        <th scope="col">Type</th>
         <th scope="col">From</th>
         <th scope="col" class="d-none d-sm-table-cell">To</th>
         <th scope="col" class="d-none d-sm-table-cell">Value</th>
@@ -23,7 +23,25 @@
           <a href="{% url 'tx-detail' tx.transaction %}">{{ tx.transaction|truncatechars:10 }}</a><br>
           <span class="small">{{ tx.timestamp|naturaltime }}</span>
         </td>
-        <td class="d-none d-sm-table-cell">{{ tx.tx_name }}</td>
+        <td class="text-nowrap">{{ tx.tx_name }}
+          {% if tx.has_message %}
+          <br>
+          <small><span class="text-black-50" data-toggle="modal" data-target="#QRModal" title="" data-original-title="
+            {% if tx.type == 21 and tx.subtype == 3 %}
+              {{ tx|tx_message_sub }}
+            {% elif tx.type == 2 and tx.subtype == 1 %}
+              {{ tx|tx_message_token }}
+            {% elif tx.message_pend %}
+              {{ tx.message_pend }}
+            {% else %}
+              {{ tx|tx_message }}
+            {% endif %}">Has Message</span></small>
+          {% endif %}
+          {% if tx.has_encrypted_message %}
+          <br>
+          <small><span class="text-black-50">Has Message <i class="fa-solid fa-lock"></i></span></small>
+          {% endif %}
+        </td>
         <td class="text-nowrap">
           {% include "account_link.html" with account_id=tx.sender account_name=tx.sender_name %}
         </td>

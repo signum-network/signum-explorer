@@ -18,7 +18,7 @@ from scan.views.cashbacks import CBListView
 from scan.views.distribution import DistributionListView
 from scan.views.forged_blocks import ForgedBlocksListView
 from scan.views.index import index
-from scan.views.json import TopAccountsJson, getSNRjson, getStatejson
+from scan.views.json import TopAccountsJson, getSNRjson, getStatejson, getNodejson
 from scan.views.marketplace import (
     MarketPlaceDetailView,
     MarketPlaceListView,
@@ -68,6 +68,8 @@ urlpatterns = [
     path("sub/", SubscriptionListView.as_view(), name="subscription"),
     path("SNRinfo/", getSNRjson, name="snr-info"),
     path("json/SNRinfo/", getSNRjson, name="snr-info"),
+    path("json/snrinfo/", getSNRjson, name="snr-info"),
+    path("json/nodeinfo/<str:address>", getNodejson, name="node-info"),
     path("json/state/<str:address>", getStatejson, name="state"),
     path("json/accounts/", TopAccountsJson, name="json-account"),
     path("json/accounts/<int:results>", TopAccountsJson),

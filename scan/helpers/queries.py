@@ -254,6 +254,8 @@ def get_unconfirmed_transactions():
         t["amountNQT"] = int(t["amountNQT"])
         t["feeNQT"] = int(t["feeNQT"])
         t["sender_name"] = get_account_name(int(t["sender"]))
+        t["has_message"] = False
+        t["has_encrypted_message"] = False
 
         if "recipient" in t:
             t["recipient_exists"] = (
@@ -269,6 +271,11 @@ def get_unconfirmed_transactions():
             t["attachment_bytes"] =  bytes.fromhex(t["attachmentBytes"])
         if "attachment" in t and "recipients" in t["attachment"]:
             t["multiout"] = len(t["attachment"]["recipients"])
+        if "attachment" in t and "message" in t["attachment"] and "messageIsText" in t["attachment"]:
+            t["message_pend"] = t["attachment"]["message"]
+            t["has_message"] = True
+        if "attachment" in t and "encryptedMessage" in t["attachment"]:
+            t["has_encrypted_message"] = True    
 
         t["tx_name"] = get_desc_tx_type(t["type"], t["subtype"])
 

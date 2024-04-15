@@ -28,9 +28,8 @@
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
-
-        <div class="table-responsive">
-          <table class="table small table-sm">
+        <div class="table-responsive" id="update_pending">
+          <table class="table small table-sm" id="table_update">
             <tbody>
             <!--
             <tr>
@@ -185,7 +184,6 @@
               <td>{{ tx.ec_block_height }}</td>
             </tr>
             {% endif %}
-            {% if tx.height != 0 %}
             <tr class="collapse show_more_info">
               <th>Has message</th>
               <td>{{ tx.has_message|yesno }}</td>
@@ -202,7 +200,6 @@
               <th>Has Encrypttoself Message</th>
               <td>{{ tx.has_encrypttoself_message|yesno }}</td>
             </tr>
-            {% endif %}
             <tr class="collapse show_more_info">
               <th>Sender Public Key</th>
               <td class="text-monospace" style="word-wrap: break-word; max-width: 250px">{{ tx.sender_public_key|bin2hex }}</td>
@@ -223,7 +220,6 @@
               <th>Full Hash</th>
               <td class="text-monospace" style="word-wrap: break-word; max-width: 250px">{{ tx.full_hash|bin2hex }}</td>
             </tr>
-            {% if tx.height != 0 %}
             {% if tx.has_message %}
             <tr>
               <th>Message</th>
@@ -232,6 +228,8 @@
                 <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message_sub }}</textarea>
               {% elif tx.type == 2 and tx.subtype == 1 %}
                 <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message_token }}</textarea>
+              {% elif tx.message_pend %}
+                <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx.message_pend }}</textarea>
                 {% else %}
                 <textarea id="attachment" class="form-control" spellcheck="false" rows="5" disabled>{{ tx|tx_message }}</textarea>
                 {% endif %}
@@ -246,7 +244,6 @@
                 <label for="attachment"></label>
               </td>
             </tr>
-            {% endif %}
             </tbody>
           </table>
         </div>
@@ -254,15 +251,19 @@
       </div>
     </div>
   </div>
-
-  <!--
-  {% if tx.height == 0 %}
-  <script>
-    setTimeout(function(){
-       document.location.reload();
-    }, 10000);
-  </script>
-  {% endif %}
-  -->
-
+{% if tx.height != 0 %}
+{% else %}
+<script src="https://cdn.jsdelivr.net/npm/nanobar@0.4.2/nanobar.min.js"></script>
+<script>
+  var nanobar = new Nanobar();
+  setInterval(function () {
+    if ($('#table_update td:contains("Pending...")').length) {
+    nanobar.go(65);
+    $('#update_pending').load(location.href + ' #update_pending');
+    $(document).ajaxComplete(function () {
+      nanobar.go(100); //progress 100 after ajax update complete
+    });}
+  }, 10000); //update every X ms.
+</script>
+{% endif %}
 {% endblock %}

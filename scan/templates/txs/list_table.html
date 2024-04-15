@@ -3,26 +3,99 @@
 
 <div class="table-responsive">
   <table class="table table-hover small table-sm">
+    {% if '/address/' not in request.path and 'block' not in request.GET %}
+    <thead>
+    <form name="filters" id="filters" method="get" action="" onsubmit="disableEmptyInputs(this)">
+    <input type="hidden" name="filtered" value="1">
+    <tr>
+      <th scope="col"><input class="form-control" type="text" name="id" style="max-width:130px;"{% if request.GET.id %} value="{{ request.GET.id }}{% endif %}"></th>
+      <th scope="col"><input class="form-control" type="text" name="blk" style="max-width:130px;"{% if request.GET.blk %} value="{{ request.GET.blk }}{% endif %}"></th>
+      <th colspan="2" scope="col">
+        <select class="selectpicker form-control" data-live-search="true" name="tst">
+          <option disabled selected value="">Transaction Type</option>
+          <optgroup label="Payment">
+          <option value="0"{% if request.GET.tst == "0" %} selected{% endif %}>All Payments</option>
+          <option value="0_0"{% if request.GET.tst == "0_0" %} selected{% endif %}>Ordinary</option>
+          <option value="0_1"{% if request.GET.tst == "0_1" %} selected{% endif %}>Multi-Out</option>
+          <option value="0_2"{% if request.GET.tst == "0_2" %} selected{% endif %}>Multi-Out Same</option>
+          <optgroup label="Advanced Payment">
+          <option value="21"{% if request.GET.tst == "21" %} selected{% endif %}>All Advanced</option>
+          <option value="21_0"{% if request.GET.tst == "21_0" %} selected{% endif %}>Escrow Creation</option>
+          <option value="21_1"{% if request.GET.tst == "21_1" %} selected{% endif %}>Escrow Sign</option>
+          <option value="21_2"{% if request.GET.tst == "21_2" %} selected{% endif %}>Escrow Result</option>
+          <option value="21_3"{% if request.GET.tst == "21_3" %} selected{% endif %}>Auto-Pay Subscribe</option>
+          <option value="21_4"{% if request.GET.tst == "21_4" %} selected{% endif %}>Auto-Pay Cancel</option>
+          <option value="21_5"{% if request.GET.tst == "21_5" %} selected{% endif %}>Auto-Payment</option>
+          <optgroup label="Token">
+          <option value="2"{% if request.GET.tst == "2" %} selected{% endif %}>All Token</option>
+          <option value="2_0"{% if request.GET.tst == "2_0" %} selected{% endif %}>Issue</option>
+          <option value="2_1"{% if request.GET.tst == "2_1" %} selected{% endif %}>Transfer</option>
+          <option value="2_2"{% if request.GET.tst == "2_2" %} selected{% endif %}>Ask Order</option>
+          <option value="2_3"{% if request.GET.tst == "2_3" %} selected{% endif %}>Bid Order</option>
+          <option value="2_4"{% if request.GET.tst == "2_4" %} selected{% endif %}>Ask Order Cancel</option>
+          <option value="2_5"{% if request.GET.tst == "2_5" %} selected{% endif %}>Bid Order Cancel</option>
+          <option value="2_6"{% if request.GET.tst == "2_6" %} selected{% endif %}>Mint</option>
+          <option value="2_7"{% if request.GET.tst == "2_7" %} selected{% endif %}>Add Treasury Account</option>
+          <option value="2_8"{% if request.GET.tst == "2_8" %} selected{% endif %}>Distribute to Holders</option>
+          <option value="2_9"{% if request.GET.tst == "2_9" %} selected{% endif %}>Transfer Multi</option>
+          <option value="2_10"{% if request.GET.tst == "2_10" %} selected{% endif %}>Transfer Ownership</option>
+          <optgroup label="Mining">
+          <option value="20"{% if request.GET.tst == "20" %} selected{% endif %}>All Mining</option>
+          <option value="20_0"{% if request.GET.tst == "20_0" %} selected{% endif %}>Assign Reward Recipient</option>
+          <option value="20_1"{% if request.GET.tst == "20_1" %} selected{% endif %}>Add Commitment</option>
+          <option value="20_2"{% if request.GET.tst == "20_2" %} selected{% endif %}>Remove Commitment</option>
+          <optgroup label="Messaging">
+          <option value="1"{% if request.GET.tst == "1" %} selected{% endif %}>All Messaging</option>
+          <option value="1_0"{% if request.GET.tst == "1_0" %} selected{% endif %}>Arbitrary Message</option>
+          <option value="1_1"{% if request.GET.tst == "1_1" %} selected{% endif %}>Alias Assignment</option>
+          <option value="1_5"{% if request.GET.tst == "1_5" %} selected{% endif %}>Account Info</option>
+          <option value="1_6"{% if request.GET.tst == "1_6" %} selected{% endif %}>Alias Sell</option>
+          <option value="1_7"{% if request.GET.tst == "1_7" %} selected{% endif %}>Alias Buy</option>
+          <option value="1_8"{% if request.GET.tst == "1_8" %} selected{% endif %}>TLD Assign</option>
+          <optgroup label="Contract Transaction">
+          <option value="22"{% if request.GET.tst == "22" %} selected{% endif %}>All Contract Transactions</option>
+          <option value="22_0"{% if request.GET.tst == "22_0" %} selected{% endif %}>Deployment</option>
+          <option value="22_1"{% if request.GET.tst == "22_1" %} selected{% endif %}>Payment</option>
+          <optgroup label="Marketplace">
+          <option value="3"{% if request.GET.tst == "3" %} selected{% endif %}>All Marketplace</option>
+          <option value="3_0"{% if request.GET.tst == "3_0" %} selected{% endif %}>Listing</option>
+          <option value="3_1"{% if request.GET.tst == "3_1" %} selected{% endif %}>Delist</option>
+          <option value="3_2"{% if request.GET.tst == "3_2" %} selected{% endif %}>Price Change</option>
+          <option value="3_3"{% if request.GET.tst == "3_3" %} selected{% endif %}>Quantity Change</option>
+          <option value="3_4"{% if request.GET.tst == "3_4" %} selected{% endif %}>Purchase</option>
+          <option value="3_5"{% if request.GET.tst == "3_5" %} selected{% endif %}>Delivery</option>
+          <option value="3_6"{% if request.GET.tst == "3_6" %} selected{% endif %}>Feedback</option>
+          <option value="3_7"{% if request.GET.tst == "3_7" %} selected{% endif %}>Refund</option>
+          </select>
+          </th>
+      <th scope="col"><input class="form-control" type="text" name="sender_id"{% if request.GET.sender_id %} value="{{ request.GET.sender_id }}{% endif %}"></th>
+      <th scope="col"></th>
+      <th scope="col"><input class="form-control" type="text" name="recipient_id"{% if request.GET.recipient_id %} value="{{ request.GET.recipient_id }}{% endif %}"></th>
+      <th scope="col"><input class="form-control" type="text" name="amount" style="max-width:100px;"{% if request.GET.amount %} value="{{ request.GET.amount }}{% endif %}"></th>
+      <th scope="col" class="d-flex flex-row"><button class="btn btn-outline-dark my-sm-0 mr-1" type="submit" value="Filter" style="float: left"><i class="fas fa-filter"></i></button></form><form name="clear" method="get"><button class="btn btn-outline-dark my-sm-0" type="submit" value="Clear" style="float: right"><i class="fa-solid fa-trash"></i></button></form></th>
+    </tr>
+    </thead>
+    {% endif %}
     <thead>
     <tr>
-      <th scope="col">Transaction ID</th>
-      <th scope="col" class="d-none d-sm-table-cell">Block</th>
-      <th scope="col" class="d-none d-sm-table-cell">Timestamp</th>
+      <th scope="col">Trans ID</th>
+      <th scope="col">Block</th>
+      <th scope="col">Timestamp</th>
       <th scope="col">Type</th>
-      <th scope="col" class="d-none d-sm-table-cell">From</th>
+      <th scope="col">From</th>
       <th scope="col"></th>
-      <th scope="col" class="d-none d-sm-table-cell">To</th>
+      <th scope="col">To</th>
       <th scope="col">Value</th>
-      <th scope="col" class="d-none d-sm-table-cell">Fee</th>
+      <th scope="col">Fee</th>
     </tr>
     </thead>
     <tbody>
     {% for tx in txs %}
       <tr>
         <td><a href="{% url 'tx-detail' tx.id %}">{{ tx.id|truncatechars:10 }}</a></td>
-        <td class="d-none d-sm-table-cell"><a href="{% url 'block-detail' tx.height %}">{{ tx.height }}</a></td>
-        <td class="text-nowrap d-none d-sm-table-cell">{{ tx.block_timestamp|naturaltime }}</td>
-        <td>
+        <td class=" "><a href="{% url 'block-detail' tx.height %}">{{ tx.height }}</a></td>
+        <td><div class="truncate">{{ tx.block_timestamp|naturaltime }}</div></td>
+        <td class="text-nowrap">
           {% if tx.type == 2 and tx.subtype == 8 %}
             <span><a href="{% url 'distribution' %}?a={{ tx.id }}">{{ tx|tx_type }}</a></span>
             <br>
@@ -31,8 +104,25 @@
           {% else %}
             <span> {{ tx|tx_type }}</span>
           {% endif %}
+          {% if tx.has_message %}
+          <br>
+          <small><span class="text-black-50" data-toggle="modal" data-target="#QRModal" title="" data-original-title="
+            {% if tx.type == 21 and tx.subtype == 3 %}
+              {{ tx|tx_message_sub }}
+            {% elif tx.type == 2 and tx.subtype == 1 %}
+              {{ tx|tx_message_token }}
+            {% elif tx.message_pend %}
+              {{ tx.message_pend }}
+            {% else %}
+              {{ tx|tx_message }}
+            {% endif %}">Has Message</span></small>
+          {% endif %}
+          {% if tx.has_encrypted_message %}
+          <br>
+          <small><span class="text-black-50">Has Message <i class="fa-solid fa-lock"></i></span></small>
+          {% endif %}
         </td>
-        <td class="text-nowrap d-none d-sm-table-cell">
+        <td class="text-nowrap">
           {% include "account_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
         </td>
         <td>
@@ -46,7 +136,7 @@
             {% endif %}
           {% endif %}
         </td>
-        <td class="text-nowrap d-none d-sm-table-cell">
+        <td class="text-nowrap">
           {% if tx.recipient_id or tx.multiout %}
             {% include "recipient_link.html" with account_id=tx.recipient_id account_name=tx.recipient_name %}
           {% elif  tx.recipient_id == Null and tx.type == 0  %}
@@ -103,7 +193,7 @@
               <span class="text-success"> {{ tx|tx_symbol_distribution}} </span><br>
             {% endif %}
           </td>
-        <td class="text-nowrap d-none d-sm-table-cell">
+        <td class="text-nowrap">
           <span>{{ tx.fee|burst_amount|rounding:8|intcomma }}</span>
           <span class="text-success"> {% coin_symbol %} </span>
         </td>
@@ -113,3 +203,11 @@
     </tbody>
   </table>
 </div>
+<script>
+function disableEmptyInputs(form) {
+  var controls = form.elements;
+  for (var i=0, iLen=controls.length; i<iLen; i++) {
+    controls[i].disabled = controls[i].value == '';
+  }
+}
+</script>

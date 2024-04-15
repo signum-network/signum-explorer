@@ -23,6 +23,17 @@ body, html {
   backdrop-filter: blur(10px) saturate(125%);
 }
 
+.truncate {
+  padding: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1em;
+  }
+
 .wrapper {
   height: auto !important;
   height: 100%;
@@ -61,6 +72,7 @@ body, html {
 
 .table td, .table th {
   vertical-align: middle;
+  padding-right: 10px;
 }
 
 .footer {
@@ -282,5 +294,4 @@ body, html {
 
 svg > g:last-child > g:last-child { pointer-events: none }
 div.google-visualization-tooltip { pointer-events: none }
-
 
