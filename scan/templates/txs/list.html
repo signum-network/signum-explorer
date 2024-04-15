@@ -11,6 +11,9 @@ Total: {{ paginator.count|intcomma }}
 {% elif 'a' in request.GET %}
 Transactions for address {{ request.GET.a|num2rs }}
 Total: {{ paginator.count|intcomma }}
+{% elif request.GET.filtered %}
+Filtered Transactions
+Total: {{ paginator.count|intcomma }}
 {% else %}
 Signum Transactions
 Total: {{ txs_cnt|intcomma }}
@@ -21,10 +24,13 @@ Total: {{ txs_cnt|intcomma }}
   <h5 class="p-2">Transactions
     {% if 'block' in request.GET %}
       <br class="d-md-none" />
-      <small class="text-muted">for block #<a href="{% url 'block-detail' request.GET.block %}">{{ request.GET.block }}</a></small>
+      for block <small>#<a href="{% url 'block-detail' request.GET.block %}">{{ request.GET.block }}</a></small>
     {% elif 'a' in request.GET %}
       <br class="d-md-none" />
-      <small class="text-muted">for address <a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
+      for address <small><a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small>
+    {% elif request.GET.filtered %}
+      <br class="d-md-none" />
+      - Filtered
     {% endif %}
   </h5>
 
