@@ -6,6 +6,7 @@
     {% if '/address/' not in request.path and 'block' not in request.GET %}
     <thead>
     <form name="filters" id="filters" method="get" action="" onsubmit="disableEmptyInputs(this)">
+    <input type="hidden" name="filtered" value="1">
     <tr>
       <th scope="col"><input class="form-control" type="text" name="id" style="max-width:130px;"{% if request.GET.id %} value="{{ request.GET.id }}{% endif %}"></th>
       <th scope="col"><input class="form-control" type="text" name="blk" style="max-width:130px;"{% if request.GET.blk %} value="{{ request.GET.blk }}{% endif %}"></th>
@@ -105,7 +106,16 @@
           {% endif %}
           {% if tx.has_message %}
           <br>
-          <small><span class="text-black-50">Has Message</span></small>
+          <small><span class="text-black-50" data-toggle="modal" data-target="#QRModal" title="" data-original-title="
+            {% if tx.type == 21 and tx.subtype == 3 %}
+              {{ tx|tx_message_sub }}
+            {% elif tx.type == 2 and tx.subtype == 1 %}
+              {{ tx|tx_message_token }}
+            {% elif tx.message_pend %}
+              {{ tx.message_pend }}</textarea>
+            {% else %}
+              {{ tx|tx_message }}
+            {% endif %}">Has Message</span></small>
           {% endif %}
         </td>
         <td class="text-nowrap">
