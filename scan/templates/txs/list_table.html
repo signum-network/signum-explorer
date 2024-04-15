@@ -117,6 +117,10 @@
               {{ tx|tx_message }}
             {% endif %}">Has Message</span></small>
           {% endif %}
+          {% if tx.has_encrypted_message %}
+          <br>
+          <small><span class="text-black-50">Has Message <i class="fa-solid fa-lock"></i></span></small>
+          {% endif %}
         </td>
         <td class="text-nowrap">
           {% include "account_link.html" with account_id=tx.sender_id account_name=tx.sender_name %}
