@@ -7,6 +7,9 @@
     <thead>
     <form name="filters" id="filters" method="get" action="" onsubmit="disableEmptyInputs(this)">
     <input type="hidden" name="filtered" value="1">
+    {% if request.GET.a %}
+    <input type="hidden" name="a" value="{{ request.GET.a }}">
+    {% endif %}
     <tr>
       <th scope="col"><input class="form-control" type="text" name="id" style="max-width:130px;"{% if request.GET.id %} value="{{ request.GET.id }}{% endif %}"></th>
       <th scope="col"><input class="form-control" type="text" name="blk" style="max-width:130px;"{% if request.GET.blk %} value="{{ request.GET.blk }}{% endif %}"></th>
@@ -72,7 +75,7 @@
       <th scope="col"></th>
       <th scope="col"><input class="form-control" type="text" name="recipient_id"{% if request.GET.recipient_id %} value="{{ request.GET.recipient_id }}{% endif %}"></th>
       <th scope="col"><input class="form-control" type="text" name="amount" style="max-width:100px;"{% if request.GET.amount %} value="{{ request.GET.amount }}{% endif %}"></th>
-      <th scope="col" class="d-flex flex-row"><button class="btn btn-outline-dark my-sm-0 mr-1" type="submit" value="Filter" style="float: left"><i class="fas fa-filter"></i></button></form><form name="clear" method="get"><button class="btn btn-outline-dark my-sm-0" type="submit" value="Clear" style="float: right"><i class="fa-solid fa-trash"></i></button></form></th>
+      <th scope="col" class="d-flex flex-row"><button class="btn btn-outline-dark my-sm-0 mr-1" type="submit" value="Filter" style="float: left"><i class="fas fa-filter"></i></button></form><form name="clear" method="get">{% if request.GET.a %}<input type="hidden" name="a" value="{{ request.GET.a }}">{% endif %}<button class="btn btn-outline-dark my-sm-0" type="submit" value="Clear" style="float: right"><i class="fa-solid fa-trash"></i></button></form></th>
     </tr>
     </thead>
     {% endif %}
