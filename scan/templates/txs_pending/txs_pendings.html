@@ -32,7 +32,7 @@
             {% elif tx.type == 2 and tx.subtype == 1 %}
               {{ tx|tx_message_token }}
             {% elif tx.message_pend %}
-              {{ tx.message_pend }}</textarea>
+              {{ tx.message_pend }}
             {% else %}
               {{ tx|tx_message }}
             {% endif %}">Has Message</span></small>
