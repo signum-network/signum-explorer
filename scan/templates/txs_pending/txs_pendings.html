@@ -24,10 +24,19 @@
           <span class="small">{{ tx.timestamp|naturaltime }}</span>
         </td>
         <td class="text-nowrap">{{ tx.tx_name }}
-        {% if tx.has_message %}
-        <br>
-        <small><span class="text-black-50">Has Message</span></small>
-        {% endif %}
+          {% if tx.has_message %}
+          <br>
+          <small><span class="text-black-50" data-toggle="modal" data-target="#QRModal" title="" data-original-title="
+            {% if tx.type == 21 and tx.subtype == 3 %}
+              {{ tx|tx_message_sub }}
+            {% elif tx.type == 2 and tx.subtype == 1 %}
+              {{ tx|tx_message_token }}
+            {% elif tx.message_pend %}
+              {{ tx.message_pend }}</textarea>
+            {% else %}
+              {{ tx|tx_message }}
+            {% endif %}">Has Message</span></small>
+          {% endif %}
         </td>
         <td class="text-nowrap">
           {% include "account_link.html" with account_id=tx.sender account_name=tx.sender_name %}
