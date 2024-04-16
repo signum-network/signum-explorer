@@ -167,7 +167,7 @@ def tx_message_token(tx: Transaction) -> str:
         if not tx.has_message or not tx.attachment_bytes:
             return ""
         return get_message_token(tx.attachment_bytes)
-    except Exception:
+    except AttributeError:
         pass
 
 @register.filter
