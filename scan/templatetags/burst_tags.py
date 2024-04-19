@@ -163,9 +163,12 @@ def tx_message_sub(tx: Transaction) -> str:
 
 @register.filter
 def tx_message_token(tx: Transaction) -> str:
-    if not tx.has_message or not tx.attachment_bytes:
-        return ""
-    return get_message_token(tx.attachment_bytes)
+    try:
+        if not tx.has_message or not tx.attachment_bytes:
+            return ""
+        return get_message_token(tx.attachment_bytes)
+    except AttributeError:
+        pass
 
 @register.filter
 def tx_type(tx: Transaction) -> str:

@@ -43,9 +43,23 @@ body, html {
 }
 
 .wrapper-home {
-  background-image: url('expbg.jpg') !important;
-  background-repeat: no-repeat;
+  background-image: url('../expbg.jpg') !important;
+  background-repeat: repeat-x;
   background-position: center top;
+  overflow: hidden;
+  position: relative;
+}
+
+.floating-logo {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  top: -100px;
+  right: -200px;
+  background: url('../logo_floating.svg');
+  background-position: 50% 50%;
+  background-size: cover;
+  opacity: 0.10;
 }
 
 .table > tbody > tr:first-child > th,
@@ -294,4 +308,3 @@ body, html {
 
 svg > g:last-child > g:last-child { pointer-events: none }
 div.google-visualization-tooltip { pointer-events: none }
-
