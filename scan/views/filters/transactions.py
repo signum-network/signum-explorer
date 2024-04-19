@@ -1,7 +1,8 @@
 from django.db.models import Q
 from django_filters import FilterSet, NumberFilter, CharFilter
 from burst.libs.reed_solomon import ReedSolomon, ReedSolomonError
-from java_wallet.models import IndirectIncoming, Transaction
+from java_wallet.models import IndirectIncoming, Transaction, Account
+
 import os
 
 
@@ -28,8 +29,23 @@ class TxFilter(FilterSet):
                 value = value[len(os.environ.get("ADDRESS_PREFIX")):]
                 numeric_id = ReedSolomon().decode(value)
                 return queryset.filter(**{name: numeric_id})
-            else:
+            elif value.isdigit():
                 return queryset.filter(**{name: value})
+            else:
+                account_exists = (
+                    Account.objects.using("java_wallet")
+                    .filter(name=value).exists()
+                )
+                if account_exists:
+                    act_name = (
+                        Account.objects.using("java_wallet")
+                        .filter(name=value)
+                        .order_by("-height")
+                        .values_list("id", flat=True)
+                        .first()
+                    )
+                return queryset.filter(**{name: act_name})
+
         except:
             return queryset.filter()
         
