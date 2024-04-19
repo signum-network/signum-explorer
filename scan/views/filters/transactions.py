@@ -46,10 +46,10 @@ class TxFilter(FilterSet):
                     )
                     return queryset.filter(**{name: act_name})
                 else:
-                    return queryset.filter(**{name: '010'})
+                    return queryset.filter(**{name: '000'})
 
         except:
-            return queryset.filter(**{name: '010'})
+            return queryset.filter(**{name: '000'})
         
     def tx_type_subtype(self, queryset, name, value):
         try:
