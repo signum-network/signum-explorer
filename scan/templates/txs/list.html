@@ -8,7 +8,7 @@
 {% if request.GET.filtered and request.GET.a %}
 Filtered Transactions for address {{ request.GET.a|num2rs }}
 Total: {{ paginator.count|intcomma }}
-{% elif request.GET.filtered and request.GET.a %}
+{% elif request.GET.filtered %}
 Filtered Transactions
 Total: {{ paginator.count|intcomma }}
 {% elif 'block' in request.GET %}
@@ -28,7 +28,7 @@ Total: {{ txs_cnt|intcomma }}
     {% if request.GET.filtered and request.GET.a %}
       <br class="d-md-none" />
       for address <small><a href="{% url 'address-detail' request.GET.a %}">{{ request.GET.a|num2rs }}</a></small> - Filtered
-    {% elif request.GET.filtered and request.GET.a %}
+    {% elif request.GET.filtered %}
       <br class="d-md-none" />
       - Filtered
     {% elif 'block' in request.GET %}
