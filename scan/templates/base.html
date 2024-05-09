@@ -105,7 +105,7 @@
           {% if submit == 'Search' %}
           <div class="alert alert-danger" role="alert">
             {% if request.GET.q %}
-            No exact match when searching for '{{ request.GET.q }}'.
+            No exact match when searching for '{{ request.GET.q }}'. You might try our <a href="/txs/" class="alert-link">advanced search and filtering</a>.
             {% else %}
             Nothing found. You might try our <a href="/txs/" class="alert-link">advanced search and filtering</a>.
             {% endif %}
