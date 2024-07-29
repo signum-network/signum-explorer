@@ -107,6 +107,15 @@
                 {% if peer.created_at|hours_ago:48 %}    {# other badges here #}
                 <a href="#" class="text-warning text-decoration-none" data-toggle="modal" data-html="true" title="New Node <br> Found <br> {{ peer.created_at|naturaltime }}"><i class="fa-solid fa-star"></i></a>
                 {% endif %}
+                {% with peer.platform|split:';' as platf %}
+                {% if platf.1 == '0'%}
+                <a href="#" class="text-danger text-decoration-none" data-toggle="modal" data-html="true" title="Node Voted <br> REJECT"><i class="fa-solid fa-square-poll-vertical"></i></a>
+                {% elif platf.1 == '1'%}
+                <a href="#" class="text-success text-decoration-none" data-toggle="modal" data-html="true" title="Node Voted <br> APPROVE"><i class="fa-solid fa-square-poll-vertical"></i></a>
+                {% elif platf.1 == '2'%}
+                <a href="#" class="text-warning text-decoration-none" data-toggle="modal" data-html="true" title="Node Voted <br> NO VOTE"><i class="fa-solid fa-square-poll-vertical"></i></a>
+                {% endif %}
+                {% endwith %}
                 </td>
                 <td>{{ peer.availability|floatformat:2 }}%</td>
                 <td>{{ peer.height }}</td>
