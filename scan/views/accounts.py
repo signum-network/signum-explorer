@@ -44,7 +44,7 @@ class AccountsListView(ListView):
         qs = cache.get('top_accounts')
         if not qs:
             qs = AccountBalance.objects.using("java_wallet").filter(latest=True, balance__gte=10000000000000).exclude(id=0).order_by('-balance').all()[:1000]
-            cache.set('top_accounts', qs, 60 * 60 * 24)  # Cache for 24 hours
+            cache.set('top_accounts', qs, 86400)  # Cache for 24 hours
         return qs
 
     def get_context_data(self, **kwargs):
