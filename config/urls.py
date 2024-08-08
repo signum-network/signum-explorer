@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.urls import include, path
+from django.views.decorators.cache import cache_page
 
 from scan.views.accounts import AccountsListView, AddressDetailView
 from scan.views.aliases import AliasListView
@@ -18,7 +19,7 @@ from scan.views.cashbacks import CBListView
 from scan.views.distribution import DistributionListView
 from scan.views.forged_blocks import ForgedBlocksListView
 from scan.views.index import index
-from scan.views.json import TopAccountsJson, getSNRjson, getStatejson, getNodejson
+from scan.views.json import TopAccountsJson, getSNRjson, getStatejson, getNodejson, getallNodejson
 from scan.views.marketplace import (
     MarketPlaceDetailView,
     MarketPlaceListView,
@@ -70,10 +71,11 @@ urlpatterns = [
     path("json/SNRinfo/", getSNRjson, name="snr-info"),
     path("json/snrinfo/", getSNRjson, name="snr-info"),
     path("json/nodeinfo/<str:address>", getNodejson, name="node-info"),
+    path("json/allnodeinfo/", getallNodejson, name="allnode-info"),
     path("json/state/<str:address>", getStatejson, name="state"),
     path("json/accounts/", TopAccountsJson, name="json-account"),
     path("json/accounts/<int:results>", TopAccountsJson),
-    path("pools/", PoolListView.as_view(), name="pools"),
+    path("pools/", cache_page(60 * 4)(PoolListView.as_view()), name="pools"),
     path("pool/<str:id>", PoolDetailView.as_view(), name="pool-detail"),
     path("miner/", MinerListView.as_view(), name="miner"),
     path("forged-blocks/", ForgedBlocksListView.as_view(), name="forged-blocks"),
