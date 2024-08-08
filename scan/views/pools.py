@@ -19,12 +19,10 @@ from scan.helpers.queries import (
 from scan.views.base import IntSlugDetailView
 from scan.views.transactions import fill_data_transaction
 
-
 def fill_data_pool(pool):
     pool["url"] = get_description_url(pool["pool_id"])
     pool["miners_cnt"] = get_count_of_miners(pool["pool_id"])
     pool["block_timestamp"] = get_timestamp_of_block(pool["height"])
-
 
 class PoolListView(ListView):
     model = RewardRecipAssign
@@ -36,7 +34,7 @@ class PoolListView(ListView):
     template_name = "pools/list.html"
     context_object_name = "pools"
     paginator_class = CachingPaginator
-    paginate_by = 25
+    paginate_by = 5000
     ordering = "-block"
 
     def get_queryset(self):
@@ -95,8 +93,17 @@ class PoolListView(ListView):
         for pool in obj:
             fill_data_pool(pool)
 
-        return context
+        # Remove duplicate pools
+        unique_pools = []
+        unique_pool_ids = set()
+        for pool in obj:
+            if pool["pool_id"] not in unique_pool_ids:
+                unique_pools.append(pool)
+                unique_pool_ids.add(pool["pool_id"])
 
+        context[self.context_object_name] = unique_pools
+
+        return context
 
 class PoolDetailView(IntSlugDetailView):
     model = Account
