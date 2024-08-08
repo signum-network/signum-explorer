@@ -42,7 +42,7 @@ Total: {{ paginator.count|intcomma }}
               <tr>
                 <td><a href="{% url 'block-detail' pool.height %}">{{ pool.height }}</a></td>
                 <td class="text-nowrap">{{ pool.block_timestamp|naturaltime }}</td>
-                <td class="d-none d-sm-table-cell"><a href="{% url 'pool-detail' pool.pool_id %}">{{ pool.pool_id|num2rs }}</a></td>
+                <td class="d-none d-sm-table-cell"><a href="{% url 'address-detail' pool.pool_id %}">{{ pool.pool_id|num2rs }}</a></td>
                 {% if pool.url %}
                   <td><a href="{{ pool.url }}">{{ pool.pool_id|account_name_string }}</a></td>
                 {% else %}
