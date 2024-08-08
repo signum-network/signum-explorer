@@ -76,7 +76,6 @@ urlpatterns = [
     path("json/accounts/", TopAccountsJson, name="json-account"),
     path("json/accounts/<int:results>", TopAccountsJson),
     path("pools/", cache_page(60 * 4)(PoolListView.as_view()), name="pools"),
-    path("pool/<str:id>", PoolDetailView.as_view(), name="pool-detail"),
     path("miner/", MinerListView.as_view(), name="miner"),
     path("forged-blocks/", ForgedBlocksListView.as_view(), name="forged-blocks"),
     # path("admin/", admin.site.urls),
