@@ -40,6 +40,12 @@ def getNodejson(request, address):
     noderaw = list(PeerMonitor.objects.all().filter(announced_address=address).values('announced_address', 'real_ip', 'platform', 'application', 'version', 'country_code', 'state', 'lifetime', 'downtime', 'availability', 'last_online_at', 'created_at', 'modified_at', 'reward_state', 'reward_time'))
     return JsonResponse(noderaw, safe=False)
 
+@cache_memoize(10)
+@require_http_methods(["GET"])
+def getallNodejson(request):
+    noderaw = list(PeerMonitor.objects.all().filter().values('announced_address', 'real_ip', 'platform', 'application', 'version', 'country_code', 'state', 'lifetime', 'downtime', 'availability', 'last_online_at', 'created_at', 'modified_at', 'reward_state', 'reward_time'))
+    return JsonResponse(noderaw, safe=False)
+
 @cache_memoize(300)
 @require_http_methods(["GET"])
 def getSNRjson(request):
