@@ -283,7 +283,7 @@ def get_unconfirmed_transactions():
 
     return txs_pending
 
-
+@cache_memoize(120)
 def get_description_url(pool_id: int) -> str:
     description = (
         Account.objects.using("java_wallet")
@@ -296,8 +296,28 @@ def get_description_url(pool_id: int) -> str:
         return json.loads(description)["hp"]
     except (json.JSONDecodeError, TypeError, KeyError):
         return ''
+        
+@cache_memoize(120)
+def get_description_banner(pool_id: int) -> str:
+    description = (
+        Account.objects.using("java_wallet")
+        .filter(id=pool_id)
+        .values_list("description", flat=True)
+        .filter(latest=1)
+        .first()
+    )
+    try:
+        data = json.loads(description)
+        key = str(data["bg"])
+        split_key = key.split("'")
+        if len(split_key) > 1:
+            return split_key[1]
+        else:
+            return ''
+    except (json.JSONDecodeError, TypeError, KeyError):
+        return ''
 
-
+@cache_memoize(120)
 def get_count_of_miners(pool_id: int) -> int:
     return (
         RewardRecipAssign.objects.using("java_wallet")
@@ -305,7 +325,7 @@ def get_count_of_miners(pool_id: int) -> int:
         .filter(latest=1)
     ).count()
 
-
+@cache_memoize(120)
 def get_timestamp_of_block(height: int) -> datetime:
     return (
         Block.objects.using("java_wallet")
@@ -314,7 +334,7 @@ def get_timestamp_of_block(height: int) -> datetime:
         .first()
     )
 
-
+@cache_memoize(120)
 def get_forged_blocks_of_pool(pool_id):
     miners = (
         RewardRecipAssign.objects.using("java_wallet")
