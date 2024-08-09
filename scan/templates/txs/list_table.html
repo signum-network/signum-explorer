@@ -11,9 +11,9 @@
     <input type="hidden" name="a" value="{{ request.GET.a }}">
     {% endif %}
     <tr>
-      <th scope="col" data-toggle="tooltip" data-placement="bottom" data-title="Search by Transaction ID, only numbers are allowed here"><input class="form-control" type="number" name="id" style="max-width:130px;"{% if request.GET.id %} value="{{ request.GET.id }}{% endif %}"></th>
-      <th scope="col" data-toggle="tooltip" data-placement="bottom" data-title="Search by Block Height, only numbers are allowed here"><input class="form-control" type="number" name="blk" style="max-width:130px;"{% if request.GET.blk %} value="{{ request.GET.blk }}{% endif %}"></th>
-      <th colspan="2" scope="col" data-toggle="tooltip" data-placement="bottom" data-title="Search by Transaction Type/Subtype">
+      <th scope="col" data-toggle="tooltip" data-placement="right" data-title="Search by Transaction ID, only numbers are allowed here"><input class="form-control" type="number" name="id" style="max-width:130px;"{% if request.GET.id %} value="{{ request.GET.id }}{% endif %}"></th>
+      <th scope="col" data-toggle="tooltip" data-placement="left" data-title="Search by Block Height, only numbers are allowed here"><input class="form-control" type="number" name="blk" style="max-width:130px;"{% if request.GET.blk %} value="{{ request.GET.blk }}{% endif %}"></th>
+      <th colspan="2" scope="col" data-toggle="tooltip" data-placement="left" data-title="Search by Transaction Type/Subtype">
         <select class="selectpicker form-control" data-live-search="true" name="tst">
           <option disabled selected value="">Transaction Type</option>
           <optgroup label="Payment">
@@ -71,10 +71,10 @@
           <option value="3_7"{% if request.GET.tst == "3_7" %} selected{% endif %}>Refund</option>
           </select>
           </th>
-      <th scope="col" data-toggle="tooltip" data-placement="bottom" data-title="Search by Sender. Hint: You can use Account name, number, or address here."><input class="form-control" type="text" name="sender_id"{% if request.GET.sender_id %} value="{{ request.GET.sender_id }}{% endif %}"></th>
+      <th scope="col" data-toggle="tooltip" data-placement="left" data-title="Search by Sender. Hint: You can use Account name, number, or address here."><input class="form-control" type="text" name="sender_id"{% if request.GET.sender_id %} value="{{ request.GET.sender_id }}{% endif %}"></th>
       <th scope="col"></th>
-      <th scope="col" data-toggle="tooltip" data-placement="bottom" data-title="Search by Receiver. Hint: You can use Account name, number, or address here."><input class="form-control" type="text" name="recipient_id"{% if request.GET.recipient_id %} value="{{ request.GET.recipient_id }}{% endif %}"></th>
-      <th scope="col" data-toggle="tooltip" data-placement="bottom" data-title="Search by transaction Value. Hint: You can search for values greater than > X, less than, or equal to. Only numbers are allowed here.">
+      <th scope="col" data-toggle="tooltip" data-placement="left" data-title="Search by Receiver. Hint: You can use Account name, number, or address here."><input class="form-control" type="text" name="recipient_id"{% if request.GET.recipient_id %} value="{{ request.GET.recipient_id }}{% endif %}"></th>
+      <th scope="col" data-toggle="tooltip" data-placement="left" data-title="Search by transaction Value. Hint: You can search for values greater than > X, less than, or equal to. Only numbers are allowed here.">
         <div class="input-group">
           <div class="input-group-prepend">
             <select class="selectpicker form-control btn btn-outline-secondary dropdown-toggle" name="vgtlt">
@@ -87,8 +87,8 @@
         </div>
       </th>  
       <th scope="col" class="d-flex flex-row">
-        <div class="form-check form-check-inline" data-toggle="tooltip" data-placement="bottom" data-title="Show only transactions that Have a message."><input class="form-check-input" type="checkbox" id="has_message" name="has_message" value="1" {% if request.GET.has_message == "1" %} checked{% endif %}><label class="form-check-label" for="has_message"><i class="fa-solid fa-message pt-1"></i></label>
-        </div><button class="btn btn-outline-dark my-sm-0 mr-1" type="submit" value="Filter" style="float: left" data-toggle="tooltip" data-placement="bottom" data-title="Filter Results"><i class="fas fa-filter"></i></button></form><form name="clear" method="get">{% if request.GET.a %}<input type="hidden" name="a" value="{{ request.GET.a }}">{% endif %}<button class="btn btn-outline-dark my-sm-0" type="submit" value="Clear" style="float: right" data-toggle="tooltip" data-placement="bottom" data-title="Clear filter form"><i class="fa-solid fa-trash"></i></button></form></th>
+        <div class="form-check form-check-inline" data-toggle="tooltip" data-placement="left" data-title="Show only transactions that Have a message."><input class="form-check-input" type="checkbox" id="has_message" name="has_message" value="1" {% if request.GET.has_message == "1" %} checked{% endif %}><label class="form-check-label" for="has_message"><i class="fa-solid fa-message pt-1"></i></label>
+        </div><button class="btn btn-outline-dark my-sm-0 mr-1" type="submit" value="Filter" style="float: left" data-toggle="tooltip" data-placement="left" data-title="Filter Results"><i class="fas fa-filter"></i></button></form><form name="clear" method="get">{% if request.GET.a %}<input type="hidden" name="a" value="{{ request.GET.a }}">{% endif %}<button class="btn btn-outline-dark my-sm-0" type="submit" value="Clear" style="float: right" data-toggle="tooltip" data-placement="left" data-title="Clear filter form"><i class="fa-solid fa-trash"></i></button></form></th>
     </tr>
     </thead>
     {% endif %}
