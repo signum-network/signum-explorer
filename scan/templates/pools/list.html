@@ -31,9 +31,9 @@ Total: {{ paginator.count|intcomma }}
             <thead>
             <tr>
               <th scope="col">Last forged block</th>
-              <th scope="col">Timestamp</th>
-              <th scope="col" class="d-none d-sm-table-cell">Pool</th>
-              <th scope="col">Name</th>
+              <th scope="col" class="d-none d-sm-table-cell">Timestamp</th>
+              <th scope="col" class="text-center">Pool</th>
+              <th scope="col" class="text-center">Pool Link</th>
               <th scope="col" class="d-none d-sm-table-cell">Registered miners</th>
             </tr>
             </thead>
@@ -41,12 +41,14 @@ Total: {{ paginator.count|intcomma }}
             {% for pool in pools %}
               <tr>
                 <td><a href="{% url 'block-detail' pool.height %}">{{ pool.height }}</a></td>
-                <td class="text-nowrap">{{ pool.block_timestamp|naturaltime }}</td>
-                <td class="d-none d-sm-table-cell"><a href="{% url 'address-detail' pool.pool_id %}">{{ pool.pool_id|num2rs }}</a></td>
-                {% if pool.url %}
-                  <td><a href="{{ pool.url }}">{{ pool.pool_id|account_name_string }}</a></td>
+                <td class="d-none d-sm-table-cell text-nowrap">{{ pool.block_timestamp|naturaltime }}</td>
+                <td class="text-center">{% include "account_link.html" with account_id=pool.pool_id account_name=pool.pool_id|account_name_string %}</td>
+		{% if pool.banner and pool.url %}
+		  <td class="text-center"><a href="{{ pool.url }}" target="_blank"><img src="{{ ipfs_gateway }}{{ pool.banner }}" style="height: 50px; width: 230px;"></a></td>
+                {% elif pool.url %}
+                  <td class="text-center"><a href="{{ pool.url }}">{{ pool.pool_id|account_name_string }}</a></td>
                 {% else %}
-                  <td style="word-wrap: break-word; max-width: 250px">{{ pool.pool_id|account_name_string }}</td>
+                  <td style="word-wrap: break-word; max-width: 250px"> </td>
                 {% endif %}
                 <td class="d-none d-sm-table-cell"><a href="{% url 'miner' %}?a={{ pool.pool_id }}">{{ pool.miners_cnt }}</a></td>
               </tr>
