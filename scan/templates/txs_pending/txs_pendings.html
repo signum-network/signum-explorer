@@ -26,7 +26,7 @@
         <td class="text-nowrap">{{ tx.tx_name }}
           {% if tx.has_message %}
           <br>
-          <small><span class="text-black-50" data-toggle="modal" data-target="#QRModal" title="" data-original-title="
+          <small><span class="text-black-50" data-toggle="modal" data-placement="left" data-target="#QRModal" title="" data-original-title="
             {% if tx.type == 21 and tx.subtype == 3 %}
               {{ tx|tx_message_sub }}
             {% elif tx.type == 2 and tx.subtype == 1 %}
