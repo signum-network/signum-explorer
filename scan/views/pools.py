@@ -13,6 +13,7 @@ from scan.helpers.queries import (
     get_account_name,
     get_count_of_miners,
     get_description_url,
+    get_description_banner,
     get_forged_blocks_of_pool,
     get_timestamp_of_block,
 )
@@ -21,6 +22,7 @@ from scan.views.transactions import fill_data_transaction
 
 def fill_data_pool(pool):
     pool["url"] = get_description_url(pool["pool_id"])
+    pool["banner"] = get_description_banner(pool["pool_id"])
     pool["miners_cnt"] = get_count_of_miners(pool["pool_id"])
     pool["block_timestamp"] = get_timestamp_of_block(pool["height"])
 
