@@ -44,7 +44,7 @@ Total: {{ paginator.count|intcomma }}
                 <td class="d-none d-sm-table-cell text-nowrap">{{ pool.block_timestamp|naturaltime }}</td>
                 <td class="text-center">{% include "account_link.html" with account_id=pool.pool_id account_name=pool.pool_id|account_name_string %}</td>
 		{% if pool.banner and pool.url %}
-		  <td class="text-center"><a href="{{ pool.url }}" target="_blank"><img src="{{ ipfs_gateway }}{{ pool.banner }}" style="height: 50px; width: 230px;"></a></td>
+		  <td class="text-center"><a href="{{ pool.url }}" target="_blank"><img src="{{ ipfs_gateway }}{{ pool.banner }}" class="rounded-sm" style="height: 50px; width: 230px;"></a></td>
                 {% elif pool.url %}
                   <td class="text-center"><a href="{{ pool.url }}">{{ pool.pool_id|account_name_string }}</a></td>
                 {% else %}
