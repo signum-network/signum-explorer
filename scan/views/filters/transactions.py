@@ -5,7 +5,6 @@ from java_wallet.models import IndirectIncoming, Transaction, Account
 
 import os
 
-
 class TxFilter(FilterSet):
     block = NumberFilter(field_name="block__height")
     blk = NumberFilter(field_name="block__height")
@@ -18,11 +17,11 @@ class TxFilter(FilterSet):
     sender_id = CharFilter(field_name="sender_id", method="rs_id")
     recipient_id = CharFilter(field_name="recipient_id", method="rs_id")
     tst = CharFilter(method="tx_type_subtype")
-       
+    
     class Meta:
         model = Transaction
         fields = ("block", "a", "has_message", "type", "subtype", "id", "amount", "sender_id", "recipient_id")
-   
+    
     def rs_id(self, queryset, name, value):
         try:
             if value.startswith(os.environ.get("ADDRESS_PREFIX")):
@@ -46,10 +45,10 @@ class TxFilter(FilterSet):
                     )
                     return queryset.filter(**{name: act_name})
                 else:
-                    return queryset.filter(**{name: '000'})
+                    return queryset.filter(**{name: '99'})
 
         except:
-            return queryset.filter(**{name: '000'})
+            return queryset.filter(**{name: '99'})
         
     def tx_type_subtype(self, queryset, name, value):
         try:
@@ -60,7 +59,8 @@ class TxFilter(FilterSet):
         return queryset
 
     def scale_amount(self, queryset, name, value):
-        return queryset.filter(**{name: value * 100000000})
+        vgtlt = "exact"
+        return queryset.filter(**{name + '__' + vgtlt: value * 100000000})
 
     @staticmethod
     def filter_by_account(queryset, name, value):

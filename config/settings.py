@@ -257,6 +257,8 @@ if SENTRY_DSN:
 # UA-XXXXXXXXX-X
 GOOGLE_TRACKING_ID = os.environ.get("GOOGLE_TRACKING_ID")
 
+IPFS_GATEWAY = os.environ.get("IPFS_GATEWAY", "https://ipfs.io/ipfs/")
+
 DEFAULT_P2P_PORT = int(os.environ.get("DEFAULT_P2P_PORT", 8123))
 DEFAULT_API_V1_PORT = int(os.environ.get("DEFAULT_API_V1_PORT", 8125))
 
