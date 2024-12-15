@@ -14,10 +14,6 @@ class ExchangeData:
     market_cap_usd: float = float(os.environ.get("COINGECKO_MKT_USD"))
     percent_change_24h: float = 0
 
-class CachingExchangeDataTTL(CachingDataBase):
-    _cache_key = "exchange_data_ttl"
-    _cache_expiring = 300  # How long to wait before new API call?
-
 class CachingExchangeData(CachingDataBase):
     _cache_key = "exchange_data"
     _cache_expiring = 3600  # SECONDS to hold value if API breaks
