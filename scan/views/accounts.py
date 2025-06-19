@@ -80,18 +80,12 @@ class AddressDetailView(IntSlugDetailView):
             .filter(account_id=obj.id)
         )
         indirects_count = indirects_query.count()
-
-        txs_query = (
-            Transaction.objects.using("java_wallet")
-            .filter(
-                Q(sender_id=obj.id)
-                | Q(recipient_id=obj.id)
-                | Q(id__in=indirects_query)
-            )
-        )
-        txs_cnt = txs_query.distinct().count()
-
-        txs = txs_query.order_by("-height")[:min(txs_cnt, 15)]
+        ids_sender = Transaction.objects.using("java_wallet").filter(sender_id=obj.id).values_list("id", flat=True)
+        ids_recipient = Transaction.objects.using("java_wallet").filter(recipient_id=obj.id).values_list("id", flat=True)
+        ids_indirect = indirects_query
+        all_ids = set(ids_sender).union(ids_recipient).union(ids_indirect)
+        txs_cnt =len(all_ids)
+        txs = Transaction.objects.using("java_wallet").filter(id__in=all_ids).order_by("-height")[:min(txs_cnt, 15)]
 
         for t in txs:
             fill_data_transaction(t, list_page=True)
