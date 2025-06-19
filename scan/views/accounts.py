@@ -1,8 +1,9 @@
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.views.generic import ListView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.core.cache import cache
+from django.shortcuts import render
 
 from java_wallet.models import (
     Account,
@@ -80,21 +81,12 @@ class AddressDetailView(IntSlugDetailView):
             .filter(account_id=obj.id)
         )
         indirects_count = indirects_query.count()
-
-        txs_query = (
-            Transaction.objects.using("java_wallet")
-            .filter(Q(sender_id=obj.id) | Q(recipient_id=obj.id))
-        )
-        txs_cnt = txs_query.count() + indirects_count
-
-        if indirects_count > 0:
-            txs_indirects = (
-                Transaction.objects.using("java_wallet")
-                .filter(id__in=indirects_query)
-            )
-            txs_query = txs_query.union(txs_indirects)
-
-        txs = txs_query.order_by("-height")[:min(txs_cnt, 15)]
+        ids_sender = Transaction.objects.using("java_wallet").filter(sender_id=obj.id).values_list("id", flat=True)
+        ids_recipient = Transaction.objects.using("java_wallet").filter(recipient_id=obj.id).values_list("id", flat=True)
+        ids_indirect = indirects_query
+        all_ids = set(ids_sender).union(ids_recipient).union(ids_indirect)
+        txs_cnt =len(all_ids)
+        txs = Transaction.objects.using("java_wallet").filter(id__in=all_ids).order_by("-height")[:min(txs_cnt, 15)]
 
         for t in txs:
             fill_data_transaction(t, list_page=True)
@@ -110,13 +102,13 @@ class AddressDetailView(IntSlugDetailView):
         else:
             cash_query = (
                 Transaction.objects.using("java_wallet")
-                .filter(Q(cash_back_id=obj.id)))
-            
+                .filter(Q(cash_back_id=obj.id))
+            )
+
             cbs_cnt = cash_query.count()
             cbs = cash_query.order_by("-height")[:min(cbs_cnt, 15)]
-            total_cashback = 0 
-            for cb in cash_query:
-                total_cashback += cashback_amount(cb.fee)
+            total_fee = cash_query.aggregate(sum_fee=Sum("fee"))["sum_fee"] or 0
+            total_cashback = cashback_amount(total_fee)
         
         context["total_cashback"]=total_cashback
         context["cbs"] = cbs
@@ -253,3 +245,21 @@ class AddressDetailView(IntSlugDetailView):
         )
 
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        tab = self.request.GET.get("tab")
+        templates = {
+            "assets": "accounts/assets.html",
+            "trades": "assets/trades_list.html",
+            "transfers": "assets/transfers_list.html",
+            "ats": "accounts/ats.html",
+            "mined_blocks": "accounts/mined_blocks.html",
+            "cashback": "accounts/cashback.html",
+            "alias": "accounts/alias.html",
+            "subscription": "accounts/subscription.html",
+        }
+
+        if tab in templates:
+            return render(self.request, templates[tab], context)
+
+        return super().render_to_response(context, **response_kwargs)
