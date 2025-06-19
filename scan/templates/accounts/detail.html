@@ -76,6 +76,9 @@ const template = `
       var target = $($(e.target).attr('href'));
       var container = target.find('.lazy-tab');
       if (container.length && container.is(':empty')) {
+        container.html(
+          '<div class="text-center my-4"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>'
+        );
         $.get(container.data('url'), function (data) {
           container.html(data);
         });
