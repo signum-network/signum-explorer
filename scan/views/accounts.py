@@ -3,6 +3,7 @@ from django.views.generic import ListView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.core.cache import cache
+from django.shortcuts import render
 
 from java_wallet.models import (
     Account,
@@ -244,3 +245,21 @@ class AddressDetailView(IntSlugDetailView):
         )
 
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        tab = self.request.GET.get("tab")
+        templates = {
+            "assets": "accounts/assets.html",
+            "trades": "assets/trades_list.html",
+            "transfers": "assets/transfers_list.html",
+            "ats": "accounts/ats.html",
+            "mined_blocks": "accounts/mined_blocks.html",
+            "cashback": "accounts/cashback.html",
+            "alias": "accounts/alias.html",
+            "subscription": "accounts/subscription.html",
+        }
+
+        if tab in templates:
+            return render(self.request, templates[tab], context)
+
+        return super().render_to_response(context, **response_kwargs)
