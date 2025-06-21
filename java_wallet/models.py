@@ -441,6 +441,11 @@ class IndirectIncoming(models.Model):
     class Meta:
         managed = True
         db_table = 'indirect_incoming'
+        indexes = [
+            models.Index(fields=["account_id"], name="indirect_incoming_id_index"),
+            models.Index(fields=["transaction_id"], name="indirect_incoming_tx_idx"),
+        ]
+
 
 class UnconfirmedTransaction(models.Model):
     db_id = models.BigAutoField(primary_key=True)
