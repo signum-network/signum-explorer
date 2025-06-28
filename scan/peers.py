@@ -120,7 +120,7 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
     if int(peer_info["blockchainHeight"]) -10 >  int(local_difficulty["height"]):
         logger.info("Node: %s its block to high  %s", address,peer_info["blockchainHeight"])
         return
-    if int(peer_info["blockchainHeight"]) +1500 <  int(local_difficulty["height"]):
+    if int(peer_info["blockchainHeight"]) +500000 <  int(local_difficulty["height"]):
         logger.info("Node: %s its block to low %s", address,peer_info["blockchainHeight"])
         return
 
