@@ -118,7 +118,7 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
     peer_info.update(p2p_api.get_cumulative_difficulty())
     #logger.info(p2p_api.get_cumulative_difficulty())
     if int(peer_info["blockchainHeight"]) -10 >  int(local_difficulty["height"]):
-        logger.info("Node: %s is to high  %s", address,peer_info["blockchainHeight"])
+        logger.info("Node: %s is to height  %s", address,peer_info["blockchainHeight"])
         return
     if int(peer_info["blockchainHeight"]) +1500 <  int(local_difficulty["height"]):
         logger.info("Node: %s is to low %s", address,peer_info["blockchainHeight"])
