@@ -111,14 +111,25 @@ def get_block_cumulative_difficulty(height: int) -> str:
 
 
 def explore_peer(local_difficulty: dict, address: str, updates: dict):
-    logger.debug("Peer: %s", address)
+    logger.info("Peer: %s", address)
+    p2p_api = P2PApi(address)
+    peer_info = p2p_api.get_info()
+    logger.info("Peerdata")
+    peer_info.update(p2p_api.get_cumulative_difficulty())
+    #logger.info(p2p_api.get_cumulative_difficulty())
+    if int(peer_info["blockchainHeight"]) -10 >  int(local_difficulty["height"]):
+        logger.info("Node: %s its block to high  %s", address,peer_info["blockchainHeight"])
+        return
+    if int(peer_info["blockchainHeight"]) +500000 <  int(local_difficulty["height"]):
+        logger.info("Node: %s its block to low %s", address,peer_info["blockchainHeight"])
+        return
 
     if address in updates:
         return
 
     try:
-        p2p_api = P2PApi(address)
-        peer_info = p2p_api.get_info()
+        # p2p_api = P2PApi(address)
+        # peer_info = p2p_api.get_info()
         if not is_good_version(peer_info["version"]):
             logger.debug("Old version: %s", peer_info["version"])
             updates[address] = None
@@ -140,7 +151,6 @@ def explore_peer(local_difficulty: dict, address: str, updates: dict):
         return
 
     ip = get_ip_by_domain(address)
-
     updates[address] = {
         "announced_address": peer_info["announcedAddress"],
         "real_ip": ip,
