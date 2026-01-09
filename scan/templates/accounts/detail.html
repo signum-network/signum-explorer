@@ -27,48 +27,58 @@
     });
 </script>
 <script>
-window.onload = function() {
+  window.onload = function () {
 
-const template = `
-<div style='display: inline-block; text-align: center;'>
-%avatar%
-<strong>%name%</strong></div>
-<br><br>
-%description%<br> 
-<a href='%web%' target='_blank'>%web%</a>`;
+    const fields = document.getElementsByName('src44field');
+    if (!fields || fields.length === 0) return;
 
-   const fields = document.getElementsByName('src44field');
-   if (!fields) {
-     return
-   }
-   for (const field of fields) {
-     const source = field.innerHTML;
-     try {
-       const obj = JSON.parse(source);
-       
-         const item = {
-            name: obj.nm ?? '',
-            description: obj.ds ?? '',
-            web: obj.hp ?? '',
-            avatar: ''
-         }
-       if (!obj.ds) {
-         return
-       }
-       if (obj.av) {
-           avatar = Object.keys(obj.av)[0] ?? ''
-           item.avatar = '<a href="#avatarModal" data-large-src="{{ ipfs_gateway }}' + avatar + '" data-toggle="modal"><img src="{{ ipfs_gateway }}' + avatar + '" style="border-radius: 10%; height: 65px; width: 65px; object-fit: cover; object-position: center;"></a><br>';
-       }
-         out = template
-           .replace('%avatar%', item.avatar)
-           .replace('%name%', item.name)
-           .replace('%description%', item.description)
-           .replace(/%web%/g, item.web);
-       field.innerHTML = out;
-     } catch (_e) {
-     }
+    for (const field of fields) {
+      const source = field.textContent?.trim() ?? '';
+      if (!source) continue;
+
+      try {
+        const obj = JSON.parse(source);
+
+        const name = (obj.nm ?? '').toString().trim();
+        const description = (obj.ds ?? '').toString().trim();
+        const web = (obj.hp ?? '').toString().trim();
+
+        let avatarHtml = '';
+        if (obj.av && typeof obj.av === 'object') {
+          const cid = Object.keys(obj.av)[0] ?? '';
+          if (cid) {
+            avatarHtml =
+              '<a href="#avatarModal" data-large-src="{{ ipfs_gateway }}' + cid + '" data-toggle="modal">' +
+              '<img src="{{ ipfs_gateway }}' + cid + '" style="border-radius: 10%; height: 65px; width: 65px; object-fit: cover; object-position: center;">' +
+              '</a>';
+          }
+        }
+
+        // only render blocks if data exists
+        let html = "<div style='display: inline-block; text-align: center;'>";
+        if (avatarHtml) html += avatarHtml;
+
+        if (name) {
+          if (avatarHtml) html += "<br>";
+          html += "<strong>" + name + "</strong>";
+        }
+        html += "</div>";
+
+        if (description) {
+          html += "<br>" + description;
+        }
+
+        if (web) {
+          html += '<br><a href="' + web + '" target="_blank" rel="noopener noreferrer">' + web + "</a>";
+        }
+
+        field.innerHTML = html;
+
+      } catch (e) {
+        console.error("SRC44 JSON parse failed:", e, source);
+      }
+    }
   }
-}
 </script>
 <script>
   $(function () {
