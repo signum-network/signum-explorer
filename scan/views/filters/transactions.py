@@ -2,7 +2,7 @@ from django.db.models import Q
 from django_filters import FilterSet, NumberFilter, CharFilter
 from burst.libs.reed_solomon import ReedSolomon, ReedSolomonError
 from java_wallet.models import IndirectIncoming, Transaction, Account
-
+from decimal import Decimal, InvalidOperation
 import os
 
 class TxFilter(FilterSet):
@@ -59,8 +59,15 @@ class TxFilter(FilterSet):
         return queryset
 
     def scale_amount(self, queryset, name, value):
-        vgtlt = "exact"
-        return queryset.filter(**{name + '__' + vgtlt: value * 100000000})
+        op = (self.data.get("vgtlt") or "exact").lower()
+        if op not in ("exact", "gt", "lt"):
+            op = "exact"
+        try:
+            v = Decimal(str(value))
+            scaled = int((v * Decimal("100000000")).to_integral_value())
+        except (InvalidOperation, ValueError, TypeError):
+            return queryset.none()
+        return queryset.filter(**{f"{name}__{op}": scaled})
 
     @staticmethod
     def filter_by_account(queryset, name, value):
