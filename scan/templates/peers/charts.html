@@ -8,69 +8,83 @@ Online: {{ online_now }}
 {% endblock %}
 {% block scripts %}
 
-  <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-  <script src="https://code.highcharts.com/maps/modules/data.js"></script>
-  <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-  <script src="https://code.highcharts.com/modules/export-data.js"></script>
-  <script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
-  <script src="https://code.highcharts.com/highcharts-more.js"></script>
-  <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/highmaps.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/modules/data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/modules/exporting.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/highcharts-more.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/modules/solid-gauge.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/modules/accessibility.js"></script>
+
 
   <script type="text/javascript">
 
 var data = [
-  ['Country', 'Peers'],
 {% for country in countries %}['{{ country.country_code }}', {{ country.cnt }}],{% endfor %}
 ];
 
-var objs = data.map(function(x) {
-  return {
-    'code': x[0],
-    'z': x[1]
-  };
-});
+var objs = data
+    .filter(function (x) {
+        return x[0] !== '??';
+    })
+    .map(function (x) {
+        return {
+            code: x[0].toLowerCase(),
+            z: x[1]
+        };
+    });
 
 var chart = Highcharts.mapChart('geochart', {
-  chart: {
-    map: 'customworld'
-  },
+    chart: {
+    },
+    accessibility: {
+        enabled: false
+    },
+    title: {
+        text: '',
+        align: 'left'
+    },
+    legend: {
+        enabled: false
+    },
+    credits: {
+        enabled: false
+    },
+    exporting: {
+        enabled: true
+    },
+    mapNavigation: {
+        enabled: true,
+        buttonOptions: {
+            verticalAlign: 'bottom'
+        }
+    },
 
-          title: {
-            text: '',
-            align: 'left'
+    series: [
+        {
+            mapData: Highcharts.maps['custom/world'],
+            color: '#E0E0E0',
+            enableMouseTracking: false,
+            showInLegend: false
         },
 
-      legend: {
-        enabled: false
-    },
-
-       credits: {
-        enabled: false
-    },
-
-  mapNavigation: {
-    enabled: true,
-    buttonOptions: {
-      verticalAlign: 'bottom'
-    }
-  },
-
-  series: [{
-    color: '#E0E0E0',
-    enableMouseTracking: false,
-    showInLegend: false
-  }, {
-    name: 'Nodes',
-    type: 'mapbubble',
-    joinBy: ['iso-a2', 'code'],
-    data: objs,
-    minSize: 4,
-    maxSize: '12%',
-  }]
-
+        {
+            name: 'Nodes',
+            type: 'mapbubble',
+            mapData: Highcharts.maps['custom/world'],
+            joinBy: ['hc-key', 'code'],
+            data: objs,
+            minSize: 4,
+            maxSize: '12%',
+            color: '#2f7ed8',
+            showInLegend: false
+        }
+    ]
 });
 
-  </script>
+</script>
 
   <script type="text/javascript">
 
@@ -81,9 +95,7 @@ var chart = Highcharts.mapChart('geochart', {
         plotShadow: false,
         type: 'pie',
         marginLeft: 0
-
     },
-
         legend: {
         align: 'left',
         verticalAlign: 'top',
@@ -91,24 +103,19 @@ var chart = Highcharts.mapChart('geochart', {
         x: 0,
         y: 40
     },
-
     title: {
         text: 'Versions (Online)',
         align: 'left'
     },
-
     credits: {
         enabled: false
     },
-
     exporting: {
         enabled: false
     },
-
     tooltip: {
         pointFormat: '<b>{point.y} ({point.percentage:.1f}%)</b>'
     },
-
     plotOptions: {
         pie: {
             allowPointSelect: true,
@@ -119,7 +126,6 @@ var chart = Highcharts.mapChart('geochart', {
             showInLegend: true
         }
     },
-
     series: [{
         name: 'Version',
         colorByPoint: true,
@@ -362,7 +368,7 @@ var chartSpeed = Highcharts.chart('container-nodes', Highcharts.merge(gaugeOptio
 
   <h5 class="p-2">Nodes Distribution</h5>
 
-  <div class="card-deck mb-3">
+  <div class="card-deck mb-3 highcharts-light">
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
           <div id="geochart" style="height: 500px; max-width: 1300px; margin: 0 auto"></div>

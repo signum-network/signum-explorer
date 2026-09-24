@@ -15,10 +15,10 @@
 
 {% block scripts %}
 
-<script src="https://code.highcharts.com/stock/highstock.js"></script>
-<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/modules/accessibility.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/highstock.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/modules/exporting.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highcharts@latest/modules/export-data.js"></script>
 
 <script>
 (async () => {
@@ -105,7 +105,7 @@ const template = `
     <a class="btn btn-sm btn-icon btn-light rounded-circle copy-btn" title="" href="https://www.signumswap.com/tokens/{{ asset.id }}" target="_blank" data-original-title="Click to Trade"><i class="fa fa-retweet"></i></a>
   </h5>
 
-<div class="card-deck mb-3">
+<div class="card-deck mb-3 highcharts-light">
     <div class="card mb-4 shadow-sm">
        {% if assets_trades_cnt > 0 %}
          <div class="mt-2" style="height: 340px;" id="chartDiv">
